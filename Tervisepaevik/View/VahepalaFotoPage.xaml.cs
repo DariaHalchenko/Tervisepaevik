@@ -3,14 +3,14 @@ using Tervisepaevik.Models;
 
 namespace Tervisepaevik.View;
 
-public partial class LounasookFotoPage : ContentPage
+public partial class VahepalaFotoPage : ContentPage
 {
-    private LounasookDatabase database;
+    private VahepalaDatabase database;
     private Grid grid;
 
-    public LounasookFotoPage()
+    public VahepalaFotoPage()
     {
-        Title = "Lounasöök";
+        Title = "Vahepala";
 
         grid = new Grid
         {
@@ -25,7 +25,7 @@ public partial class LounasookFotoPage : ContentPage
         }
 
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
-        database = new LounasookDatabase(dbPath);
+        database = new VahepalaDatabase(dbPath);
 
         LoadImages();
 
@@ -48,7 +48,7 @@ public partial class LounasookFotoPage : ContentPage
                 BackgroundColor = Colors.Transparent,
                 Command = new Command(async () =>
                 {
-                    await Navigation.PushAsync(new LounasookPage());
+                    await Navigation.PushAsync(new VahepalaPage());
                 })
             }
         };
@@ -75,7 +75,7 @@ public partial class LounasookFotoPage : ContentPage
         grid.Children.Clear();
         grid.RowDefinitions.Clear();
 
-        var imageList = database.GetLounasook()
+        var imageList = database.GetVahepala()
             .Where(x => x.Toidu_foto != null && x.Toidu_foto.Length > 0)
             .ToList();
 
@@ -89,7 +89,7 @@ public partial class LounasookFotoPage : ContentPage
                 grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             }
 
-            string tempFilePath = Path.Combine(FileSystem.CacheDirectory, $"image_{item.Lounasook_id}.jpg");
+            string tempFilePath = Path.Combine(FileSystem.CacheDirectory, $"image_{item.Vahepala_id}.jpg");
             File.WriteAllBytes(tempFilePath, item.Toidu_foto);
 
             var imagegrid = new Grid
@@ -121,7 +121,7 @@ public partial class LounasookFotoPage : ContentPage
                 bool answer = await DisplayAlert("Kinnita kustutamine", "Kas oled kindel, et soovid selle foto kustutada?", "Jah", "Ei");
                 if (answer)
                 {
-                    database.DeleteLounasook(item.Lounasook_id);
+                    database.DeleteVahepala(item.Vahepala_id);
                     LoadImages();
                 }
             };

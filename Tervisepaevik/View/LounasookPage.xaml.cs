@@ -1,4 +1,4 @@
-using Microsoft.Maui.Layouts;
+ï»¿using Microsoft.Maui.Layouts;
 using Tervisepaevik.Database;
 using Tervisepaevik.Models;
 
@@ -27,12 +27,12 @@ public partial class LounasookPage : ContentPage
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
         database = new LounasookDatabase(dbPath);
 
-        Title = "Lounasöök";
+        Title = "LounasÃ¶Ã¶k";
 
         ec_roaNimi = new EntryCell { Label = "Roa nimi", Placeholder = "nt. Puder" };
         ec_valgud = new EntryCell { Label = "Valgud", Placeholder = "g", Keyboard = Keyboard.Numeric };
         ec_rasvad = new EntryCell { Label = "Rasvad", Placeholder = "g", Keyboard = Keyboard.Numeric };
-        ec_susivesikud = new EntryCell { Label = "Süsivesikud", Placeholder = "g", Keyboard = Keyboard.Numeric };
+        ec_susivesikud = new EntryCell { Label = "SÃ¼sivesikud", Placeholder = "g", Keyboard = Keyboard.Numeric };
         ec_kalorid = new EntryCell { Label = "Kalorid", Placeholder = "kcal", Keyboard = Keyboard.Numeric };
 
         dp_kuupaev = new DatePicker { Date = DateTime.Now };
@@ -104,9 +104,9 @@ public partial class LounasookPage : ContentPage
         tableview = new TableView
         {
             Intent = TableIntent.Form,
-            Root = new TableRoot("Sisesta Lounasöök")
+            Root = new TableRoot("Sisesta LounasÃ¶Ã¶k")
             {
-                new TableSection("Üldandmed")
+                new TableSection("Ãœldandmed")
                 {
                     new ViewCell { View = dp_kuupaev },
                     new ViewCell { View = tp_kallaaeg },
@@ -178,7 +178,7 @@ public partial class LounasookPage : ContentPage
         }
         else
         {
-            await Shell.Current.DisplayAlert("Viga", "Teie seade ei ole toetatud", "Ok");
+            await Application.Current.MainPage.DisplayAlert("Viga", "Teie seade ei ole toetatud", "Ok");
         }
     }
 
@@ -204,7 +204,7 @@ public partial class LounasookPage : ContentPage
             };
             fotoSection.Add(imageViewCell);
 
-            await Shell.Current.DisplayAlert("Edu", "Foto on edukalt salvestatud", "OK");
+            await Application.Current.MainPage.DisplayAlert("Edu", "Foto on edukalt salvestatud", "OK");
         }
     }
 

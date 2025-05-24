@@ -1,16 +1,15 @@
 ﻿using Tervisepaevik.Database;
-using Tervisepaevik.Models;
 
 namespace Tervisepaevik.View;
 
-public partial class LounasookFotoPage : ContentPage
+public partial class OhtusookFotoPage : ContentPage
 {
-    private LounasookDatabase database;
+    private OhtusookDatabase database;
     private Grid grid;
 
-    public LounasookFotoPage()
+    public OhtusookFotoPage()
     {
-        Title = "Lounasöök";
+        Title = "Õhtusöök";
 
         grid = new Grid
         {
@@ -25,7 +24,7 @@ public partial class LounasookFotoPage : ContentPage
         }
 
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
-        database = new LounasookDatabase(dbPath);
+        database = new OhtusookDatabase(dbPath);
 
         LoadImages();
 
@@ -48,7 +47,7 @@ public partial class LounasookFotoPage : ContentPage
                 BackgroundColor = Colors.Transparent,
                 Command = new Command(async () =>
                 {
-                    await Navigation.PushAsync(new LounasookPage());
+                    await Navigation.PushAsync(new OhtusookPage());
                 })
             }
         };
@@ -75,7 +74,7 @@ public partial class LounasookFotoPage : ContentPage
         grid.Children.Clear();
         grid.RowDefinitions.Clear();
 
-        var imageList = database.GetLounasook()
+        var imageList = database.GetOhtusook()
             .Where(x => x.Toidu_foto != null && x.Toidu_foto.Length > 0)
             .ToList();
 
@@ -89,7 +88,7 @@ public partial class LounasookFotoPage : ContentPage
                 grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             }
 
-            string tempFilePath = Path.Combine(FileSystem.CacheDirectory, $"image_{item.Lounasook_id}.jpg");
+            string tempFilePath = Path.Combine(FileSystem.CacheDirectory, $"image_{item.Ohtusook_id}.jpg");
             File.WriteAllBytes(tempFilePath, item.Toidu_foto);
 
             var imagegrid = new Grid
@@ -121,7 +120,7 @@ public partial class LounasookFotoPage : ContentPage
                 bool answer = await DisplayAlert("Kinnita kustutamine", "Kas oled kindel, et soovid selle foto kustutada?", "Jah", "Ei");
                 if (answer)
                 {
-                    database.DeleteLounasook(item.Lounasook_id);
+                    database.DeleteOhtusook(item.Ohtusook_id);
                     LoadImages();
                 }
             };

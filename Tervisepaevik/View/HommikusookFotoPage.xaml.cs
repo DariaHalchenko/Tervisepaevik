@@ -1,4 +1,4 @@
-using Tervisepaevik.Database;
+ï»¿using Tervisepaevik.Database;
 
 namespace Tervisepaevik.View;
 
@@ -9,7 +9,7 @@ public partial class HommikusookFotoPage : ContentPage
 
     public HommikusookFotoPage()
     {
-        Title = "Hommikusöök";
+        Title = "HommikusÃ¶Ã¶k";
 
         grid = new Grid
         {
@@ -129,14 +129,14 @@ public partial class HommikusookFotoPage : ContentPage
             tap.Tapped += async (s, e) =>
             {
                 string info = $"Roa nimi: {item.Roa_nimi}\n" +
-                              $"Kuupäev: {item.Kuupaev:dd.MM.yyyy}\n" +
+                              $"KuupÃ¤ev: {item.Kuupaev:dd.MM.yyyy}\n" +
                               $"Kellaaeg: {item.Kallaaeg:hh\\:mm}\n" +
                               $"Valgud: {item.Valgud} g\n" +
                               $"Rasvad: {item.Rasvad} g\n" +
-                              $"Süsivesikud: {item.Susivesikud} g\n" +
+                              $"SÃ¼sivesikud: {item.Susivesikud} g\n" +
                               $"Kalorid: {item.Kalorid} kcal";
 
-                await Shell.Current.DisplayAlert("Toiduandmed", info, "OK");
+                await Application.Current.MainPage.DisplayAlert("Toiduandmed", info, "OK");
             };
 
             image.GestureRecognizers.Add(tap);

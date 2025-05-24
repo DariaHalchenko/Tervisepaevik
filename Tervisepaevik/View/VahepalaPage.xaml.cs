@@ -4,12 +4,12 @@ using Tervisepaevik.Models;
 
 namespace Tervisepaevik.View;
 
-public partial class HommikusookPage : ContentPage
+public partial class VahepalaPage : ContentPage
 {
     private string lisafoto;
     private byte[] fotoBytes;
-    private HommikusookDatabase database;
-    private HommikusookClass selectedItem;
+    private VahepalaDatabase database;
+    private VahepalaClass selectedItem;
 
     private EntryCell ec_roaNimi, ec_valgud, ec_rasvad, ec_susivesikud, ec_kalorid;
     private DatePicker dp_kuupaev;
@@ -22,12 +22,12 @@ public partial class HommikusookPage : ContentPage
     private ImageButton btn_salvesta, btn_pildista, btn_valifoto, btn_menu, btn_vesi, btn_trener;
     private StackLayout sl;
 
-    public HommikusookPage()
+    public VahepalaPage()
     {
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
-        database = new HommikusookDatabase(dbPath);
+        database = new VahepalaDatabase(dbPath);
 
-        Title = "Hommikusöök";
+        Title = "Vahepala";
 
         ec_roaNimi = new EntryCell { Label = "Roa nimi", Placeholder = "nt. Puder" };
         ec_valgud = new EntryCell { Label = "Valgud", Placeholder = "g", Keyboard = Keyboard.Numeric };
@@ -59,6 +59,7 @@ public partial class HommikusookPage : ContentPage
             HeightRequest = 45,
             WidthRequest = 45
         };
+
         btn_vesi = new ImageButton
         {
             Source = "vesi.png",
@@ -73,6 +74,7 @@ public partial class HommikusookPage : ContentPage
             HeightRequest = 45,
             WidthRequest = 45
         };
+
         btn_menu = new ImageButton
         {
             Source = "menu.png",
@@ -96,12 +98,13 @@ public partial class HommikusookPage : ContentPage
         btn_trener.Clicked += Btn_trener_Clicked;
 
         img = new Image();
+
         fotoSection = new TableSection("Foto");
 
         tableview = new TableView
         {
             Intent = TableIntent.Form,
-            Root = new TableRoot("Sisesta Hommikusöök")
+            Root = new TableRoot("Sisesta Vahepala")
             {
                 new TableSection("Üldandmed")
                 {
@@ -116,6 +119,7 @@ public partial class HommikusookPage : ContentPage
                 fotoSection
             }
         };
+
 
         sl = new StackLayout
         {
@@ -140,6 +144,7 @@ public partial class HommikusookPage : ContentPage
         AbsoluteLayout.SetLayoutBounds(btn_menu, new Rect(0.95, 0.95, 60, 60));
         absolutelayout.Children.Add(btn_menu);
 
+
         Content = absolutelayout;
     }
 
@@ -152,7 +157,6 @@ public partial class HommikusookPage : ContentPage
     {
         await Navigation.PushAsync(new VeejalgiminePage());
     }
-
     private void Btn_menu_Clicked(object sender, EventArgs e)
     {
         sl.IsVisible = !sl.IsVisible;
@@ -191,10 +195,15 @@ public partial class HommikusookPage : ContentPage
             fotoBytes = ms.ToArray();
 
             File.WriteAllBytes(lisafoto, fotoBytes);
+
             img.Source = ImageSource.FromFile(lisafoto);
 
             fotoSection.Clear();
-            fotoSection.Add(new ViewCell { View = img });
+            var imageViewCell = new ViewCell
+            {
+                View = img
+            };
+            fotoSection.Add(imageViewCell);
 
             await Application.Current.MainPage.DisplayAlert("Edu", "Foto on edukalt salvestatud", "OK");
         }
@@ -205,7 +214,7 @@ public partial class HommikusookPage : ContentPage
         if (string.IsNullOrWhiteSpace(ec_roaNimi.Text)) return;
 
         if (selectedItem == null)
-            selectedItem = new HommikusookClass();
+            selectedItem = new VahepalaClass();
 
         selectedItem.Roa_nimi = ec_roaNimi.Text;
         selectedItem.Valgud = int.TryParse(ec_valgud.Text, out var valgud) ? valgud : 0;
@@ -218,7 +227,7 @@ public partial class HommikusookPage : ContentPage
         if (fotoBytes != null)
             selectedItem.Toidu_foto = fotoBytes;
 
-        database.SaveHommikusook(selectedItem);
+        database.SaveVahepala(selectedItem);
         ClearForm();
     }
 
