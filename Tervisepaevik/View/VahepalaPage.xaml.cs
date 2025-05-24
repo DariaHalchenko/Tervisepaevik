@@ -71,6 +71,7 @@ public partial class VahepalaPage : ContentPage
             WidthRequest = 45,
             CornerRadius = 22
         };
+
         btn_trener = new ImageButton
         {
             Source = "trener.png",
