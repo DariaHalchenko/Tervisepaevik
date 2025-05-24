@@ -88,7 +88,7 @@ public partial class OhtusookFotoPage : ContentPage
                 grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             }
 
-            string tempFilePath = Path.Combine(FileSystem.CacheDirectory, $"image_{item.Ohtusook_id}.jpg");
+            string tempFilePath = Path.Combine(FileSystem.CacheDirectory, $"ohtusook_image_{item.Ohtusook_id}.jpg");
             File.WriteAllBytes(tempFilePath, item.Toidu_foto);
 
             var imagegrid = new Grid

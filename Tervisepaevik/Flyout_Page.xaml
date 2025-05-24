@@ -51,6 +51,12 @@
                         Text="Treeningud"
                         CornerRadius="0"
                         Clicked="btnTreeningudFotoPage_Clicked"/>
+                <Button x:Name="btnTreeningudPage"
+                        BackgroundColor="White"
+                        TextColor="Black"
+                        Text="Treeningud"
+                        CornerRadius="0"
+                        Clicked="btnTreeningudPage_Clicked"/>
                 <Button x:Name="btnEnesetunnePage"
                         BackgroundColor="White"
                         TextColor="Black"

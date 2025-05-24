@@ -41,37 +41,43 @@ public partial class HommikusookPage : ContentPage
         btn_pildista = new ImageButton
         {
             Source = "foto.png",
-            BackgroundColor = Colors.Transparent,
+            BackgroundColor = Colors.LightGrey,
             HeightRequest = 45,
-            WidthRequest = 45
+            WidthRequest = 45,
+            CornerRadius = 10
         };
         btn_valifoto = new ImageButton
         {
             Source = "valifoto.png",
-            BackgroundColor = Colors.Transparent,
+            BackgroundColor = Colors.LightSkyBlue,
             HeightRequest = 45,
-            WidthRequest = 45
+            WidthRequest = 45,
+            CornerRadius = 10
         };
         btn_salvesta = new ImageButton
         {
             Source = "salvesta.png",
-            BackgroundColor = Colors.Transparent,
+            BackgroundColor = Colors.LightGreen,
             HeightRequest = 45,
-            WidthRequest = 45
+            WidthRequest = 45,
+            CornerRadius = 22
         };
+
         btn_vesi = new ImageButton
         {
             Source = "vesi.png",
-            BackgroundColor = Colors.Transparent,
+            BackgroundColor = Colors.Aqua,
             HeightRequest = 45,
-            WidthRequest = 45
+            WidthRequest = 45,
+            CornerRadius = 22
         };
         btn_trener = new ImageButton
         {
             Source = "trener.png",
-            BackgroundColor = Colors.Transparent,
+            BackgroundColor = Colors.LightCoral,
             HeightRequest = 45,
-            WidthRequest = 45
+            WidthRequest = 45,
+            CornerRadius = 22
         };
         btn_menu = new ImageButton
         {

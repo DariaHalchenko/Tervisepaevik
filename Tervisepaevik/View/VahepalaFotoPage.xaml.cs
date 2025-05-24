@@ -89,7 +89,7 @@ public partial class VahepalaFotoPage : ContentPage
                 grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             }
 
-            string tempFilePath = Path.Combine(FileSystem.CacheDirectory, $"image_{item.Vahepala_id}.jpg");
+            string tempFilePath = Path.Combine(FileSystem.CacheDirectory, $"vahepala_image_{item.Vahepala_id}.jpg");
             File.WriteAllBytes(tempFilePath, item.Toidu_foto);
 
             var imagegrid = new Grid

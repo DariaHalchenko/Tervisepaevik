@@ -53,6 +53,12 @@ public partial class Flyout_Page : FlyoutPage
         if (!((IFlyoutPageController)this).ShouldShowSplitMode)
             IsPresented = false;
     }
+    private void btnTreeningudPage_Clicked(object sender, EventArgs e)
+    {
+        Detail = new NavigationPage(new TreeningudPage());
+        if (!((IFlyoutPageController)this).ShouldShowSplitMode)
+            IsPresented = false;
+    }
     private void btnEnesetunnePage_Clicked(object sender, EventArgs e)
     {
         Detail = new NavigationPage(new EnesetunnePage());

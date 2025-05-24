@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Microsoft.Maui.Layouts;
+using System.Globalization;
 using Tervisepaevik.Database;
 using Tervisepaevik.Models;
 
@@ -8,6 +9,7 @@ public partial class TreeningudFotoPage : ContentPage
 {
     private readonly TreeningudDatabase database;
     private Switch redirectSwitch;
+
 
     public TreeningudFotoPage()
     {
@@ -127,15 +129,42 @@ public partial class TreeningudFotoPage : ContentPage
             }
         };
 
-        // Основной макет страницы
-        Content = new StackLayout
+        var frame = new Frame
         {
-            Children =
+            CornerRadius = 30,
+            HeightRequest = 60,
+            WidthRequest = 60,
+            BackgroundColor = Colors.White,
+            Padding = 10,
+            HasShadow = true,
+            Content = new ImageButton
             {
-                carousel,
-                switchLayout
+                Source = "lisa.png",
+                BackgroundColor = Colors.Transparent,
+                Command = new Command(async () =>
+                {
+                    await Navigation.PushAsync(new TreeningudPage());
+                })
             }
         };
+
+        // Основной макет страницы
+        var absoluteLayout = new AbsoluteLayout();
+
+        AbsoluteLayout.SetLayoutFlags(carousel, AbsoluteLayoutFlags.All);
+        AbsoluteLayout.SetLayoutBounds(carousel, new Rect(0, 0, 1, 1));
+        absoluteLayout.Children.Add(carousel);
+
+        AbsoluteLayout.SetLayoutFlags(switchLayout, AbsoluteLayoutFlags.PositionProportional);
+        AbsoluteLayout.SetLayoutBounds(switchLayout, new Rect(0.5, 0.95, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
+        absoluteLayout.Children.Add(switchLayout);
+
+        AbsoluteLayout.SetLayoutFlags(frame, AbsoluteLayoutFlags.PositionProportional);
+        AbsoluteLayout.SetLayoutBounds(frame, new Rect(0.95, 0.95, 60, 60));
+        absoluteLayout.Children.Add(frame);
+
+        Content = absoluteLayout;
+
     }
 
     private async void RedirectSwitch_Toggled(object sender, ToggledEventArgs e)
