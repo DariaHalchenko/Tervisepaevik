@@ -1,4 +1,5 @@
-﻿using Tervisepaevik.Database;
+﻿using Microsoft.Maui.Layouts;
+using Tervisepaevik.Database;
 using Tervisepaevik.Models;
 
 namespace Tervisepaevik.View;
@@ -14,8 +15,10 @@ public partial class VeejalgiminePage : ContentPage
     ListView veejalgimineListView;
     BoxView bv_klaas;
     Frame f_klaas;
-
+    private ImageButton btn_salvesta, btn_menu, btn_ajavaka, btn_trener;
     VeejalgimineClass selectedItem;
+    private StackLayout sl;
+
 
     public VeejalgiminePage()
     {
@@ -45,11 +48,65 @@ public partial class VeejalgiminePage : ContentPage
             })
         };
 
+        btn_salvesta = new ImageButton
+        {
+            Source = "salvesta.png",
+            BackgroundColor = Colors.LightGreen,
+            HeightRequest = 45,
+            WidthRequest = 45,
+            CornerRadius = 22
+        };
+
+        btn_ajavaka = new ImageButton
+        {
+            Source = "ajakava.png",
+            BackgroundColor = Colors.Aqua,
+            HeightRequest = 45,
+            WidthRequest = 45,
+            CornerRadius = 22
+        };
+        btn_trener = new ImageButton
+        {
+            Source = "trener.png",
+            BackgroundColor = Colors.LightCoral,
+            HeightRequest = 45,
+            WidthRequest = 45,
+            CornerRadius = 22
+        };
+        btn_menu = new ImageButton
+        {
+            Source = "menu.png",
+            BackgroundColor = Colors.Transparent,
+            HeightRequest = 55,
+            WidthRequest = 55,
+            CornerRadius = 30,
+            Shadow = new Shadow
+            {
+                Opacity = 0.3f,
+                Radius = 10,
+                Offset = new Point(3, 3)
+            }
+        };
+
         veejalgimineListView.ItemSelected += VeejalgimineListView_ItemSelected;
-        salvestaButton.Clicked += SalvestaButton_Clicked;
         kustutaButton.Clicked += KustutaButton_Clicked;
         uusSisestusButton.Clicked += UusSisestusButton_Clicked;
         avaGraafikButton.Clicked += AvaGraafikButton_Clicked;
+
+        btn_trener.Clicked += Btn_trener_Clicked;
+        btn_salvesta.Clicked += Btn_salvesta_Clicked;
+        btn_menu.Clicked += Btn_menu_Clicked;
+        btn_ajavaka.Clicked += Btn_ajavaka_Clicked;
+
+        sl = new StackLayout
+        {
+            Orientation = StackOrientation.Horizontal,
+            Spacing = 15,
+            IsVisible = false,
+            Children = { btn_salvesta, btn_ajavaka, btn_trener },
+            Margin = new Thickness(0, 0, 0, 10)
+        };
+
 
         f_klaas = new Frame
         {
@@ -70,34 +127,47 @@ public partial class VeejalgiminePage : ContentPage
             }
         };
 
-        Content = new ScrollView
+        var scrollContent = new ScrollView
         {
             Content = new StackLayout
             {
                 Padding = 20,
                 Children =
-                    {
-                        new Label { Text = "Kuupäev" },
-                        kuupaevPicker,
-                        new Label { Text = "Kogus (ml)" },
-                        kogusEntry,
-                        new Label { Text = "Aktiivne" },
-                        aktiivneSwitch,
-                        salvestaButton,
-                        kustutaButton,
-                        uusSisestusButton,
-                        avaGraafikButton,
-                        new Label { Text = "Klaas" },
-                        f_klaas,
-                        veejalgimineListView
-                    }
+                {
+                    new Label { Text = "Kuupäev" },
+                    kuupaevPicker,
+                    new Label { Text = "Kogus (ml)" },
+                    kogusEntry,
+                    new Label { Text = "Aktiivne" },
+                    aktiivneSwitch,
+                    new Label { Text = "Klaas" },
+                    f_klaas,
+                    veejalgimineListView
+                }
             }
         };
+
+        var absoluteLayout = new AbsoluteLayout();
+
+        AbsoluteLayout.SetLayoutFlags(scrollContent, AbsoluteLayoutFlags.All);
+        AbsoluteLayout.SetLayoutBounds(scrollContent, new Rect(0, 0, 1, 1));
+        absoluteLayout.Children.Add(scrollContent);
+
+        AbsoluteLayout.SetLayoutFlags(sl, AbsoluteLayoutFlags.PositionProportional);
+        AbsoluteLayout.SetLayoutBounds(sl, new Rect(0.60, 0.95, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
+        absoluteLayout.Children.Add(sl);
+
+        AbsoluteLayout.SetLayoutFlags(btn_menu, AbsoluteLayoutFlags.PositionProportional);
+        AbsoluteLayout.SetLayoutBounds(btn_menu, new Rect(0.95, 0.95, 60, 60));
+        absoluteLayout.Children.Add(btn_menu);
+
+        Content = absoluteLayout;
+
 
         LoadData();
     }
 
-    private async void AvaGraafikButton_Clicked(object? sender, EventArgs e)
+    private async void Btn_ajavaka_Clicked(object? sender, EventArgs e)
     {
         var andmed = database.GetVeejalgimine()
             .OrderBy(v => v.Kuupaev)
@@ -106,13 +176,12 @@ public partial class VeejalgiminePage : ContentPage
         await Navigation.PushAsync(new VeejalgimineGrafikPage(andmed));
     }
 
-
-    private void KuupaevPicker_DateSelected(object? sender, DateChangedEventArgs e)
+    private void Btn_menu_Clicked(object? sender, EventArgs e)
     {
-        LoadData();
+        sl.IsVisible = !sl.IsVisible;
     }
 
-    private async void SalvestaButton_Clicked(object sender, EventArgs e)
+    private async void Btn_salvesta_Clicked(object? sender, EventArgs e)
     {
         if (!aktiivneSwitch.IsToggled)
         {
@@ -189,6 +258,28 @@ public partial class VeejalgiminePage : ContentPage
         ClearForm();
         LoadData();
     }
+
+    private async void Btn_trener_Clicked(object? sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new TreeningudFotoPage());
+    }
+
+    private async void AvaGraafikButton_Clicked(object? sender, EventArgs e)
+    {
+        var andmed = database.GetVeejalgimine()
+            .OrderBy(v => v.Kuupaev)
+            .ToList();
+
+        await Navigation.PushAsync(new VeejalgimineGrafikPage(andmed));
+    }
+
+
+    private void KuupaevPicker_DateSelected(object? sender, DateChangedEventArgs e)
+    {
+        LoadData();
+    }
+
+    
 
     private void KustutaButton_Clicked(object sender, EventArgs e)
     {

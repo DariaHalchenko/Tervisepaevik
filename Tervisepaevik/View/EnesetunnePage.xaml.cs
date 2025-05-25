@@ -44,7 +44,6 @@ public partial class EnesetunnePage : ContentPage
         btn_puhastata = new Button { Text = "Uus sisestus" };
         btn_hingeohk = new Button { Text = "Hingamise taastamine", IsVisible = false };
 
-        // TUJU (эмоции)
         sl_tuju = new StackLayout { Orientation = StackOrientation.Horizontal };
         for (int i = 1; i <= 5; i++)
         {
@@ -69,7 +68,6 @@ public partial class EnesetunnePage : ContentPage
             sl_tuju.Children.Add(img);
         }
 
-        // ENERGIA (огоньки)
         sl_energia = new StackLayout { Orientation = StackOrientation.Horizontal };
         for (int i = 1; i <= 5; i++)
         {
@@ -124,7 +122,7 @@ public partial class EnesetunnePage : ContentPage
                 FontSize = 14,
                 VerticalOptions = LayoutOptions.Center,
                 Margin = new Thickness(10, 0),
-                TextColor = Colors.DarkSlateGray // Цвет текста
+                TextColor = Colors.DarkSlateGray 
             };
             lbl_kuupaev.SetBinding(Label.TextProperty, new Binding("Kuupaev", stringFormat: "{0:dd.MM.yyyy}"));
 

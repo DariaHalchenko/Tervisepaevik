@@ -147,7 +147,6 @@ public partial class StartPage : ContentPage
             })
         };
 
-        // Кнопки (оставим как есть)
         btn_hommikusook = new ImageButton
         {
             Source = "hommikusook.jpg",

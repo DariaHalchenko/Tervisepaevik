@@ -22,7 +22,6 @@ public partial class TreeningudFotoPage : ContentPage
             .OrderByDescending(t => t.Kallaaeg)
             .ToList();
 
-        // Создаем карусель
         var carousel = new CarouselView
         {
             ItemsSource = treeningud,
@@ -63,7 +62,6 @@ public partial class TreeningudFotoPage : ContentPage
                     Text = "Video vaatamiseks klõpsake pildil"
                 };
 
-                // TapGestureRecognizer to open video link
                 var tapGesture = new TapGestureRecognizer();
                 tapGesture.Tapped += async (s, e) =>
                 {
@@ -102,7 +100,6 @@ public partial class TreeningudFotoPage : ContentPage
             })
         };
 
-        // Создаем переключатель с текстом
         redirectSwitch = new Switch
         {
             HorizontalOptions = LayoutOptions.End,
@@ -148,7 +145,6 @@ public partial class TreeningudFotoPage : ContentPage
             }
         };
 
-        // Основной макет страницы
         var absoluteLayout = new AbsoluteLayout();
 
         AbsoluteLayout.SetLayoutFlags(carousel, AbsoluteLayoutFlags.All);

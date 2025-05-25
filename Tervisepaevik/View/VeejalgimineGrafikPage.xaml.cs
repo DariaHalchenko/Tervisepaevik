@@ -10,7 +10,6 @@ public partial class VeejalgimineGrafikPage : ContentPage
     {
         Title = "Vee tarbimise graafik";
 
-        // Группируем по месяцу и году
         var groupedData = andmed
             .GroupBy(v => v.Kuupaev.ToString("MMMM yyyy"))
             .OrderBy(g => g.First().Kuupaev)
@@ -73,7 +72,6 @@ public partial class VeejalgimineGrafikPage : ContentPage
     }
 }
 
-// Вспомогательные классы
 public class ChartGroup
 {
     public string MonthYear { get; set; }
