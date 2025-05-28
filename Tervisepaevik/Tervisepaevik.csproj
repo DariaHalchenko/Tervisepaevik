@@ -93,6 +93,9 @@
 	  <MauiXaml Update="StartPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="TervitatavPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="View\EnesetunnePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -6,7 +6,7 @@
         {
             InitializeComponent();
 
-            MainPage = new Flyout_Page();
+            MainPage = new NavigationPage(new TervitatavPage());
         }
     }
 }
