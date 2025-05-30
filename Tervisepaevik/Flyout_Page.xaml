@@ -9,10 +9,16 @@
     <FlyoutPage.Flyout>
         <ContentPage Title="Menüü">
             <StackLayout>
-                <Button x:Name="btnStartPage"
+                <Button x:Name="btnNewPagePage"
                         BackgroundColor="White"
                         TextColor="Black"
                         Text="Avaleht"
+                        CornerRadius="0"
+                        Clicked="btnNewPage_Clicked"/>
+                <Button x:Name="btnStartPage"
+                        BackgroundColor="White"
+                        TextColor="Black"
+                        Text="Söök"
                         CornerRadius="0"
                         Clicked="btnStartPage_Clicked"/>
                 <Button x:Name="btnHommikusookFotoPage"

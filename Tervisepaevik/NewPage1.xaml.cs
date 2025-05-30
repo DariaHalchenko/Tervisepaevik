@@ -1,47 +1,96 @@
-using Tervisepaevik.View;
+﻿using Tervisepaevik.View;
 
 namespace Tervisepaevik;
 
 public partial class NewPage1 : ContentPage
 {
-    public List<ContentPage> lehed = new List<ContentPage>() { new TreeningudPage(), new EnesetunnePage(), new VeejalgiminePage(), new StartPage(),
-    new OhtusookPage(), new VahepalaPage(), new LounasookPage(), new HommikusookFotoPage(),  new HommikusookPage()};
-    public List<string> tekstid = new List<string> { "Tee lahti TreeningudPage", "Tee lahti EnesetunnePage", "Tee lahti VeejalgiminePage",
-    "StartPage1", "OhtusookPage", "VahepalaPage", "LounasookPage", "ghd", "HommikusookPage"};
-    ScrollView sv;
-    VerticalStackLayout vsl;
+    // Список обычных страниц (без Flyout_Page)
+    public List<ContentPage> lehed = new List<ContentPage>()
+    {
+        new TervitatavPage(),
+        new TreeningudPage(),
+        new EnesetunnePage(),
+        new VeejalgiminePage()
+    };
+
+    // Отображаемые элементы с текстом и изображениями
+    public List<(string Tekst, string Pilt)> valikud = new List<(string, string)>
+    {
+        ("Tervitus", "tervitus.png"),
+        ("Menüü", "menuu.png"),
+        ("Treeningud", "trener.png"),
+        ("Enesetunne", "enesetunne.png"),
+        ("Vee jälgimine", "veejalgimine.png")
+    };
+
     public NewPage1()
     {
-        Title = "Avaleht";
-        vsl = new VerticalStackLayout { BackgroundColor = Color.FromArgb("#FFC0CB") };
-        for (int i = 0; i < tekstid.Count; i++)
+        Title = "Tervise Päevik";
+
+        ScrollView sv = new ScrollView();
+        VerticalStackLayout vsl = new VerticalStackLayout
         {
-            Button nupp = new Button
+            Padding = 20,
+            Spacing = 20,
+            BackgroundColor = Color.FromArgb("#FFF0F5")
+        };
+
+        for (int i = 0; i < valikud.Count; i++)
+        {
+            var frame = new Frame
             {
-                Text = tekstid[i],
-                BackgroundColor = Color.FromArgb("#EE82EE"),
-                TextColor = Color.FromArgb("#FF00FF"),
-                BorderWidth = 10,
-                ZIndex = i,
-                FontFamily = "Luckymoon 400",
-                FontSize = 28
+                BorderColor = Colors.LightGray,
+                CornerRadius = 20,
+                HasShadow = true,
+                BackgroundColor = Colors.White,
+                Padding = 10
             };
-            vsl.Add(nupp);
-            nupp.Clicked += Lehte_avamine;
+
+            var imgButton = new ImageButton
+            {
+                Source = valikud[i].Pilt,
+                HeightRequest = 100,
+                WidthRequest = 100,
+                Aspect = Aspect.AspectFit,
+                BackgroundColor = Colors.Transparent,
+                HorizontalOptions = LayoutOptions.Center,
+                CornerRadius = 15
+            };
+
+            var label = new Label
+            {
+                Text = valikud[i].Tekst,
+                FontSize = 20,
+                FontAttributes = FontAttributes.Bold,
+                TextColor = Colors.DarkMagenta,
+                HorizontalOptions = LayoutOptions.Center
+            };
+
+            int index = i; // Захват текущего индекса
+            imgButton.Clicked += async (s, e) =>
+            {
+                if (valikud[index].Tekst == "Menüü")
+                {
+                    // Меняем корневую страницу на Flyout_Page
+                    Application.Current.MainPage = new Flyout_Page();
+                }
+                else
+                {
+                    // Смещаем индекс, потому что Flyout_Page исключена из lehed
+                    int realIndex = index > 1 ? index - 1 : index;
+                    await Navigation.PushAsync(lehed[realIndex]);
+                }
+            };
+
+            frame.Content = new VerticalStackLayout
+            {
+                Children = { imgButton, label }
+            };
+
+            vsl.Children.Add(frame);
         }
-        sv = new ScrollView { Content = vsl };
+
+        sv.Content = vsl;
         Content = sv;
-
-    }
-
-    private async void Lehte_avamine(object? sender, EventArgs e)
-    {
-        Button btn = (Button)sender;
-        await Navigation.PushAsync(lehed[btn.ZIndex]);
-    }
-
-    private async void Tagasi_Clicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new MainPage());
     }
 }

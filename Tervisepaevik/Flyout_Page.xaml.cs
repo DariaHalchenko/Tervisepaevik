@@ -9,6 +9,13 @@ public partial class Flyout_Page : FlyoutPage
         InitializeComponent();
     }
 
+    private void btnNewPage_Clicked(object sender, EventArgs e)
+    {
+        Detail = new NavigationPage(new NewPage1());
+        if (!((IFlyoutPageController)this).ShouldShowSplitMode)
+            IsPresented = false;
+    }
+
     private void btnStartPage_Clicked(object sender, EventArgs e)
     {
         Detail = new NavigationPage(new StartPage());

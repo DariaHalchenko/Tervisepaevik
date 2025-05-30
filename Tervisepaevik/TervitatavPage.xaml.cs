@@ -73,8 +73,9 @@ public partial class TervitatavPage : ContentPage
         };
     }
 
-    private void Btn_alusta_Clicked(object? sender, EventArgs e)
+    private async void Btn_alusta_Clicked(object? sender, EventArgs e)
     {
-        Application.Current.MainPage = new Flyout_Page();
+        //Application.Current.MainPage = new NewPage1();
+        await Navigation.PushAsync(new NewPage1());
     }
 }
