@@ -13,6 +13,7 @@ public partial class Flyout_Page : FlyoutPage
     {
         Detail = new NavigationPage(new NewPage1());
         if (!((IFlyoutPageController)this).ShouldShowSplitMode)
+           
             IsPresented = false;
     }
 
