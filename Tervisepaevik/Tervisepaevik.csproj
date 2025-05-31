@@ -63,11 +63,9 @@
 	  <None Remove="Resources\Images\lisa.png" />
 	  <None Remove="Resources\Images\louna.jpg" />
 	  <None Remove="Resources\Images\menu.png" />
-	  <None Remove="Resources\Images\menuu.png" />
 	  <None Remove="Resources\Images\ohtusook.jpg" />
 	  <None Remove="Resources\Images\salvesta.png" />
 	  <None Remove="Resources\Images\suda.jpg" />
-	  <None Remove="Resources\Images\tervitus.png" />
 	  <None Remove="Resources\Images\tuju1.jpg" />
 	  <None Remove="Resources\Images\tuju2.jpg" />
 	  <None Remove="Resources\Images\tuju3.jpg" />

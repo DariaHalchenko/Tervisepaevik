@@ -13,13 +13,13 @@ public partial class StartPage : ContentPage
 
     private List<DayFoodGroup> GetNadalaToidud(string dbPath)
     {
-        DateTime startDate = DateTime.Today.AddDays(-6);
-        DateTime today = DateTime.Today;
+        DateTime startDate = DateTime.Today; // Сегодня
+        DateTime endDate = DateTime.Today.AddDays(6); // Через 6 дней
 
-        var hommik = new HommikusookDatabase(dbPath).GetHommikusook().Where(x => x.Kuupaev >= startDate && x.Kuupaev <= today);
-        var louna = new LounasookDatabase(dbPath).GetLounasook().Where(x => x.Kuupaev >= startDate && x.Kuupaev <= today);
-        var ohtu = new OhtusookDatabase(dbPath).GetOhtusook().Where(x => x.Kuupaev >= startDate && x.Kuupaev <= today);
-        var vahepala = new VahepalaDatabase(dbPath).GetVahepala().Where(x => x.Kuupaev >= startDate && x.Kuupaev <= today);
+        var hommik = new HommikusookDatabase(dbPath).GetHommikusook().Where(x => x.Kuupaev >= startDate && x.Kuupaev <= endDate);
+        var louna = new LounasookDatabase(dbPath).GetLounasook().Where(x => x.Kuupaev >= startDate && x.Kuupaev <= endDate);
+        var ohtu = new OhtusookDatabase(dbPath).GetOhtusook().Where(x => x.Kuupaev >= startDate && x.Kuupaev <= endDate);
+        var vahepala = new VahepalaDatabase(dbPath).GetVahepala().Where(x => x.Kuupaev >= startDate && x.Kuupaev <= endDate);
 
         var allMeals = new List<ToidukorradClass>();
         allMeals.AddRange(hommik.Select(x => new ToidukorradClass
@@ -55,16 +55,17 @@ public partial class StartPage : ContentPage
             Toidu_foto = x.Toidu_foto
         }));
 
-        return Enumerable.Range(0, 7)
+        return Enumerable.Range(0, 7) // Сегодня + 6 дней
             .Select(offset =>
             {
                 var date = startDate.AddDays(offset);
                 var foods = allMeals.Where(x => x.Kuupaev.Date == date).ToList();
                 return new DayFoodGroup { DateTime = date, Foods = foods };
             })
-            .Where(group => group.Foods.Any())
+            .Where(group => group.Foods.Any()) // Исключаем пустые дни
             .ToList();
     }
+
 
     public class DayFoodGroup
     {

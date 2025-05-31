@@ -1,96 +1,192 @@
-﻿using Tervisepaevik.View;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
+using Tervisepaevik.View;
 
-namespace Tervisepaevik;
-
-public partial class NewPage1 : ContentPage
+namespace Tervisepaevik
 {
-    // Список обычных страниц (без Flyout_Page)
-    public List<ContentPage> lehed = new List<ContentPage>()
+    public partial class NewPage1 : ContentPage
     {
-        new TervitatavPage(),
-        new TreeningudPage(),
-        new EnesetunnePage(),
-        new VeejalgiminePage()
-    };
-
-    // Отображаемые элементы с текстом и изображениями
-    public List<(string Tekst, string Pilt)> valikud = new List<(string, string)>
-    {
-        ("Tervitus", "tervitus.png"),
-        ("Menüü", "menuu.png"),
-        ("Treeningud", "trener.png"),
-        ("Enesetunne", "enesetunne.png"),
-        ("Vee jälgimine", "veejalgimine.png")
-    };
-
-    public NewPage1()
-    {
-        Title = "Tervise Päevik";
-
-        ScrollView sv = new ScrollView();
-        VerticalStackLayout vsl = new VerticalStackLayout
+        // Список обычных страниц (без Flyout_Page)
+        public List<ContentPage> lehed = new List<ContentPage>()
         {
-            Padding = 20,
-            Spacing = 20,
-            BackgroundColor = Color.FromArgb("#FFF0F5")
+            new TervitatavPage(),
+            new TreeningudPage(),
+            new EnesetunnePage(),
+            new VeejalgiminePage()
         };
 
-        for (int i = 0; i < valikud.Count; i++)
+        // Отображаемые элементы с текстом и изображениями
+        public List<(string Tekst, string Pilt)> valikud = new List<(string, string)>
         {
-            var frame = new Frame
+            ("Tervitus", "tervitus.png"),
+            ("Menüü", "menuu.png"),
+            ("Treeningud", "gym.png"),
+            ("Enesetunne", "enesetunne.png"),
+            ("Vee jälgimine", "veejalgimine.png"),
+            ("Hingamine", "kopsud.png") // Новый пункт
+        };
+
+        public NewPage1()
+        {
+            Title = "Tervise Päevik";
+
+            ScrollView sv = new ScrollView();
+            VerticalStackLayout vsl = new VerticalStackLayout
             {
-                BorderColor = Colors.LightGray,
-                CornerRadius = 20,
-                HasShadow = true,
-                BackgroundColor = Colors.White,
-                Padding = 10
+                Padding = 20,
+                Spacing = 20,
+                BackgroundColor = Color.FromArgb("#FFF0F5")
             };
 
-            var imgButton = new ImageButton
+            for (int i = 0; i < valikud.Count; i++)
             {
-                Source = valikud[i].Pilt,
-                HeightRequest = 100,
-                WidthRequest = 100,
-                Aspect = Aspect.AspectFit,
-                BackgroundColor = Colors.Transparent,
-                HorizontalOptions = LayoutOptions.Center,
-                CornerRadius = 15
+                var frame = new Frame
+                {
+                    BorderColor = Colors.LightGray,
+                    CornerRadius = 20,
+                    HasShadow = true,
+                    BackgroundColor = Colors.White,
+                    Padding = 10
+                };
+
+                var imgButton = new ImageButton
+                {
+                    Source = valikud[i].Pilt,
+                    HeightRequest = 55, // уменьшено с 100
+                    WidthRequest = 55,  // уменьшено с 100
+                    Aspect = Aspect.AspectFit,
+                    BackgroundColor = Colors.Transparent,
+                    HorizontalOptions = LayoutOptions.Center,
+                    CornerRadius = 10 // тоже слегка уменьшен
+                };
+
+                var label = new Label
+                {
+                    Text = valikud[i].Tekst,
+                    FontSize = 20,
+                    FontAttributes = FontAttributes.Bold,
+                    TextColor = Colors.DarkMagenta,
+                    HorizontalOptions = LayoutOptions.Center
+                };
+
+                int index = i; // Захват индекса для лямбды
+                imgButton.Clicked += async (s, e) =>
+                {
+                    if (valikud[index].Tekst == "Menüü")
+                    {
+                        Application.Current.MainPage = new Flyout_Page();
+                    }
+                    else if (valikud[index].Tekst == "Hingamine")
+                    {
+                        await ShowBreathingPopup();
+                    }
+                    else
+                    {
+                        int realIndex = index > 1 ? index - 1 : index;
+                        await Navigation.PushAsync(lehed[realIndex]);
+                    }
+                };
+
+                frame.Content = new VerticalStackLayout
+                {
+                    Children = { imgButton, label }
+                };
+
+                vsl.Children.Add(frame);
+            }
+
+            sv.Content = vsl;
+            Content = sv;
+        }
+
+        private async Task ShowBreathingPopup()
+        {
+            var popupPage = new ContentPage
+            {
+                BackgroundColor = Color.FromRgba(0, 0, 0, 0.7),
+                Padding = 20
             };
 
-            var label = new Label
+            var timerLabel = new Label
             {
-                Text = valikud[i].Tekst,
-                FontSize = 20,
-                FontAttributes = FontAttributes.Bold,
-                TextColor = Colors.DarkMagenta,
+                Text = "30",
+                FontSize = 24,
+                TextColor = Colors.White,
                 HorizontalOptions = LayoutOptions.Center
             };
 
-            int index = i; // Захват текущего индекса
-            imgButton.Clicked += async (s, e) =>
+            var kopsudImage = new Image
             {
-                if (valikud[index].Tekst == "Menüü")
+                Source = "kopsud.png",
+                WidthRequest = 200,
+                HeightRequest = 200,
+                Aspect = Aspect.AspectFit
+            };
+
+            // Анимация дыхания
+            kopsudImage.Loaded += async (s, e) =>
+            {
+                while (true)
                 {
-                    // Меняем корневую страницу на Flyout_Page
-                    Application.Current.MainPage = new Flyout_Page();
-                }
-                else
-                {
-                    // Смещаем индекс, потому что Flyout_Page исключена из lehed
-                    int realIndex = index > 1 ? index - 1 : index;
-                    await Navigation.PushAsync(lehed[realIndex]);
+                    await kopsudImage.ScaleTo(1.2, 3000, Easing.SinInOut);
+                    await kopsudImage.ScaleTo(1.0, 3000, Easing.SinInOut);
                 }
             };
 
-            frame.Content = new VerticalStackLayout
+            var btn_sule = new Button
             {
-                Children = { imgButton, label }
+                Text = "Sulge",
+                Margin = new Thickness(0, 20, 0, 0)
             };
 
-            vsl.Children.Add(frame);
+            btn_sule.Clicked += async (s, e) =>
+            {
+                await Application.Current.MainPage.Navigation.PopModalAsync();
+            };
+
+            popupPage.Content = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.Center,
+                Children =
+                {
+                    new Label
+                    {
+                        Text = "Hingamise harjutus",
+                        FontSize = 20,
+                        TextColor = Colors.White,
+                        HorizontalOptions = LayoutOptions.Center
+                    },
+                    new Label
+                    {
+                        Text = "Hingake sisse, kui pilt muutub suuremaks,\nhingake välja, kui pilt muutub väiksemaks.",
+                        FontSize = 14,
+                        TextColor = Colors.White,
+                        HorizontalOptions = LayoutOptions.Center,
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        LineBreakMode = LineBreakMode.WordWrap,
+                        Margin = new Thickness(10, 10, 10, 0)
+                    },
+                    timerLabel,
+                    kopsudImage,
+                    btn_sule
+                }
+            };
+
+            int secondsRemaining = 30;
+            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    secondsRemaining--;
+                    timerLabel.Text = secondsRemaining > 0 ? secondsRemaining.ToString() : "Valmis!";
+                });
+                return secondsRemaining > 0;
+            });
+
+            await Application.Current.MainPage.Navigation.PushModalAsync(popupPage);
         }
-
-        sv.Content = vsl;
-        Content = sv;
     }
 }

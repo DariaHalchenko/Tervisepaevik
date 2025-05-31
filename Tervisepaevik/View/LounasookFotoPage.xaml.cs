@@ -10,7 +10,7 @@ public partial class LounasookFotoPage : ContentPage
 
     public LounasookFotoPage()
     {
-        Title = "Lounasöök";
+        Title = "Lõunasöök";
 
         grid = new Grid
         {
