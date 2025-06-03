@@ -8,7 +8,6 @@ namespace Tervisepaevik
 {
     public partial class NewPage1 : ContentPage
     {
-        // Список обычных страниц (без Flyout_Page)
         public List<ContentPage> lehed = new List<ContentPage>()
         {
             new TervitatavPage(),
@@ -17,15 +16,14 @@ namespace Tervisepaevik
             new VeejalgiminePage()
         };
 
-        // Отображаемые элементы с текстом и изображениями
         public List<(string Tekst, string Pilt)> valikud = new List<(string, string)>
         {
             ("Tervitus", "tervitus.png"),
-            ("Menüü", "menuu.png"),
+            ("Söök", "menuu.png"),
             ("Treeningud", "gym.png"),
             ("Enesetunne", "enesetunne.png"),
             ("Vee jälgimine", "veejalgimine.png"),
-            ("Hingamine", "kopsud.png") // Новый пункт
+            ("Hingamine", "kopsud.png") 
         };
 
         public NewPage1()
@@ -54,12 +52,12 @@ namespace Tervisepaevik
                 var imgButton = new ImageButton
                 {
                     Source = valikud[i].Pilt,
-                    HeightRequest = 55, // уменьшено с 100
-                    WidthRequest = 55,  // уменьшено с 100
+                    HeightRequest = 55, 
+                    WidthRequest = 55,  
                     Aspect = Aspect.AspectFit,
                     BackgroundColor = Colors.Transparent,
                     HorizontalOptions = LayoutOptions.Center,
-                    CornerRadius = 10 // тоже слегка уменьшен
+                    CornerRadius = 10 
                 };
 
                 var label = new Label
@@ -71,7 +69,7 @@ namespace Tervisepaevik
                     HorizontalOptions = LayoutOptions.Center
                 };
 
-                int index = i; // Захват индекса для лямбды
+                int index = i; 
                 imgButton.Clicked += async (s, e) =>
                 {
                     if (valikud[index].Tekst == "Menüü")
@@ -125,7 +123,6 @@ namespace Tervisepaevik
                 Aspect = Aspect.AspectFit
             };
 
-            // Анимация дыхания
             kopsudImage.Loaded += async (s, e) =>
             {
                 while (true)
