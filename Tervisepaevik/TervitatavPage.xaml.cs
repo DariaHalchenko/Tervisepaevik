@@ -1,4 +1,4 @@
-namespace Tervisepaevik;
+﻿namespace Tervisepaevik;
 
 public partial class TervitatavPage : ContentPage
 {

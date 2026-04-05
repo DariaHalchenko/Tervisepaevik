@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Layouts;
+using System.Globalization;
 using Tervisepaevik.Database;
 using Tervisepaevik.Models;
 
@@ -11,14 +12,11 @@ public partial class VeejalgiminePage : ContentPage
     Entry kogusEntry;
     DatePicker kuupaevPicker;
     Switch aktiivneSwitch;
-    Button salvestaButton, kustutaButton, uusSisestusButton, avaGraafikButton;
-    ListView veejalgimineListView;
+
     BoxView bv_klaas;
     Frame f_klaas;
-    private ImageButton btn_salvesta, btn_menu, btn_ajavaka, btn_trener;
-    VeejalgimineClass selectedItem;
-    private StackLayout sl;
 
+    CollectionView listView;
 
     public VeejalgiminePage()
     {
@@ -26,307 +24,200 @@ public partial class VeejalgiminePage : ContentPage
         database = new VeejalgimineDatabase(dbPath);
 
         Title = "Vee jälgimine";
+        BackgroundColor = Color.FromArgb("#F2F2F7");
 
-        kogusEntry = new Entry { Placeholder = "Joodud vee kogus (ml)", Keyboard = Keyboard.Numeric };
+        // INPUTS
+        kogusEntry = new Entry
+        {
+            Placeholder = "Joodud vee kogus (ml)",
+            Keyboard = Keyboard.Numeric
+        };
+
+        // ✅ live update стакана
+        kogusEntry.TextChanged += KogusEntry_TextChanged;
+
         kuupaevPicker = new DatePicker { Date = DateTime.Now };
-        kuupaevPicker.DateSelected += KuupaevPicker_DateSelected;
         aktiivneSwitch = new Switch { IsToggled = true };
 
-        salvestaButton = new Button { Text = "Salvesta" };
-        kustutaButton = new Button { Text = "Kustuta", IsVisible = false };
-        uusSisestusButton = new Button { Text = "Uus sisestus" };
-        avaGraafikButton = new Button { Text = "Ava graafik" };
-
-        veejalgimineListView = new ListView
-        {
-            ItemTemplate = new DataTemplate(() =>
-            {
-                var textCell = new TextCell();
-                textCell.SetBinding(TextCell.TextProperty, new Binding("Kogus", stringFormat: "Kogus: {0} ml"));
-                textCell.SetBinding(TextCell.DetailProperty, new Binding("Kuupaev", stringFormat: "{0:d}"));
-                return textCell;
-            })
-        };
-
-        btn_salvesta = new ImageButton
-        {
-            Source = "salvesta.png",
-            BackgroundColor = Colors.LightGreen,
-            HeightRequest = 45,
-            WidthRequest = 45,
-            CornerRadius = 22
-        };
-
-        btn_ajavaka = new ImageButton
-        {
-            Source = "ajakava.png",
-            BackgroundColor = Colors.Aqua,
-            HeightRequest = 45,
-            WidthRequest = 45,
-            CornerRadius = 22
-        };
-        btn_trener = new ImageButton
-        {
-            Source = "trener.png",
-            BackgroundColor = Colors.LightCoral,
-            HeightRequest = 45,
-            WidthRequest = 45,
-            CornerRadius = 22
-        };
-        btn_menu = new ImageButton
-        {
-            Source = "menu.png",
-            BackgroundColor = Colors.Transparent,
-            HeightRequest = 55,
-            WidthRequest = 55,
-            CornerRadius = 30,
-            Shadow = new Shadow
-            {
-                Opacity = 0.3f,
-                Radius = 10,
-                Offset = new Point(3, 3)
-            }
-        };
-
-        veejalgimineListView.ItemSelected += VeejalgimineListView_ItemSelected;
-        kustutaButton.Clicked += KustutaButton_Clicked;
-        uusSisestusButton.Clicked += UusSisestusButton_Clicked;
-        avaGraafikButton.Clicked += AvaGraafikButton_Clicked;
-
-        btn_trener.Clicked += Btn_trener_Clicked;
-        btn_salvesta.Clicked += Btn_salvesta_Clicked;
-        btn_menu.Clicked += Btn_menu_Clicked;
-        btn_ajavaka.Clicked += Btn_ajavaka_Clicked;
-
-        sl = new StackLayout
-        {
-            Orientation = StackOrientation.Horizontal,
-            Spacing = 15,
-            IsVisible = false,
-            Children = { btn_salvesta, btn_ajavaka, btn_trener },
-            Margin = new Thickness(0, 0, 0, 10)
-        };
-
-
+        // ================= GLASS =================
         f_klaas = new Frame
         {
-            BorderColor = Colors.Blue,
-            HeightRequest = 300,
-            WidthRequest = 150,
+            CornerRadius = 25,
+            HeightRequest = 250,
+            WidthRequest = 140,
+            BackgroundColor = Colors.White,
+            HasShadow = true,
+            Padding = 0,
             Content = new Grid
             {
                 Children =
-                    {
-                        (bv_klaas = new BoxView
-                        {
-                            Color = Colors.LightBlue,
-                            VerticalOptions = LayoutOptions.End,
-                            HeightRequest = 0
-                        })
-                    }
-            }
-        };
-
-        var scrollContent = new ScrollView
-        {
-            Content = new StackLayout
-            {
-                Padding = 20,
-                Children =
                 {
-                    new Label { Text = "Kuupäev" },
-                    kuupaevPicker,
-                    new Label { Text = "Kogus (ml)" },
-                    kogusEntry,
-                    new Label { Text = "Aktiivne" },
-                    aktiivneSwitch,
-                    new Label { Text = "Klaas" },
-                    f_klaas,
-                    veejalgimineListView
+                    new BoxView
+                    {
+                        Color = Colors.LightGray,
+                        Opacity = 0.2
+                    },
+                    (bv_klaas = new BoxView
+                    {
+                        Color = Colors.DodgerBlue,
+                        VerticalOptions = LayoutOptions.End,
+                        HeightRequest = 0
+                    })
                 }
             }
         };
 
-        var absoluteLayout = new AbsoluteLayout();
+        // ================= LIST =================
+        listView = new CollectionView
+        {
+            ItemsLayout = new LinearItemsLayout(ItemsLayoutOrientation.Vertical)
+            {
+                ItemSpacing = 10
+            },
+            ItemTemplate = new DataTemplate(() =>
+            {
+                var frame = new Frame
+                {
+                    CornerRadius = 15,
+                    Padding = 12,
+                    BackgroundColor = Colors.White,
+                    HasShadow = true,
+                    Margin = new Thickness(0, 5)
+                };
 
-        AbsoluteLayout.SetLayoutFlags(scrollContent, AbsoluteLayoutFlags.All);
-        AbsoluteLayout.SetLayoutBounds(scrollContent, new Rect(0, 0, 1, 1));
-        absoluteLayout.Children.Add(scrollContent);
+                var kogus = new Label { FontAttributes = FontAttributes.Bold, FontSize = 16 };
+                kogus.SetBinding(Label.TextProperty, new Binding("Kogus", stringFormat: "💧 {0} ml"));
 
-        AbsoluteLayout.SetLayoutFlags(sl, AbsoluteLayoutFlags.PositionProportional);
-        AbsoluteLayout.SetLayoutBounds(sl, new Rect(0.60, 0.95, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
-        absoluteLayout.Children.Add(sl);
+                var kuupaev = new Label { TextColor = Colors.Gray, FontSize = 12 };
+                kuupaev.SetBinding(Label.TextProperty, new Binding("Kuupaev", stringFormat: "{0:d}"));
 
-        AbsoluteLayout.SetLayoutFlags(btn_menu, AbsoluteLayoutFlags.PositionProportional);
-        AbsoluteLayout.SetLayoutBounds(btn_menu, new Rect(0.95, 0.95, 60, 60));
-        absoluteLayout.Children.Add(btn_menu);
+                frame.Content = new VerticalStackLayout
+                {
+                    Spacing = 3,
+                    Children = { kogus, kuupaev }
+                };
 
-        Content = absoluteLayout;
+                return frame;
+            })
+        };
 
+        // ================= BUTTON =================
+        var btn_salvesta = new Button
+        {
+            Text = "💾 Salvesta",
+            BackgroundColor = Colors.MediumPurple,
+            TextColor = Colors.White,
+            CornerRadius = 15,
+            HeightRequest = 50
+        };
+
+        btn_salvesta.Clicked += Btn_salvesta_Clicked;
+
+        // ================= FORM =================
+        var formCard = new Frame
+        {
+            CornerRadius = 20,
+            Padding = 15,
+            BackgroundColor = Colors.White,
+            HasShadow = true,
+            Content = new VerticalStackLayout
+            {
+                Spacing = 10,
+                Children =
+                {
+                    new Label { Text = "Kuupäev", FontAttributes = FontAttributes.Bold },
+                    kuupaevPicker,
+
+                    new Label { Text = "Kogus (ml)", FontAttributes = FontAttributes.Bold },
+                    kogusEntry,
+
+                    new Label { Text = "Aktiivne", FontAttributes = FontAttributes.Bold },
+                    aktiivneSwitch,
+
+                    new Label { Text = "Veetaseme näidik", FontAttributes = FontAttributes.Bold },
+                    f_klaas,
+
+                    btn_salvesta
+                }
+            }
+        };
+
+        // ================= MAIN =================
+        var mainStack = new VerticalStackLayout
+        {
+            Padding = 20,
+            Spacing = 15,
+            Children =
+            {
+                formCard,
+                new Label
+                {
+                    Text = "Ajalugu",
+                    FontSize = 18,
+                    FontAttributes = FontAttributes.Bold
+                },
+                listView
+            }
+        };
+
+        // ================= SCROLL =================
+        Content = new ScrollView
+        {
+            Content = mainStack
+        };
 
         LoadData();
     }
 
-    private async void Btn_ajavaka_Clicked(object? sender, EventArgs e)
+    // ✅ LIVE UPDATE
+    private void KogusEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
-        var andmed = database.GetVeejalgimine()
-            .OrderBy(v => v.Kuupaev)
-            .ToList();
-
-        await Navigation.PushAsync(new VeejalgimineGrafikPage(andmed));
-    }
-
-    private void Btn_menu_Clicked(object? sender, EventArgs e)
-    {
-        sl.IsVisible = !sl.IsVisible;
-    }
-
-    private async void Btn_salvesta_Clicked(object? sender, EventArgs e)
-    {
-        if (!aktiivneSwitch.IsToggled)
+        if (int.TryParse(kogusEntry.Text, out int kogus))
         {
-            var valitud_paev = kuupaevPicker.Date.Date;
-
-            var salvestamine = database.GetVeejalgimine()
-                .FirstOrDefault(v => v.Kuupaev.Date == valitud_paev);
-
-            if (salvestamine != null)
-            {
-                salvestamine.Kogus = 0;
-                salvestamine.Aktiivne = false;
-                database.SaveVeejalgimine(salvestamine);
-            }
-            else
-            {
-                var uus_kirje = new VeejalgimineClass
-                {
-                    Kuupaev = valitud_paev,
-                    Kogus = 0,
-                    Aktiivne = false
-                };
-                database.SaveVeejalgimine(uus_kirje);
-            }
-
-            ClearForm();
-            LoadData();
-            return;
+            UpdateKlaasImg(kogus);
         }
+        else
+        {
+            UpdateKlaasImg(0);
+        }
+    }
 
+    private async void Btn_salvesta_Clicked(object sender, EventArgs e)
+    {
         if (!int.TryParse(kogusEntry.Text, out int kogus) || kogus <= 0)
         {
             await DisplayAlert("Viga", "Sisesta korrektne vee kogus.", "OK");
             return;
         }
 
-        var valitud_paev_active = kuupaevPicker.Date.Date;
+        var paev = kuupaevPicker.Date.Date;
 
-        var salvestamineActive = database.GetVeejalgimine()
-            .FirstOrDefault(v => v.Kuupaev.Date == valitud_paev_active);
+        var kirje = database.GetVeejalgimine()
+            .FirstOrDefault(v => v.Kuupaev.Date == paev);
 
-        const int norm = 2000;
-
-        if (salvestamineActive != null)
+        if (kirje != null)
         {
-            int uus_summa = salvestamineActive.Kogus + kogus;
-            if (uus_summa > norm)
-            {
-                await DisplayAlert("Täis!", "Tänaseks on vee norm juba täis (2000ml).", "OK");
-                return;
-            }
-
-            salvestamineActive.Kogus += kogus;
-            salvestamineActive.Aktiivne = true;
-            database.SaveVeejalgimine(salvestamineActive);
+            kirje.Kogus += kogus;
+            kirje.Aktiivne = true;
+            database.SaveVeejalgimine(kirje);
         }
         else
         {
-            if (kogus > norm)
+            database.SaveVeejalgimine(new VeejalgimineClass
             {
-                await DisplayAlert("Liiga palju", "Sisestatud kogus ületab päeva normi.", "OK");
-                return;
-            }
-
-            var uus_kirje = new VeejalgimineClass
-            {
-                Kuupaev = valitud_paev_active,
+                Kuupaev = paev,
                 Kogus = kogus,
                 Aktiivne = true
-            };
-            database.SaveVeejalgimine(uus_kirje);
+            });
         }
 
         ClearForm();
         LoadData();
-    }
-
-    private async void Btn_trener_Clicked(object? sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new TreeningudFotoPage());
-    }
-
-    private async void AvaGraafikButton_Clicked(object? sender, EventArgs e)
-    {
-        var andmed = database.GetVeejalgimine()
-            .OrderBy(v => v.Kuupaev)
-            .ToList();
-
-        await Navigation.PushAsync(new VeejalgimineGrafikPage(andmed));
-    }
-
-
-    private void KuupaevPicker_DateSelected(object? sender, DateChangedEventArgs e)
-    {
-        LoadData();
-    }
-
-    
-
-    private void KustutaButton_Clicked(object sender, EventArgs e)
-    {
-        if (selectedItem != null)
-        {
-            var kuupaev = selectedItem.Kuupaev.Date;
-            var kirjed = database.GetVeejalgimine().Where(v => v.Kuupaev.Date == kuupaev).ToList();
-
-            foreach (var kirje in kirjed)
-                database.DeleteVeejalgimine(kirje.Veejalgimine_id);
-
-            ClearForm();
-            LoadData();
-        }
-    }
-
-    private void VeejalgimineListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-    {
-        selectedItem = e.SelectedItem as VeejalgimineClass;
-        if (selectedItem != null)
-        {
-            kuupaevPicker.Date = selectedItem.Kuupaev;
-            kogusEntry.Text = selectedItem.Kogus.ToString();
-            aktiivneSwitch.IsToggled = selectedItem.Aktiivne;
-            kustutaButton.IsVisible = true;
-        }
-    }
-
-    private void UusSisestusButton_Clicked(object sender, EventArgs e)
-    {
-        ClearForm();
-    }
-
-    private void ClearForm()
-    {
-        selectedItem = null;
-        kuupaevPicker.Date = DateTime.Now;
-        kogusEntry.Text = string.Empty;
-        aktiivneSwitch.IsToggled = true;
-        veejalgimineListView.SelectedItem = null;
-        kustutaButton.IsVisible = false;
-        bv_klaas.HeightRequest = 0;
     }
 
     private void LoadData()
     {
-        var koik_andmed = database.GetVeejalgimine()
+        var andmed = database.GetVeejalgimine()
             .GroupBy(v => v.Kuupaev.Date)
             .Select(g => new VeejalgimineClass
             {
@@ -337,11 +228,12 @@ public partial class VeejalgiminePage : ContentPage
             .OrderByDescending(v => v.Kuupaev)
             .ToList();
 
-        veejalgimineListView.ItemsSource = koik_andmed;
+        listView.ItemsSource = andmed;
 
         var paev = kuupaevPicker.Date.Date;
-        int kokku = koik_andmed
-            .Where(v => v.Kuupaev.Date == paev && v.Aktiivne)
+
+        int kokku = andmed
+            .Where(v => v.Kuupaev.Date == paev)
             .Sum(v => v.Kogus);
 
         UpdateKlaasImg(kokku);
@@ -351,6 +243,12 @@ public partial class VeejalgiminePage : ContentPage
     {
         double max = 2000;
         double protsent = Math.Min(kogus / max, 1.0);
-        bv_klaas.HeightRequest = protsent * 300;
+        bv_klaas.HeightRequest = protsent * 250;
+    }
+
+    private void ClearForm()
+    {
+        kogusEntry.Text = "";
+        aktiivneSwitch.IsToggled = true;
     }
 }

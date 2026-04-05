@@ -19,5 +19,6 @@ namespace Tervisepaevik.Models
         public string Link { get; set; }
         public int Kulutud_kalorid { get; set; }
         public byte[]? Treeningu_foto { get; set; }
+        public DateTime Kuupaev { get; set; }
     }
 }

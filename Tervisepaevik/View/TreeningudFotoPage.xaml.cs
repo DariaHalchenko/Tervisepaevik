@@ -10,10 +10,10 @@ public partial class TreeningudFotoPage : ContentPage
     private readonly TreeningudDatabase database;
     private Switch redirectSwitch;
 
-
     public TreeningudFotoPage()
     {
         Title = "Minu treeningud";
+        BackgroundColor = Color.FromArgb("#F2F2F7");
 
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
         database = new TreeningudDatabase(dbPath);
@@ -25,42 +25,65 @@ public partial class TreeningudFotoPage : ContentPage
         var carousel = new CarouselView
         {
             ItemsSource = treeningud,
+            PeekAreaInsets = 20,
+            HeightRequest = 450,
             ItemTemplate = new DataTemplate(() =>
             {
+                var card = new Frame
+                {
+                    CornerRadius = 25,
+                    Padding = 15,
+                    Margin = new Thickness(10),
+                    BackgroundColor = Colors.White,
+                    HasShadow = true
+                };
+
                 var nimiLabel = new Label
                 {
                     FontSize = 22,
                     FontAttributes = FontAttributes.Bold,
-                    HorizontalOptions = LayoutOptions.Center
+                    HorizontalOptions = LayoutOptions.Center,
+                    TextColor = Colors.Black
                 };
                 nimiLabel.SetBinding(Label.TextProperty, "Treeningu_nimi");
 
-                var tyyppLabel = new Label();
+                var tyyppLabel = new Label
+                {
+                    FontSize = 14,
+                    TextColor = Colors.Gray
+                };
                 tyyppLabel.SetBinding(Label.TextProperty, new Binding("Treeningu_tuup", stringFormat: "Tüüp: {0}"));
 
-                var kellaaegLabel = new Label();
+                var kellaaegLabel = new Label
+                {
+                    FontSize = 14,
+                    TextColor = Colors.Gray
+                };
                 kellaaegLabel.SetBinding(Label.TextProperty, new Binding("Kallaaeg", stringFormat: "Kellaaeg: {0}"));
 
-                var sammudLabel = new Label();
+                var sammudLabel = new Label
+                {
+                    FontSize = 14,
+                    TextColor = Colors.Gray
+                };
                 sammudLabel.SetBinding(Label.TextProperty, new Binding("Kirjeldus", stringFormat: "Kirjeldus: {0}"));
 
-                var kaloridLabel = new Label();
+                var kaloridLabel = new Label
+                {
+                    FontSize = 14,
+                    TextColor = Colors.Gray
+                };
                 kaloridLabel.SetBinding(Label.TextProperty, new Binding("Kulutud_kalorid", stringFormat: "Kalorid: {0}"));
 
                 var image = new Image
                 {
-                    HeightRequest = 200,
-                    Aspect = Aspect.AspectFill
+                    HeightRequest = 220,
+                    Aspect = Aspect.AspectFill,
+                    Margin = new Thickness(0, 10)
                 };
-                image.SetBinding(Image.SourceProperty, new Binding("Treeningu_foto", converter: new ByteArrayToImageSourceConverter()));
 
-                var juhisLabel = new Label
-                {
-                    FontSize = 14,
-                    FontAttributes = FontAttributes.Bold,
-                    HorizontalOptions = LayoutOptions.Center,
-                    Text = "Video vaatamiseks klõpsake pildil"
-                };
+                image.SetBinding(Image.SourceProperty,
+                    new Binding("Treeningu_foto", converter: new ByteArrayToImageSourceConverter()));
 
                 var tapGesture = new TapGestureRecognizer();
                 tapGesture.Tapped += async (s, e) =>
@@ -73,94 +96,106 @@ public partial class TreeningudFotoPage : ContentPage
                         }
                         catch (Exception ex)
                         {
-                            await Application.Current.MainPage.DisplayAlert("Viga", $"Linki ei saa avada: {ex.Message}", "OK");
+                            await DisplayAlert("Viga", $"Linki ei saa avada: {ex.Message}", "OK");
                         }
                     }
                 };
+
                 image.GestureRecognizers.Add(tapGesture);
 
-                return new ScrollView
+                var infoStack = new VerticalStackLayout
                 {
-                    Content = new StackLayout
+                    Spacing = 5,
+                    Children =
                     {
-                        Padding = new Thickness(20),
-                        Spacing = 12,
-                        Children =
-                        {
-                            nimiLabel,
-                            tyyppLabel,
-                            kellaaegLabel,
-                            sammudLabel,
-                            kaloridLabel,
-                            image,
-                            juhisLabel
-                        }
+                        nimiLabel,
+                        tyyppLabel,
+                        kellaaegLabel,
+                        sammudLabel,
+                        kaloridLabel
                     }
                 };
+
+                var mainStack = new VerticalStackLayout
+                {
+                    Spacing = 10,
+                    Children =
+                    {
+                        infoStack,
+                        image
+                    }
+                };
+
+                card.Content = mainStack;
+
+                return card;
             })
         };
 
+        // ================= BUTTON (NEW DESIGN) =================
+        var addButton = new Button
+        {
+            Text = "➕ Lisa uus treening",
+            BackgroundColor = Colors.MediumPurple,
+            TextColor = Colors.White,
+            CornerRadius = 15,
+            HeightRequest = 50,
+            FontAttributes = FontAttributes.Bold
+        };
+
+        addButton.Clicked += async (s, e) =>
+        {
+            await Navigation.PushAsync(new TreeningudPage());
+        };
+
+        // ================= SWITCH =================
         redirectSwitch = new Switch
         {
-            HorizontalOptions = LayoutOptions.End,
-            ThumbColor = Colors.DarkViolet,
-            OnColor = Colors.LightGreen
+            ThumbColor = Colors.White,
+            OnColor = Colors.MediumPurple
         };
         redirectSwitch.Toggled += RedirectSwitch_Toggled;
 
-        var switchLayout = new StackLayout
+        var switchLayout = new Frame
         {
-            Orientation = StackOrientation.Horizontal,
-            HorizontalOptions = LayoutOptions.Center,
-            Spacing = 10,
-            Padding = new Thickness(0, 10),
+            Padding = 10,
+            CornerRadius = 20,
+            BackgroundColor = Colors.White,
+            HasShadow = true,
+            Content = new HorizontalStackLayout
+            {
+                Spacing = 10,
+                Children =
+                {
+                    new Label
+                    {
+                        Text = "Enesetunne",
+                        VerticalOptions = LayoutOptions.Center,
+                        FontAttributes = FontAttributes.Bold
+                    },
+                    redirectSwitch
+                }
+            }
+        };
+
+        // ================= MAIN STACK =================
+        var mainStack = new VerticalStackLayout
+        {
+            Padding = 15,
+            Spacing = 15,
             Children =
             {
-                new Label
-                {
-                    Text = "Minu enesetunne",
-                    VerticalOptions = LayoutOptions.Center,
-                    FontSize = 14
-                },
-                redirectSwitch
+                addButton,
+                carousel,
+                switchLayout
             }
         };
 
-        var frame = new Frame
+        // ================= SCROLL =================
+        Content = new ScrollView
         {
-            CornerRadius = 30,
-            HeightRequest = 60,
-            WidthRequest = 60,
-            BackgroundColor = Colors.White,
-            Padding = 10,
-            HasShadow = true,
-            Content = new ImageButton
-            {
-                Source = "lisa.png",
-                BackgroundColor = Colors.Transparent,
-                Command = new Command(async () =>
-                {
-                    await Navigation.PushAsync(new TreeningudPage());
-                })
-            }
+            Content = mainStack
         };
-
-        var absoluteLayout = new AbsoluteLayout();
-
-        AbsoluteLayout.SetLayoutFlags(carousel, AbsoluteLayoutFlags.All);
-        AbsoluteLayout.SetLayoutBounds(carousel, new Rect(0, 0, 1, 1));
-        absoluteLayout.Children.Add(carousel);
-
-        AbsoluteLayout.SetLayoutFlags(switchLayout, AbsoluteLayoutFlags.PositionProportional);
-        AbsoluteLayout.SetLayoutBounds(switchLayout, new Rect(0.5, 0.95, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
-        absoluteLayout.Children.Add(switchLayout);
-
-        AbsoluteLayout.SetLayoutFlags(frame, AbsoluteLayoutFlags.PositionProportional);
-        AbsoluteLayout.SetLayoutBounds(frame, new Rect(0.95, 0.95, 60, 60));
-        absoluteLayout.Children.Add(frame);
-
-        Content = absoluteLayout;
-
     }
 
     private async void RedirectSwitch_Toggled(object sender, ToggledEventArgs e)
@@ -171,21 +206,22 @@ public partial class TreeningudFotoPage : ContentPage
             Device.BeginInvokeOnMainThread(() => redirectSwitch.IsToggled = false);
         }
     }
-}
 
-public class ByteArrayToImageSourceConverter : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public class ByteArrayToImageSourceConverter : IValueConverter
     {
-        if (value is byte[] bytes && bytes.Length > 0)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return ImageSource.FromStream(() => new MemoryStream(bytes));
-        }
-        return null;
-    }
+            if (value is byte[] bytes && bytes.Length > 0)
+            {
+                return ImageSource.FromStream(() => new MemoryStream(bytes));
+            }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
+            return null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

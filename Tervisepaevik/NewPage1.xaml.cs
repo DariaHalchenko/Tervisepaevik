@@ -11,7 +11,8 @@ namespace Tervisepaevik
         public List<ContentPage> lehed = new List<ContentPage>()
         {
             new TervitatavPage(),
-            new TreeningudPage(),
+            new StartPage(),
+            new TreeningudFotoPage(),
             new EnesetunnePage(),
             new VeejalgiminePage()
         };
@@ -82,8 +83,7 @@ namespace Tervisepaevik
                     }
                     else
                     {
-                        int realIndex = index > 1 ? index - 1 : index;
-                        await Navigation.PushAsync(lehed[realIndex]);
+                        await Navigation.PushAsync(lehed[index]);
                     }
                 };
 

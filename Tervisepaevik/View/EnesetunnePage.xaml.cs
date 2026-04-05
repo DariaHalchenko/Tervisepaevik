@@ -1,6 +1,7 @@
-﻿using System.Globalization;
+﻿using Microsoft.Maui.Controls;
 using Tervisepaevik.Database;
 using Tervisepaevik.Models;
+using static Android.Graphics.ImageDecoder;
 
 namespace Tervisepaevik.View;
 
@@ -10,9 +11,10 @@ public partial class EnesetunnePage : ContentPage
 
     ListView enesetunneListView;
     DatePicker dp_kuupaev;
-    Button btn_salvesta, btn_kustuta, btn_puhastata, btn_hingeohk;
+    Button btn_salvesta, btn_kustuta, btn_hingeohk;
 
     StackLayout sl_tuju, sl_energia;
+
     int selectedTuju = 0;
     int selectedEnergia = 0;
 
@@ -27,261 +29,247 @@ public partial class EnesetunnePage : ContentPage
 
         dp_kuupaev = new DatePicker
         {
-            Date = DateTime.Now,
-            BackgroundColor = Colors.LightBlue,
-            TextColor = Colors.White,
-            FontSize = 16,
-            HorizontalOptions = LayoutOptions.Center
+            Date = DateTime.Now
         };
 
-        dp_kuupaev.DateSelected += (s, e) =>
+        btn_salvesta = CreateButton("Salvesta", Colors.Green);
+        btn_kustuta = CreateButton("Kustuta", Colors.Red);
+        btn_hingeohk = CreateButton("Hingamise harjutus", Colors.Blue);
+
+        btn_kustuta.IsVisible = false;
+        btn_hingeohk.IsVisible = false;
+
+        // ✅ TUJU (stack row)
+        sl_tuju = new StackLayout
         {
-            dp_kuupaev.ScaleTo(1.1, 300, Easing.CubicInOut);
-            dp_kuupaev.ScaleTo(1.0, 300, Easing.CubicInOut);
+            Orientation = StackOrientation.Horizontal,
+            Spacing = 10,
+            HorizontalOptions = LayoutOptions.Start,
+            Margin = new Thickness(0)
         };
-        btn_salvesta = new Button { Text = "Salvesta" };
-        btn_kustuta = new Button { Text = "Kustuta", IsVisible = false };
-        btn_puhastata = new Button { Text = "Uus sisestus" };
-        btn_hingeohk = new Button { Text = "Hingamise taastamine", IsVisible = false };
 
-        sl_tuju = new StackLayout { Orientation = StackOrientation.Horizontal };
         for (int i = 1; i <= 5; i++)
         {
-            var img = new Image
-            {
-                Source = $"tuju{i}.PNG",
-                BackgroundColor = Colors.Transparent,
-                HeightRequest = 70,
-                WidthRequest = 70,
-            };
-            int level = i;
-            var tap = new TapGestureRecognizer();
-            tap.Tapped += async (s, e) =>
-            {
-                selectedTuju = level;
-                var image = s as Image;
-                await image.ScaleTo(1.2, 100, Easing.CubicInOut);
-                await image.ScaleTo(1.0, 100, Easing.CubicInOut);
-                KontrolliHingeohkNuppu();
-            };
-            img.GestureRecognizers.Add(tap);
+            var img = CreateMoodImage($"tuju{i}.PNG", i, true);
             sl_tuju.Children.Add(img);
         }
 
-        sl_energia = new StackLayout { Orientation = StackOrientation.Horizontal };
+        // ✅ ENERGIA
+        sl_energia = new StackLayout
+        {
+            Orientation = StackOrientation.Horizontal,
+            Spacing = 10
+        };
+
         for (int i = 1; i <= 5; i++)
         {
-            var img = new Image
-            {
-                Source = "energia.png",
-                BackgroundColor = Colors.Transparent,
-                HeightRequest = 70,
-                WidthRequest = 70
-            };
-            int level = i;
-            var tap = new TapGestureRecognizer();
-            tap.Tapped += async (s, e) =>
-            {
-                selectedEnergia = level;
-
-                var image = s as Image;
-                await image.ScaleTo(1.2, 100, Easing.CubicInOut);
-                await image.ScaleTo(1.0, 100, Easing.CubicInOut);
-                KontrolliHingeohkNuppu();
-            };
-            img.GestureRecognizers.Add(tap);
-            sl_energia.Children.Add(img);
+            sl_energia.Children.Add(CreateMoodImage("energia.png", i, false));
         }
 
-        enesetunneListView = new ListView();
+        enesetunneListView = new ListView
+        {
+            SeparatorVisibility = SeparatorVisibility.None,
+            HasUnevenRows = true,
+            BackgroundColor = Colors.Transparent
+        };
 
         enesetunneListView.ItemTemplate = new DataTemplate(() =>
         {
-            var tujuImage = new Image
-            {
-                HeightRequest = 50,
-                WidthRequest = 50,
-                Aspect = Aspect.Fill,
-                BackgroundColor = Colors.Transparent,
-
-            };
+            var tujuImage = new Image { HeightRequest = 40, WidthRequest = 40 };
             tujuImage.SetBinding(Image.SourceProperty, "TujuImageSource");
 
-            var energiaImage = new Image
-            {
-                HeightRequest = 50,
-                WidthRequest = 50,
-                Aspect = Aspect.Fill,
-                BackgroundColor = Colors.Transparent,
-
-            };
+            var energiaImage = new Image { HeightRequest = 40, WidthRequest = 40 };
             energiaImage.SetBinding(Image.SourceProperty, "EnergiaImageSource");
 
-            var lbl_kuupaev = new Label
+            var dateLabel = new Label
             {
-                FontSize = 14,
-                VerticalOptions = LayoutOptions.Center,
-                Margin = new Thickness(10, 0),
-                TextColor = Colors.DarkSlateGray 
-            };
-            lbl_kuupaev.SetBinding(Label.TextProperty, new Binding("Kuupaev", stringFormat: "{0:dd.MM.yyyy}"));
-
-            var sudaImage = new Image
-            {
-                Source = "suda.jpg",
-                WidthRequest = 30,
-                HeightRequest = 30,
+                FontAttributes = FontAttributes.Bold,
                 VerticalOptions = LayoutOptions.Center
             };
-            sudaImage.SetBinding(IsVisibleProperty, new Binding("Energia", BindingMode.Default, converter: new EnergiaToHeartVisibilityConverter()));
+            dateLabel.SetBinding(Label.TextProperty, new Binding("Kuupaev", stringFormat: "{0:dd.MM.yyyy}"));
 
-            sudaImage.Loaded += async (s, e) =>
+            var heart = new Image
             {
-                while (true)
-                {
-                    await sudaImage.ScaleTo(1.2, 500, Easing.SinInOut);
-                    await sudaImage.ScaleTo(1.0, 500, Easing.SinInOut);
+                Source = "suda.jpg",
+                WidthRequest = 25,
+                HeightRequest = 25
+            };
 
+            heart.SetBinding(IsVisibleProperty,
+                new Binding("Energia", converter: new EnergiaToHeartVisibilityConverter()));
+
+            var grid = new Grid
+            {
+                Padding = 10,
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition { Width = GridLength.Auto },
+                    new ColumnDefinition { Width = GridLength.Auto },
+                    new ColumnDefinition { Width = GridLength.Star },
+                    new ColumnDefinition { Width = GridLength.Auto }
                 }
             };
 
-            var cell = new ViewCell
+            grid.Add(tujuImage);
+            Grid.SetColumn(tujuImage, 0);
+
+            grid.Add(energiaImage);
+            Grid.SetColumn(energiaImage, 1);
+
+            grid.Add(dateLabel);
+            Grid.SetColumn(dateLabel, 2);
+
+            grid.Add(heart);
+            Grid.SetColumn(heart, 3);
+
+            return new ViewCell
             {
-                View = new StackLayout
+                View = new Frame
                 {
-                    Orientation = StackOrientation.Horizontal,
-                    Spacing = 15,
-                    Padding = 15,
-                    Children = { tujuImage, energiaImage, lbl_kuupaev, sudaImage }
+                    CornerRadius = 15,
+                    Margin = 5,
+                    Padding = 10,
+                    HasShadow = true,
+                    BackgroundColor = Colors.White,
+                    Content = grid
                 }
             };
-
-            return cell;
         });
 
         enesetunneListView.ItemSelected += EnesetunneListView_ItemSelected;
+
         btn_salvesta.Clicked += Btn_salvesta_Clicked;
         btn_kustuta.Clicked += Btn_kustuta_Clicked;
-        btn_puhastata.Clicked += Btn_puhastata_Clicked;
         btn_hingeohk.Clicked += Btn_hingeohk_Clicked;
 
         Content = new ScrollView
         {
             Content = new StackLayout
             {
-                Padding = 20,
+                Padding = 15,
+                Spacing = 15,
                 Children =
-                    {
-                        new Label { Text = "Kuupäev:" },
-                        dp_kuupaev,
-                        new Label { Text = "Tuju:" },
-                        sl_tuju,
-                        new Label { Text = "Energia:", Margin = new Thickness(0, 20, 0, 0) },
-                        sl_energia,
-                        btn_salvesta,
-                        btn_kustuta,
-                        btn_puhastata,
-                        btn_hingeohk,
-                        enesetunneListView
-                    }
+                {
+                    CreateCard("Kuupäev", dp_kuupaev),
+                    CreateCard("Tuju", sl_tuju),
+                    CreateCard("Energia", sl_energia),
+
+                    btn_salvesta,
+
+                    btn_kustuta,
+                    btn_hingeohk,
+
+                    CreateListCard()
+                }
             }
         };
+
         NaitaAndmeid();
     }
 
-    private async void Btn_hingeohk_Clicked(object? sender, EventArgs e)
+    // ✅ Mood image with animation
+    private Image CreateMoodImage(string source, int level, bool isMood)
     {
-        var popupPage = new ContentPage
+        var img = new Image
         {
-            BackgroundColor = Color.FromRgba(0, 0, 0, 0.7),
-            Padding = 20
+            Source = source,
+            HeightRequest = 55,
+            WidthRequest = 55,
+            Opacity = 0.5
         };
 
-        var timerLabel = new Label
+        var tap = new TapGestureRecognizer();
+        tap.Tapped += async (s, e) =>
         {
-            Text = "30",
-            FontSize = 24,
-            TextColor = Colors.White,
-            HorizontalOptions = LayoutOptions.Center
+            ResetMoodOpacity(isMood);
+
+            if (isMood)
+                selectedTuju = level;
+            else
+                selectedEnergia = level;
+
+            await img.ScaleTo(1.3, 150);
+            await img.ScaleTo(1.0, 150);
+
+            img.Opacity = 1;
+
+            KontrolliHingeohkNuppu();
         };
 
-        var kopsudImage = new Image
-        {
-            Source = "kopsud.png",
-            WidthRequest = 200,
-            HeightRequest = 200,
-            Aspect = Aspect.AspectFit
-        };
-        kopsudImage.SetBinding(IsVisibleProperty, new Binding("Energia", BindingMode.Default, converter: new EnergiaToHeartVisibilityConverter()));
+        img.GestureRecognizers.Add(tap);
+        return img;
+    }
 
-        kopsudImage.Loaded += async (s, e) =>
+    private void ResetMoodOpacity(bool isMood)
+    {
+        var stack = isMood ? sl_tuju : sl_energia;
+
+        foreach (var view in stack.Children)
         {
-            while (true)
+            if (view is Image img)
             {
-                await kopsudImage.ScaleTo(1.2, 2000, Easing.SinInOut);
-                await kopsudImage.ScaleTo(1.0, 2000, Easing.SinInOut);
+                img.Opacity = 0.6;
+                img.Scale = 1;
+            }
+        }
+    }
 
+    // UI helpers
+    private Frame CreateCard(string title, Microsoft.Maui.Controls.View content)
+    {
+        return new Frame
+        {
+            CornerRadius = 20,
+            Padding = 15,
+            HasShadow = true,
+            BackgroundColor = Colors.White,
+            Content = new StackLayout
+            {
+                Spacing = 10,
+                Children =
+                {
+                    new Label
+                    {
+                        Text = title,
+                        FontAttributes = FontAttributes.Bold
+                    },
+                    content
+                }
             }
         };
-
-        var btn_sule = new Button
-        {
-            Text = "Sulge",
-            Margin = new Thickness(0, 20, 0, 0)
-        };
-        btn_sule.Clicked += Btn_sule_Clicked;
-
-        popupPage.Content = new StackLayout
-        {
-            VerticalOptions = LayoutOptions.Center,
-            HorizontalOptions = LayoutOptions.Center,
-            Children = {
-            new Label {
-                Text = "Hingamise harjutus",
-                FontSize = 20,
-                TextColor = Colors.White,
-                HorizontalOptions = LayoutOptions.Center
-            },
-            timerLabel,
-            kopsudImage,
-            btn_sule
-        }
-        };
-
-        int secondsRemaining = 30;
-        Device.StartTimer(TimeSpan.FromSeconds(1), () =>
-        {
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                secondsRemaining--;
-                timerLabel.Text = secondsRemaining.ToString();
-
-                if (secondsRemaining <= 0)
-                {
-                    timerLabel.Text = "Valmis!";
-                }
-            });
-
-            return secondsRemaining > 0;
-        });
-
-        await Application.Current.MainPage.Navigation.PushModalAsync(popupPage);
     }
 
-    private void Btn_sule_Clicked(object? sender, EventArgs e)
+    private Frame CreateListCard()
     {
-        Application.Current.MainPage.Navigation.PopModalAsync();
+        return new Frame
+        {
+            CornerRadius = 20,
+            Padding = 10,
+            HasShadow = true,
+            BackgroundColor = Colors.White,
+            Content = enesetunneListView
+        };
     }
 
-    private void Btn_puhastata_Clicked(object? sender, EventArgs e)
+    private Button CreateButton(string text, Color color)
     {
-        SelgeForm();
+        return new Button
+        {
+            Text = text,
+            BackgroundColor = color,
+            TextColor = Colors.White,
+            CornerRadius = 10
+        };
     }
 
-    private async void Btn_salvesta_Clicked(object? sender, EventArgs e)
+    // ✅ SAVE FIXED
+    private async void Btn_salvesta_Clicked(object sender, EventArgs e)
     {
         if (selectedTuju == 0 || selectedEnergia == 0)
+        {
+            await DisplayAlert("Viga", "Vali tuju ja energia enne salvestamist", "OK");
             return;
+        }
 
         if (selectedItem == null)
             selectedItem = new EnesetunneClass();
@@ -292,25 +280,13 @@ public partial class EnesetunnePage : ContentPage
 
         database.SaveEnesetunne(selectedItem);
 
-        string sonum = "";
-
-        if (selectedTuju >= 4 && selectedEnergia >= 4)
-            sonum = "Super! Tundub, et sul on suurepärane päev! 😄⚡";
-        else if (selectedTuju <= 2 && selectedEnergia <= 2)
-            sonum = "Püüa puhata ja hoolitse enda eest täna.";
-        else if (selectedTuju >= 4 && selectedEnergia <= 2)
-            sonum = "Hea tuju, aga oled väsinud – aeg hellitada end ☕🎶";
-        else if (selectedTuju <= 2 && selectedEnergia >= 4)
-            sonum = "Sul on energiat, aga tuju vajab turgutust. Proovi midagi toredat teha! 🚶🎨";
-
-        if (!string.IsNullOrEmpty(sonum))
-            await DisplayAlert("Sõnum sulle", sonum, "OK");
+        await DisplayAlert("Info", "Salvestatud", "OK");
 
         SelgeForm();
         NaitaAndmeid();
     }
 
-    private void Btn_kustuta_Clicked(object? sender, EventArgs e)
+    private void Btn_kustuta_Clicked(object sender, EventArgs e)
     {
         if (selectedItem != null)
         {
@@ -320,6 +296,11 @@ public partial class EnesetunnePage : ContentPage
         }
     }
 
+    private async void Btn_hingeohk_Clicked(object sender, EventArgs e)
+    {
+        await DisplayAlert("Hingamine", "Harjutus algas...", "OK");
+    }
+
     public void NaitaAndmeid()
     {
         enesetunneListView.ItemsSource = database.GetEnesetunne()
@@ -327,44 +308,49 @@ public partial class EnesetunnePage : ContentPage
             .ToList();
     }
 
-    public void EnesetunneListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    private void EnesetunneListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         selectedItem = e.SelectedItem as EnesetunneClass;
+
         if (selectedItem != null)
         {
             selectedTuju = selectedItem.Tuju;
             selectedEnergia = selectedItem.Energia;
             dp_kuupaev.Date = selectedItem.Kuupaev;
+
             btn_kustuta.IsVisible = true;
         }
     }
 
-    public void SelgeForm()
+    private void SelgeForm()
     {
         selectedItem = null;
         selectedTuju = 0;
         selectedEnergia = 0;
+
         dp_kuupaev.Date = DateTime.Now;
         enesetunneListView.SelectedItem = null;
+
         btn_kustuta.IsVisible = false;
         btn_hingeohk.IsVisible = false;
     }
-    public class EnergiaToHeartVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            int energia = (int)value;
-            return energia >= 2;
-        }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
     private void KontrolliHingeohkNuppu()
     {
         btn_hingeohk.IsVisible = (selectedEnergia >= 1 && (selectedTuju == 1 || selectedTuju == 2));
     }
 
+    public class EnergiaToHeartVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int energia = (int)value;
+            return energia >= 2;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

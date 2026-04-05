@@ -1,4 +1,4 @@
-﻿using Microsoft.Maui.Layouts;
+﻿using Microsoft.Maui.Controls;
 using Tervisepaevik.Database;
 using Tervisepaevik.Models;
 
@@ -6,21 +6,14 @@ namespace Tervisepaevik.View;
 
 public partial class LounasookPage : ContentPage
 {
-    private string lisafoto;
     private byte[] fotoBytes;
     private LounasookDatabase database;
     private LounasookClass selectedItem;
 
-    private EntryCell ec_roaNimi, ec_valgud, ec_rasvad, ec_susivesikud, ec_kalorid;
-    private DatePicker dp_kuupaev;
-    private TimePicker tp_kallaaeg;
+    private Entry entryRoa, entryValgud, entryRasvad, entrySys, entryKalorid;
+    private DatePicker dp;
+    private TimePicker tp;
     private Image img;
-
-    private TableView tableview;
-    private TableSection fotoSection;
-
-    private ImageButton btn_salvesta, btn_pildista, btn_valifoto, btn_menu, btn_vesi, btn_trener;
-    private StackLayout sl;
 
     public LounasookPage()
     {
@@ -28,148 +21,133 @@ public partial class LounasookPage : ContentPage
         database = new LounasookDatabase(dbPath);
 
         Title = "Lounasöök";
+        BackgroundColor = Color.FromArgb("#F5F5F5");
 
-        ec_roaNimi = new EntryCell { Label = "Roa nimi", Placeholder = "nt. Puder" };
-        ec_valgud = new EntryCell { Label = "Valgud", Placeholder = "g", Keyboard = Keyboard.Numeric };
-        ec_rasvad = new EntryCell { Label = "Rasvad", Placeholder = "g", Keyboard = Keyboard.Numeric };
-        ec_susivesikud = new EntryCell { Label = "Süsivesikud", Placeholder = "g", Keyboard = Keyboard.Numeric };
-        ec_kalorid = new EntryCell { Label = "Kalorid", Placeholder = "kcal", Keyboard = Keyboard.Numeric };
+        dp = new DatePicker { Date = DateTime.Now };
+        tp = new TimePicker { Time = TimeSpan.FromHours(13) };
 
-        dp_kuupaev = new DatePicker { Date = DateTime.Now };
-        tp_kallaaeg = new TimePicker { Time = TimeSpan.FromHours(8) };
+        entryRoa = CreateEntry("Roa nimi");
+        entryValgud = CreateEntry("Valgud (g)");
+        entryRasvad = CreateEntry("Rasvad (g)");
+        entrySys = CreateEntry("Süsivesikud (g)");
+        entryKalorid = CreateEntry("Kalorid (kcal)");
 
-        btn_pildista = new ImageButton
+        // 🔥 КАЛЬКУЛЯТОР
+        entryValgud.TextChanged += OnMacrosChanged;
+        entryRasvad.TextChanged += OnMacrosChanged;
+        entrySys.TextChanged += OnMacrosChanged;
+
+        img = new Image
         {
-            Source = "foto.png",
-            BackgroundColor = Colors.LightGrey,
-            HeightRequest = 45,
-            WidthRequest = 45,
-            CornerRadius = 10
-        };
-        btn_valifoto = new ImageButton
-        {
-            Source = "valifoto.png",
-            BackgroundColor = Colors.LightSkyBlue,
-            HeightRequest = 45,
-            WidthRequest = 45,
-            CornerRadius = 10
-        };
-        btn_salvesta = new ImageButton
-        {
-            Source = "salvesta.png",
-            BackgroundColor = Colors.LightGreen,
-            HeightRequest = 45,
-            WidthRequest = 45,
-            CornerRadius = 22
+            HeightRequest = 200,
+            Aspect = Aspect.AspectFill
         };
 
-        btn_vesi = new ImageButton
+        var fotoFrame = new Frame
         {
-            Source = "vesi.png",
-            BackgroundColor = Colors.Aqua,
-            HeightRequest = 45,
-            WidthRequest = 45,
-            CornerRadius = 22
-        };
-        btn_trener = new ImageButton
-        {
-            Source = "trener.png",
-            BackgroundColor = Colors.LightCoral,
-            HeightRequest = 45,
-            WidthRequest = 45,
-            CornerRadius = 22
-        };
-        btn_menu = new ImageButton
-        {
-            Source = "menu.png",
-            BackgroundColor = Colors.Transparent,
-            HeightRequest = 55,
-            WidthRequest = 55,
-            CornerRadius = 30,
-            Shadow = new Shadow
-            {
-                Opacity = 0.3f,
-                Radius = 10,
-                Offset = new Point(3, 3)
-            }
+            CornerRadius = 15,
+            Padding = 0,
+            IsClippedToBounds = true,
+            Content = img
         };
 
-        btn_salvesta.Clicked += Btn_salvesta_Clicked;
-        btn_pildista.Clicked += Btn_pildista_Clicked;
-        btn_valifoto.Clicked += Btn_valifoto_Clicked;
-        btn_menu.Clicked += Btn_menu_Clicked;
-        btn_vesi.Clicked += Btn_vesi_Clicked;
-        btn_trener.Clicked += Btn_trener_Clicked;
+        var btnPick = CreateButton("Vali foto", "#03A9F4", Btn_valifoto_Clicked);
+        var btnPhoto = CreateButton("Kaamera", "#2196F3", Btn_pildista_Clicked);
+        var btnSave = CreateButton("Salvesta", "#4CAF50", Btn_salvesta_Clicked);
 
-        img = new Image();
-
-        fotoSection = new TableSection("Foto");
-
-        tableview = new TableView
+        var buttonRow = new HorizontalStackLayout
         {
-            Intent = TableIntent.Form,
-            Root = new TableRoot("Sisesta Lounasöök")
-            {
-                new TableSection("Üldandmed")
-                {
-                    new ViewCell { View = dp_kuupaev },
-                    new ViewCell { View = tp_kallaaeg },
-                    ec_roaNimi,
-                    ec_valgud,
-                    ec_rasvad,
-                    ec_susivesikud,
-                    ec_kalorid
-                },
-                fotoSection
-            }
+            Spacing = 10,
+            Children = { btnPick, btnPhoto, btnSave }
         };
 
-
-        sl = new StackLayout
+        var mainStack = new VerticalStackLayout
         {
-            Orientation = StackOrientation.Horizontal,
-            Spacing = 15,
-            IsVisible = false,
-            Children = { btn_valifoto, btn_pildista, btn_salvesta, btn_vesi, btn_trener },
-            Margin = new Thickness(0, 0, 0, 10)
+            Padding = 20,
+            Spacing = 20
         };
 
-        var absolutelayout = new AbsoluteLayout();
+        mainStack.Children.Add(CreateCard("Üldandmed",
+            dp, tp, entryRoa, entryValgud, entryRasvad, entrySys, entryKalorid));
 
-        AbsoluteLayout.SetLayoutFlags(tableview, AbsoluteLayoutFlags.All);
-        AbsoluteLayout.SetLayoutBounds(tableview, new Rect(0, 0, 1, 1));
-        absolutelayout.Children.Add(tableview);
+        mainStack.Children.Add(CreateCard("Foto",
+            fotoFrame, buttonRow));
 
-        AbsoluteLayout.SetLayoutFlags(sl, AbsoluteLayoutFlags.PositionProportional);
-        AbsoluteLayout.SetLayoutBounds(sl, new Rect(0.25, 0.95, AbsoluteLayout.AutoSize, AbsoluteLayout.AutoSize));
-        absolutelayout.Children.Add(sl);
-
-        AbsoluteLayout.SetLayoutFlags(btn_menu, AbsoluteLayoutFlags.PositionProportional);
-        AbsoluteLayout.SetLayoutBounds(btn_menu, new Rect(0.95, 0.95, 60, 60));
-        absolutelayout.Children.Add(btn_menu);
-
-        Content = absolutelayout;
+        Content = new ScrollView { Content = mainStack };
     }
 
-    private async void Btn_trener_Clicked(object? sender, EventArgs e)
+    // ================= CALCULATOR =================
+    private void OnMacrosChanged(object sender, TextChangedEventArgs e)
     {
-        await Navigation.PushAsync(new TreeningudFotoPage());
+        int valgud = int.TryParse(entryValgud.Text, out var v) ? v : 0;
+        int rasvad = int.TryParse(entryRasvad.Text, out var r) ? r : 0;
+        int sys = int.TryParse(entrySys.Text, out var s) ? s : 0;
+
+        int kalorid = (valgud * 4) + (sys * 4) + (rasvad * 9);
+
+        entryKalorid.Text = kalorid.ToString();
     }
 
-    private async void Btn_vesi_Clicked(object? sender, EventArgs e)
+    // ================= UI =================
+
+    private Entry CreateEntry(string placeholder)
     {
-        await Navigation.PushAsync(new VeejalgiminePage());
-    }
-    private void Btn_menu_Clicked(object sender, EventArgs e)
-    {
-        sl.IsVisible = !sl.IsVisible;
+        return new Entry
+        {
+            Placeholder = placeholder,
+            BackgroundColor = Colors.White,
+            HeightRequest = 50,
+            Margin = new Thickness(0, 5)
+        };
     }
 
-    private void Btn_puhastada_Clicked(object sender, EventArgs e) => ClearForm();
+    private Button CreateButton(string text, string color, EventHandler action)
+    {
+        var btn = new Button
+        {
+            Text = text,
+            BackgroundColor = Color.FromArgb(color),
+            TextColor = Colors.White,
+            CornerRadius = 15,
+            HeightRequest = 45
+        };
+
+        btn.Clicked += action;
+        return btn;
+    }
+
+    private Frame CreateCard(string title, params object[] views)
+    {
+        var stack = new VerticalStackLayout { Spacing = 10 };
+
+        stack.Children.Add(new Label
+        {
+            Text = title,
+            FontSize = 18,
+            FontAttributes = FontAttributes.Bold
+        });
+
+        foreach (var v in views)
+        {
+            if (v is VisualElement element)
+                stack.Children.Add(element);
+        }
+
+        return new Frame
+        {
+            CornerRadius = 20,
+            Padding = 15,
+            BackgroundColor = Colors.White,
+            HasShadow = true,
+            Content = stack
+        };
+    }
+
+    // ================= FOTO =================
 
     private async void Btn_valifoto_Clicked(object sender, EventArgs e)
     {
-        FileResult foto = await MediaPicker.Default.PickPhotoAsync();
+        var foto = await MediaPicker.Default.PickPhotoAsync();
         await SalvestaFoto(foto);
     }
 
@@ -177,60 +155,44 @@ public partial class LounasookPage : ContentPage
     {
         if (MediaPicker.Default.IsCaptureSupported)
         {
-            FileResult foto = await MediaPicker.Default.CapturePhotoAsync();
+            var foto = await MediaPicker.Default.CapturePhotoAsync();
             await SalvestaFoto(foto);
-        }
-        else
-        {
-            await Application.Current.MainPage.DisplayAlert("Viga", "Teie seade ei ole toetatud", "Ok");
         }
     }
 
     private async Task SalvestaFoto(FileResult foto)
     {
-        if (foto != null)
-        {
-            lisafoto = Path.Combine(FileSystem.CacheDirectory, foto.FileName);
+        if (foto == null) return;
 
-            using Stream sourceStream = await foto.OpenReadAsync();
-            using MemoryStream ms = new MemoryStream();
-            await sourceStream.CopyToAsync(ms);
-            fotoBytes = ms.ToArray();
+        using var stream = await foto.OpenReadAsync();
+        using var ms = new MemoryStream();
+        await stream.CopyToAsync(ms);
+        fotoBytes = ms.ToArray();
 
-            File.WriteAllBytes(lisafoto, fotoBytes);
-
-            img.Source = ImageSource.FromFile(lisafoto);
-
-            fotoSection.Clear();
-            var imageViewCell = new ViewCell
-            {
-                View = img
-            };
-            fotoSection.Add(imageViewCell);
-
-            await Application.Current.MainPage.DisplayAlert("Edu", "Foto on edukalt salvestatud", "OK");
-        }
+        img.Source = ImageSource.FromStream(() => new MemoryStream(fotoBytes));
     }
 
-    private void Btn_salvesta_Clicked(object? sender, EventArgs e)
+    // ================= SAVE =================
+
+    private void Btn_salvesta_Clicked(object sender, EventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(ec_roaNimi.Text)) return;
+        if (string.IsNullOrWhiteSpace(entryRoa.Text)) return;
 
-        if (selectedItem == null)
-            selectedItem = new LounasookClass();
+        selectedItem ??= new LounasookClass();
 
-        selectedItem.Roa_nimi = ec_roaNimi.Text;
-        selectedItem.Valgud = int.TryParse(ec_valgud.Text, out var valgud) ? valgud : 0;
-        selectedItem.Rasvad = int.TryParse(ec_rasvad.Text, out var rasvad) ? rasvad : 0;
-        selectedItem.Susivesikud = int.TryParse(ec_susivesikud.Text, out var susivesikud) ? susivesikud : 0;
-        selectedItem.Kalorid = int.TryParse(ec_kalorid.Text, out var kalorid) ? kalorid : 0;
-        selectedItem.Kuupaev = dp_kuupaev.Date;
-        selectedItem.Kallaaeg = tp_kallaaeg.Time;
+        selectedItem.Roa_nimi = entryRoa.Text;
+        selectedItem.Valgud = int.TryParse(entryValgud.Text, out var v) ? v : 0;
+        selectedItem.Rasvad = int.TryParse(entryRasvad.Text, out var r) ? r : 0;
+        selectedItem.Susivesikud = int.TryParse(entrySys.Text, out var s) ? s : 0;
+        selectedItem.Kalorid = int.TryParse(entryKalorid.Text, out var k) ? k : 0;
+        selectedItem.Kuupaev = dp.Date;
+        selectedItem.Kallaaeg = tp.Time;
 
         if (fotoBytes != null)
             selectedItem.Toidu_foto = fotoBytes;
 
         database.SaveLounasook(selectedItem);
+
         ClearForm();
     }
 
@@ -238,10 +200,15 @@ public partial class LounasookPage : ContentPage
     {
         selectedItem = null;
         fotoBytes = null;
-        ec_roaNimi.Text = ec_valgud.Text = ec_rasvad.Text = ec_susivesikud.Text = ec_kalorid.Text = string.Empty;
-        dp_kuupaev.Date = DateTime.Now;
-        tp_kallaaeg.Time = TimeSpan.FromHours(8);
-        fotoSection.Clear();
-        sl.IsVisible = false;
+
+        entryRoa.Text = "";
+        entryValgud.Text = "";
+        entryRasvad.Text = "";
+        entrySys.Text = "";
+        entryKalorid.Text = "";
+
+        dp.Date = DateTime.Now;
+        tp.Time = TimeSpan.FromHours(13);
+        img.Source = null;
     }
 }
