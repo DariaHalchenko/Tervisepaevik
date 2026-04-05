@@ -24,11 +24,10 @@ public partial class HommikusookFotoPage : ContentPage
 
         filterDate.DateSelected += (s, e) => LoadImages();
 
-        // 🔥 поиск по продукту
+        // поиск по продукту
         searchEntry = new Entry
         {
-            Placeholder = "Otsi rooga...",
-            BackgroundColor = Colors.White
+            Placeholder = "Otsi rooga..."
         };
 
         searchEntry.TextChanged += (s, e) => LoadImages();
@@ -60,8 +59,7 @@ public partial class HommikusookFotoPage : ContentPage
 
         var addBtn = new ImageButton
         {
-            Source = "lisa.png",
-            BackgroundColor = Colors.White,
+            Source = "lisa.svg",
             CornerRadius = 30,
             HeightRequest = 60,
             WidthRequest = 60,
@@ -93,8 +91,10 @@ public partial class HommikusookFotoPage : ContentPage
         {
             Padding = 15,
             CornerRadius = 20,
-            BackgroundColor = Colors.White,
-            HasShadow = true,
+            HasShadow = false,
+            BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark
+            ? Color.FromArgb("#1E1E1E")
+            : Colors.White,
             Content = new VerticalStackLayout
             {
                 Spacing = 10,
@@ -147,12 +147,10 @@ public partial class HommikusookFotoPage : ContentPage
             var label = new Label
             {
                 Text = $"{item.Kalorid} kcal",
-                TextColor = Colors.White,
-                BackgroundColor = Colors.Black.MultiplyAlpha(0.6f),
                 Padding = 4
             };
 
-            // 🔥 кнопка удаления (крестик)
+            // кнопка удаления (крестик)
             var deleteBtn = new ImageButton
             {
                 Source = "kustuta.png",
@@ -181,17 +179,15 @@ public partial class HommikusookFotoPage : ContentPage
                 Content = new Grid
                 {
                     Children =
-                {
-                    image,
-
-                    new VerticalStackLayout
                     {
-                        VerticalOptions = LayoutOptions.End,
-                        Children = { label }
-                    },
-
-                    deleteBtn // 🔥 добавили крестик
-                }
+                        image,
+                        new VerticalStackLayout
+                        {
+                            VerticalOptions = LayoutOptions.End,
+                            Children = { label }
+                        },
+                        deleteBtn 
+                    }
                 }
             };
 

@@ -1,14 +1,46 @@
-﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:Tervisepaevik"
              x:Class="Tervisepaevik.App">
+
     <Application.Resources>
         <ResourceDictionary>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="ContentPage">
+                <Setter Property="BackgroundColor"
+                        Value="{AppThemeBinding Light=#FFF0F5, Dark=#121212}" />
+            </Style>
+
+            <Style TargetType="Label">
+                <Setter Property="TextColor"
+                        Value="{AppThemeBinding Light=Black, Dark=White}" />
+            </Style>
+
+            <Style TargetType="Frame">
+                <Setter Property="BackgroundColor"
+            Value="{AppThemeBinding Light=White, Dark=#1E1E1E}" />
+                <Setter Property="BorderColor"
+            Value="{AppThemeBinding Light=Black, Dark=White}" />
+                <Setter Property="CornerRadius" Value="15" />
+            </Style>
+
+            <Style TargetType="Entry">
+                <Setter Property="BackgroundColor"
+                        Value="{AppThemeBinding Light=White, Dark=#2A2A2A}" />
+                <Setter Property="TextColor"
+                        Value="{AppThemeBinding Light=Black, Dark=White}" />
+            </Style>
+
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="White" />
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
+
 </Application>

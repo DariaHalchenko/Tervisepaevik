@@ -33,7 +33,7 @@ public partial class HommikusookDetailPage : ContentPage
         entrySys = CreateEntry(item.Susivesikud.ToString());
         entryKalorid = CreateEntry(item.Kalorid.ToString());
 
-        // ?? авто-калькул€тор
+        // авто-калькул€тор
         entryValgud.TextChanged += OnMacrosChanged;
         entryRasvad.TextChanged += OnMacrosChanged;
         entrySys.TextChanged += OnMacrosChanged;
@@ -89,12 +89,11 @@ public partial class HommikusookDetailPage : ContentPage
     {
         return new Entry
         {
-            Text = text,
-            BackgroundColor = Colors.White
+            Text = text
         };
     }
 
-    // ??  јЋ№ ”Ћя“ќ–
+    //  јЋ№ ”Ћя“ќ–
     private void OnMacrosChanged(object sender, TextChangedEventArgs e)
     {
         int valgud = int.TryParse(entryValgud.Text, out var v) ? v : 0;
@@ -114,7 +113,7 @@ public partial class HommikusookDetailPage : ContentPage
         item.Rasvad = int.TryParse(entryRasvad.Text, out var r) ? r : 0;
         item.Susivesikud = int.TryParse(entrySys.Text, out var s) ? s : 0;
 
-        // ?? всегда пересчЄт
+        // всегда пересчЄт
         item.Kalorid = (item.Valgud * 4) + (item.Susivesikud * 4) + (item.Rasvad * 9);
 
         database.SaveHommikusook(item);

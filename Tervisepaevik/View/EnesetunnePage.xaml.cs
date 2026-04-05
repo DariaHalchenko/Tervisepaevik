@@ -1,7 +1,6 @@
 ﻿using Microsoft.Maui.Controls;
 using Tervisepaevik.Database;
 using Tervisepaevik.Models;
-using static Android.Graphics.ImageDecoder;
 
 namespace Tervisepaevik.View;
 
@@ -39,7 +38,7 @@ public partial class EnesetunnePage : ContentPage
         btn_kustuta.IsVisible = false;
         btn_hingeohk.IsVisible = false;
 
-        // ✅ TUJU (stack row)
+        // TUJU (stack row)
         sl_tuju = new StackLayout
         {
             Orientation = StackOrientation.Horizontal,
@@ -50,11 +49,11 @@ public partial class EnesetunnePage : ContentPage
 
         for (int i = 1; i <= 5; i++)
         {
-            var img = CreateMoodImage($"tuju{i}.PNG", i, true);
+            var img = CreateMoodImage($"tuju{i}.svg", i, true);
             sl_tuju.Children.Add(img);
         }
 
-        // ✅ ENERGIA
+        // ENERGIA
         sl_energia = new StackLayout
         {
             Orientation = StackOrientation.Horizontal,
@@ -63,10 +62,10 @@ public partial class EnesetunnePage : ContentPage
 
         for (int i = 1; i <= 5; i++)
         {
-            sl_energia.Children.Add(CreateMoodImage("energia.png", i, false));
+            sl_energia.Children.Add(CreateMoodImage("energia.svg", i, false));
         }
 
-        enesetunneListView = new ListView
+        enesetunneListView = new ListView(ListViewCachingStrategy.RecycleElement)
         {
             SeparatorVisibility = SeparatorVisibility.None,
             HasUnevenRows = true,
@@ -90,7 +89,7 @@ public partial class EnesetunnePage : ContentPage
 
             var heart = new Image
             {
-                Source = "suda.jpg",
+                Source = "suda.svg",
                 WidthRequest = 25,
                 HeightRequest = 25
             };
@@ -129,8 +128,7 @@ public partial class EnesetunnePage : ContentPage
                     CornerRadius = 15,
                     Margin = 5,
                     Padding = 10,
-                    HasShadow = true,
-                    BackgroundColor = Colors.White,
+                    HasShadow = false,
                     Content = grid
                 }
             };
@@ -167,7 +165,7 @@ public partial class EnesetunnePage : ContentPage
         NaitaAndmeid();
     }
 
-    // ✅ Mood image with animation
+    // Mood image with animation
     private Image CreateMoodImage(string source, int level, bool isMood)
     {
         var img = new Image
@@ -222,7 +220,6 @@ public partial class EnesetunnePage : ContentPage
             CornerRadius = 20,
             Padding = 15,
             HasShadow = true,
-            BackgroundColor = Colors.White,
             Content = new StackLayout
             {
                 Spacing = 10,
@@ -246,7 +243,6 @@ public partial class EnesetunnePage : ContentPage
             CornerRadius = 20,
             Padding = 10,
             HasShadow = true,
-            BackgroundColor = Colors.White,
             Content = enesetunneListView
         };
     }
@@ -257,12 +253,11 @@ public partial class EnesetunnePage : ContentPage
         {
             Text = text,
             BackgroundColor = color,
-            TextColor = Colors.White,
             CornerRadius = 10
         };
     }
 
-    // ✅ SAVE FIXED
+    // SAVE FIXED
     private async void Btn_salvesta_Clicked(object sender, EventArgs e)
     {
         if (selectedTuju == 0 || selectedEnergia == 0)

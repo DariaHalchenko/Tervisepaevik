@@ -21,7 +21,6 @@ public partial class OhtusookPage : ContentPage
         database = new OhtusookDatabase(dbPath);
 
         Title = "Õhtusöök";
-        BackgroundColor = Color.FromArgb("#F5F5F5");
 
         dp = new DatePicker { Date = DateTime.Now };
         tp = new TimePicker { Time = TimeSpan.FromHours(19) };
@@ -32,7 +31,7 @@ public partial class OhtusookPage : ContentPage
         entrySys = CreateEntry("Süsivesikud (g)");
         entryKalorid = CreateEntry("Kalorid (kcal)");
 
-        // 🔥 CALCULATOR
+        // CALCULATOR
         entryValgud.TextChanged += OnMacrosChanged;
         entryRasvad.TextChanged += OnMacrosChanged;
         entrySys.TextChanged += OnMacrosChanged;
@@ -51,9 +50,9 @@ public partial class OhtusookPage : ContentPage
             Content = img
         };
 
-        var btnPick = CreateButton("Vali foto", "#03A9F4", Btn_valifoto_Clicked);
-        var btnPhoto = CreateButton("Kaamera", "#2196F3", Btn_pildista_Clicked);
-        var btnSave = CreateButton("Salvesta", "#4CAF50", Btn_salvesta_Clicked);
+        var btnPick = CreateButton("Vali", Colors.Blue, Btn_valifoto_Clicked);
+        var btnPhoto = CreateButton("Kaamera", Colors.Blue, Btn_pildista_Clicked);
+        var btnSave = CreateButton("Salvesta", Colors.Green, Btn_salvesta_Clicked);
 
         var buttonRow = new HorizontalStackLayout
         {
@@ -95,24 +94,23 @@ public partial class OhtusookPage : ContentPage
         return new Entry
         {
             Placeholder = placeholder,
-            BackgroundColor = Colors.White,
             HeightRequest = 50,
             Margin = new Thickness(0, 5)
         };
     }
 
-    private Button CreateButton(string text, string color, EventHandler action)
+    private Button CreateButton(string text, Color color, EventHandler clicked)
     {
         var btn = new Button
         {
             Text = text,
-            BackgroundColor = Color.FromArgb(color),
+            BackgroundColor = color,
             TextColor = Colors.White,
-            CornerRadius = 15,
-            HeightRequest = 45
+            CornerRadius = 10
         };
 
-        btn.Clicked += action;
+        btn.Clicked += clicked;
+
         return btn;
     }
 
@@ -137,7 +135,6 @@ public partial class OhtusookPage : ContentPage
         {
             CornerRadius = 20,
             Padding = 15,
-            BackgroundColor = Colors.White,
             HasShadow = true,
             Content = stack
         };

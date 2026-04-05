@@ -89,8 +89,7 @@ public partial class LounasookDetailPage : ContentPage
     {
         return new Entry
         {
-            Text = text,
-            BackgroundColor = Colors.White
+            Text = text
         };
     }
 

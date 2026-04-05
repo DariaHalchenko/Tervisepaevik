@@ -20,7 +20,6 @@ public partial class TreeningudPage : ContentPage
         database = new TreeningudDatabase(dbPath);
 
         Title = "🏋️ Treeningud";
-        BackgroundColor = Color.FromArgb("#F5F5F5");
 
         dp = new DatePicker { Date = DateTime.Now };
         tp = new TimePicker { Time = TimeSpan.FromHours(8) };
@@ -81,7 +80,6 @@ public partial class TreeningudPage : ContentPage
         return new Entry
         {
             Placeholder = placeholder,
-            BackgroundColor = Colors.White,
             HeightRequest = 50,
             Margin = new Thickness(0, 5)
         };
@@ -93,7 +91,6 @@ public partial class TreeningudPage : ContentPage
         {
             Text = text,
             BackgroundColor = Color.FromArgb(color),
-            TextColor = Colors.White,
             CornerRadius = 15,
             HeightRequest = 45
         };
@@ -125,7 +122,6 @@ public partial class TreeningudPage : ContentPage
         {
             CornerRadius = 20,
             Padding = 15,
-            BackgroundColor = Colors.White,
             HasShadow = true,
             Content = stack
         };

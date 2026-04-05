@@ -89,8 +89,7 @@ public partial class VahepalaDetailPage : ContentPage
     {
         return new Entry
         {
-            Text = text,
-            BackgroundColor = Colors.White
+            Text = text
         };
     }
 

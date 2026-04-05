@@ -13,7 +13,6 @@ public partial class TreeningudFotoPage : ContentPage
     public TreeningudFotoPage()
     {
         Title = "Minu treeningud";
-        BackgroundColor = Color.FromArgb("#F2F2F7");
 
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
         database = new TreeningudDatabase(dbPath);
@@ -34,7 +33,6 @@ public partial class TreeningudFotoPage : ContentPage
                     CornerRadius = 25,
                     Padding = 15,
                     Margin = new Thickness(10),
-                    BackgroundColor = Colors.White,
                     HasShadow = true
                 };
 
@@ -42,36 +40,31 @@ public partial class TreeningudFotoPage : ContentPage
                 {
                     FontSize = 22,
                     FontAttributes = FontAttributes.Bold,
-                    HorizontalOptions = LayoutOptions.Center,
-                    TextColor = Colors.Black
+                    HorizontalOptions = LayoutOptions.Center
                 };
                 nimiLabel.SetBinding(Label.TextProperty, "Treeningu_nimi");
 
                 var tyyppLabel = new Label
                 {
-                    FontSize = 14,
-                    TextColor = Colors.Gray
+                    FontSize = 14
                 };
                 tyyppLabel.SetBinding(Label.TextProperty, new Binding("Treeningu_tuup", stringFormat: "Tüüp: {0}"));
 
                 var kellaaegLabel = new Label
                 {
-                    FontSize = 14,
-                    TextColor = Colors.Gray
+                    FontSize = 14
                 };
                 kellaaegLabel.SetBinding(Label.TextProperty, new Binding("Kallaaeg", stringFormat: "Kellaaeg: {0}"));
 
                 var sammudLabel = new Label
                 {
-                    FontSize = 14,
-                    TextColor = Colors.Gray
+                    FontSize = 14
                 };
                 sammudLabel.SetBinding(Label.TextProperty, new Binding("Kirjeldus", stringFormat: "Kirjeldus: {0}"));
 
                 var kaloridLabel = new Label
                 {
-                    FontSize = 14,
-                    TextColor = Colors.Gray
+                    FontSize = 14
                 };
                 kaloridLabel.SetBinding(Label.TextProperty, new Binding("Kulutud_kalorid", stringFormat: "Kalorid: {0}"));
 
@@ -151,7 +144,6 @@ public partial class TreeningudFotoPage : ContentPage
         // ================= SWITCH =================
         redirectSwitch = new Switch
         {
-            ThumbColor = Colors.White,
             OnColor = Colors.MediumPurple
         };
         redirectSwitch.Toggled += RedirectSwitch_Toggled;
@@ -160,7 +152,6 @@ public partial class TreeningudFotoPage : ContentPage
         {
             Padding = 10,
             CornerRadius = 20,
-            BackgroundColor = Colors.White,
             HasShadow = true,
             Content = new HorizontalStackLayout
             {

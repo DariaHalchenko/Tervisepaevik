@@ -57,20 +57,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Images\energia.png" />
 	  <None Remove="Resources\Images\hommikusook.jpg" />
 	  <None Remove="Resources\Images\kopsud.png" />
-	  <None Remove="Resources\Images\lisa.png" />
 	  <None Remove="Resources\Images\louna.jpg" />
 	  <None Remove="Resources\Images\menu.png" />
 	  <None Remove="Resources\Images\ohtusook.jpg" />
 	  <None Remove="Resources\Images\salvesta.png" />
-	  <None Remove="Resources\Images\suda.jpg" />
-	  <None Remove="Resources\Images\tuju1.jpg" />
-	  <None Remove="Resources\Images\tuju2.jpg" />
-	  <None Remove="Resources\Images\tuju3.jpg" />
-	  <None Remove="Resources\Images\tuju4.jpg" />
-	  <None Remove="Resources\Images\tuju5.jpg" />
 	  <None Remove="Resources\Images\vahepala.jpg" />
 	  <None Remove="Resources\Images\valifoto.png" />
 	  <None Remove="Resources\Images\vesi.png" />

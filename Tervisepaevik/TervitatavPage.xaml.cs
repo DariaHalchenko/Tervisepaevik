@@ -2,11 +2,35 @@
 
 public partial class TervitatavPage : ContentPage
 {
-	Label lbl_tervitav, lbl_sisu;
-    Button btn_alusta;
-	public TervitatavPage()
-	{
+    Label lbl_tervitav, lbl_sisu;
+    Button btn_alusta, themeButton;
+
+    public TervitatavPage()
+    {
         Title = "Tervitatav";
+
+        // КНОПКА ТЕМЫ
+        themeButton = new Button
+        {
+            Text = "🌙",
+            FontSize = 24,
+            HorizontalOptions = LayoutOptions.End,
+            BackgroundColor = Colors.Transparent
+        };
+
+        themeButton.Clicked += (s, e) =>
+        {
+            if (Application.Current.UserAppTheme == AppTheme.Dark)
+            {
+                Application.Current.UserAppTheme = AppTheme.Light;
+                themeButton.Text = "🌙";
+            }
+            else
+            {
+                Application.Current.UserAppTheme = AppTheme.Dark;
+                themeButton.Text = "☀️";
+            }
+        };
 
         lbl_tervitav = new Label
         {
@@ -28,8 +52,7 @@ public partial class TervitatavPage : ContentPage
         btn_alusta = new Button
         {
             Text = "Alusta",
-            BackgroundColor = Colors.LightGreen,
-            TextColor = Colors.Black,
+            BackgroundColor = Colors.Green, 
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.End,
             Margin = new Thickness(0, 20, 0, 40)
@@ -51,23 +74,23 @@ public partial class TervitatavPage : ContentPage
             {
                 await tervisImage.ScaleTo(1.2, 2000, Easing.SinInOut);
                 await tervisImage.ScaleTo(1.0, 2000, Easing.SinInOut);
-
             }
         };
 
         Content = new StackLayout
         {
-            VerticalOptions = LayoutOptions.FillAndExpand,
-            HorizontalOptions = LayoutOptions.FillAndExpand,
             Padding = 20,
             Children =
             {
+                themeButton, // КНОПКА СВЕРХУ
+
                 new StackLayout
                 {
                     VerticalOptions = LayoutOptions.CenterAndExpand,
                     HorizontalOptions = LayoutOptions.CenterAndExpand,
                     Children = { lbl_tervitav, lbl_sisu, tervisImage }
                 },
+
                 btn_alusta
             }
         };
@@ -75,7 +98,6 @@ public partial class TervitatavPage : ContentPage
 
     private async void Btn_alusta_Clicked(object? sender, EventArgs e)
     {
-        //Application.Current.MainPage = new NewPage1();
         await Navigation.PushAsync(new NewPage1());
     }
 }

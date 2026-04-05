@@ -135,7 +135,6 @@ public partial class StartPage : ContentPage
                 var frame = new Frame
                 {
                     CornerRadius = 15,
-                    BackgroundColor = Colors.Beige,
                     Padding = 10,
                     Margin = new Thickness(10),
                     Content = new StackLayout

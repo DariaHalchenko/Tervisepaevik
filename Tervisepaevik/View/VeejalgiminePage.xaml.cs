@@ -24,8 +24,6 @@ public partial class VeejalgiminePage : ContentPage
         database = new VeejalgimineDatabase(dbPath);
 
         Title = "Vee jälgimine";
-        BackgroundColor = Color.FromArgb("#F2F2F7");
-
         // INPUTS
         kogusEntry = new Entry
         {
@@ -33,7 +31,6 @@ public partial class VeejalgiminePage : ContentPage
             Keyboard = Keyboard.Numeric
         };
 
-        // ✅ live update стакана
         kogusEntry.TextChanged += KogusEntry_TextChanged;
 
         kuupaevPicker = new DatePicker { Date = DateTime.Now };
@@ -45,8 +42,7 @@ public partial class VeejalgiminePage : ContentPage
             CornerRadius = 25,
             HeightRequest = 250,
             WidthRequest = 140,
-            BackgroundColor = Colors.White,
-            HasShadow = true,
+            HasShadow = false,
             Padding = 0,
             Content = new Grid
             {
@@ -80,8 +76,7 @@ public partial class VeejalgiminePage : ContentPage
                 {
                     CornerRadius = 15,
                     Padding = 12,
-                    BackgroundColor = Colors.White,
-                    HasShadow = true,
+                    HasShadow = false,
                     Margin = new Thickness(0, 5)
                 };
 
@@ -101,7 +96,7 @@ public partial class VeejalgiminePage : ContentPage
             })
         };
 
-        // ================= BUTTON =================
+        // ================= BUTTON SAVE =================
         var btn_salvesta = new Button
         {
             Text = "💾 Salvesta",
@@ -113,13 +108,38 @@ public partial class VeejalgiminePage : ContentPage
 
         btn_salvesta.Clicked += Btn_salvesta_Clicked;
 
+        // ================= BUTTON GRAPH =================
+        var btn_graafik = new Button
+        {
+            Text = "📊 Vaata graafikut",
+            BackgroundColor = Colors.DodgerBlue,
+            TextColor = Colors.White,
+            CornerRadius = 15,
+            HeightRequest = 50
+        };
+
+        btn_graafik.Clicked += async (s, e) =>
+        {
+            var andmed = database.GetVeejalgimine()
+                .GroupBy(v => v.Kuupaev.Date)
+                .Select(g => new VeejalgimineClass
+                {
+                    Kuupaev = g.Key,
+                    Kogus = g.Sum(x => x.Kogus),
+                    Aktiivne = g.Any(x => x.Aktiivne)
+                })
+                .OrderBy(v => v.Kuupaev)
+                .ToList();
+
+            await Navigation.PushAsync(new VeejalgimineGrafikPage(andmed));
+        };
+
         // ================= FORM =================
         var formCard = new Frame
         {
             CornerRadius = 20,
             Padding = 15,
-            BackgroundColor = Colors.White,
-            HasShadow = true,
+            HasShadow = false,
             Content = new VerticalStackLayout
             {
                 Spacing = 10,
@@ -150,17 +170,20 @@ public partial class VeejalgiminePage : ContentPage
             Children =
             {
                 formCard,
+
+                btn_graafik, 
+
                 new Label
                 {
                     Text = "Ajalugu",
                     FontSize = 18,
                     FontAttributes = FontAttributes.Bold
                 },
+
                 listView
             }
         };
 
-        // ================= SCROLL =================
         Content = new ScrollView
         {
             Content = mainStack
@@ -169,17 +192,12 @@ public partial class VeejalgiminePage : ContentPage
         LoadData();
     }
 
-    // ✅ LIVE UPDATE
     private void KogusEntry_TextChanged(object sender, TextChangedEventArgs e)
     {
         if (int.TryParse(kogusEntry.Text, out int kogus))
-        {
             UpdateKlaasImg(kogus);
-        }
         else
-        {
             UpdateKlaasImg(0);
-        }
     }
 
     private async void Btn_salvesta_Clicked(object sender, EventArgs e)

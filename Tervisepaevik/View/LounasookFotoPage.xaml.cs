@@ -27,7 +27,6 @@ public partial class LounasookFotoPage : ContentPage
         searchEntry = new Entry
         {
             Placeholder = "Otsi rooga...",
-            BackgroundColor = Colors.White
         };
 
         searchEntry.TextChanged += (s, e) => LoadImages();
@@ -59,8 +58,7 @@ public partial class LounasookFotoPage : ContentPage
 
         var addBtn = new ImageButton
         {
-            Source = "lisa.png",
-            BackgroundColor = Colors.White,
+            Source = "lisa.svg",
             CornerRadius = 30,
             HeightRequest = 60,
             WidthRequest = 60,
@@ -92,7 +90,6 @@ public partial class LounasookFotoPage : ContentPage
         {
             Padding = 15,
             CornerRadius = 20,
-            BackgroundColor = Colors.White,
             HasShadow = true,
             Content = new VerticalStackLayout
             {
@@ -147,8 +144,6 @@ public partial class LounasookFotoPage : ContentPage
             var label = new Label
             {
                 Text = $"{item.Kalorid} kcal",
-                TextColor = Colors.White,
-                BackgroundColor = Colors.Black.MultiplyAlpha(0.6f),
                 Padding = 4
             };
 
@@ -192,7 +187,7 @@ public partial class LounasookFotoPage : ContentPage
                 }
             };
 
-            // 🔥 TAP → DETAIL PAGE
+            // TAP → DETAIL PAGE
             var tap = new TapGestureRecognizer();
             tap.Tapped += async (s, e) =>
             {

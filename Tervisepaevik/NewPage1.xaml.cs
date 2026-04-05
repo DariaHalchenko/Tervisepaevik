@@ -8,23 +8,15 @@ namespace Tervisepaevik
 {
     public partial class NewPage1 : ContentPage
     {
-        public List<ContentPage> lehed = new List<ContentPage>()
-        {
-            new TervitatavPage(),
-            new StartPage(),
-            new TreeningudFotoPage(),
-            new EnesetunnePage(),
-            new VeejalgiminePage()
-        };
 
         public List<(string Tekst, string Pilt)> valikud = new List<(string, string)>
         {
             ("Tervitus", "tervitus.png"),
-            ("Söök", "menuu.png"),
+            ("Söök", "menuu.png"), 
             ("Treeningud", "gym.png"),
             ("Enesetunne", "enesetunne.png"),
             ("Vee jälgimine", "veejalgimine.png"),
-            ("Hingamine", "kopsud.png") 
+            ("Hingamine", "kopsud.png")
         };
 
         public NewPage1()
@@ -36,29 +28,26 @@ namespace Tervisepaevik
             {
                 Padding = 20,
                 Spacing = 20,
-                BackgroundColor = Color.FromArgb("#FFF0F5")
             };
 
             for (int i = 0; i < valikud.Count; i++)
             {
                 var frame = new Frame
                 {
-                    BorderColor = Colors.LightGray,
                     CornerRadius = 20,
-                    HasShadow = true,
-                    BackgroundColor = Colors.White,
+                    HasShadow = false,
                     Padding = 10
                 };
 
                 var imgButton = new ImageButton
                 {
                     Source = valikud[i].Pilt,
-                    HeightRequest = 55, 
-                    WidthRequest = 55,  
+                    HeightRequest = 55,
+                    WidthRequest = 55,
                     Aspect = Aspect.AspectFit,
                     BackgroundColor = Colors.Transparent,
                     HorizontalOptions = LayoutOptions.Center,
-                    CornerRadius = 10 
+                    CornerRadius = 10
                 };
 
                 var label = new Label
@@ -66,24 +55,40 @@ namespace Tervisepaevik
                     Text = valikud[i].Tekst,
                     FontSize = 20,
                     FontAttributes = FontAttributes.Bold,
-                    TextColor = Colors.DarkMagenta,
                     HorizontalOptions = LayoutOptions.Center
                 };
 
-                int index = i; 
+                int index = i;
+
                 imgButton.Clicked += async (s, e) =>
                 {
-                    if (valikud[index].Tekst == "Menüü")
+                    var tekst = valikud[index].Tekst;
+
+                    switch (tekst)
                     {
-                        Application.Current.MainPage = new Flyout_Page();
-                    }
-                    else if (valikud[index].Tekst == "Hingamine")
-                    {
-                        await ShowBreathingPopup();
-                    }
-                    else
-                    {
-                        await Navigation.PushAsync(lehed[index]);
+                        case "Tervitus":
+                            await Navigation.PushAsync(new TervitatavPage());
+                            break;
+
+                        case "Söök":
+                            Application.Current.MainPage = new Flyout_Page();
+                            break;
+
+                        case "Treeningud":
+                            await Navigation.PushAsync(new TreeningudFotoPage());
+                            break;
+
+                        case "Enesetunne":
+                            await Navigation.PushAsync(new EnesetunnePage());
+                            break;
+
+                        case "Vee jälgimine":
+                            await Navigation.PushAsync(new VeejalgiminePage());
+                            break;
+
+                        case "Hingamine":
+                            await ShowBreathingPopup();
+                            break;
                     }
                 };
 
@@ -173,6 +178,7 @@ namespace Tervisepaevik
             };
 
             int secondsRemaining = 30;
+
             Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             {
                 Device.BeginInvokeOnMainThread(() =>
@@ -180,6 +186,7 @@ namespace Tervisepaevik
                     secondsRemaining--;
                     timerLabel.Text = secondsRemaining > 0 ? secondsRemaining.ToString() : "Valmis!";
                 });
+
                 return secondsRemaining > 0;
             });
 
