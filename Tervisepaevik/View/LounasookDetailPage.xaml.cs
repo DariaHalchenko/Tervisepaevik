@@ -1,5 +1,6 @@
 ﻿using Tervisepaevik.Database;
 using Tervisepaevik.Models;
+using Tervisepaevik.Resources.Localization;
 
 namespace Tervisepaevik.View;
 
@@ -18,7 +19,7 @@ public partial class LounasookDetailPage : ContentPage
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
         database = new LounasookDatabase(dbPath);
 
-        Title = "Detail";
+        Title = AppResources.Detail;
 
         image = new Image
         {
@@ -27,20 +28,19 @@ public partial class LounasookDetailPage : ContentPage
             Aspect = Aspect.AspectFill
         };
 
-        entryName = CreateEntry(item.Roa_nimi);
-        entryValgud = CreateEntry(item.Valgud.ToString());
-        entryRasvad = CreateEntry(item.Rasvad.ToString());
-        entrySys = CreateEntry(item.Susivesikud.ToString());
-        entryKalorid = CreateEntry(item.Kalorid.ToString());
+        entryName = CreateEntry(item.Roa_nimi, AppResources.FoodName);
+        entryValgud = CreateEntry(item.Valgud.ToString(), AppResources.Proteins);
+        entryRasvad = CreateEntry(item.Rasvad.ToString(), AppResources.Fats);
+        entrySys = CreateEntry(item.Susivesikud.ToString(), AppResources.Carbs);
+        entryKalorid = CreateEntry(item.Kalorid.ToString(), AppResources.Calories);
 
-        // 🔥 калькулятор
         entryValgud.TextChanged += OnMacrosChanged;
         entryRasvad.TextChanged += OnMacrosChanged;
         entrySys.TextChanged += OnMacrosChanged;
 
         var saveBtn = new Button
         {
-            Text = "Salvesta",
+            Text = AppResources.Save,
             BackgroundColor = Colors.Green,
             TextColor = Colors.White
         };
@@ -49,14 +49,19 @@ public partial class LounasookDetailPage : ContentPage
 
         var deleteBtn = new Button
         {
-            Text = "Kustuta",
+            Text = AppResources.Delete,
             BackgroundColor = Colors.Red,
             TextColor = Colors.White
         };
 
         deleteBtn.Clicked += async (s, e) =>
         {
-            bool confirm = await DisplayAlert("Kustuta", "Kas oled kindel?", "Jah", "Ei");
+            bool confirm = await DisplayAlert(
+                AppResources.Delete,
+                AppResources.ConfirmDelete,
+                AppResources.Yes,
+                AppResources.No);
+
             if (confirm)
             {
                 database.DeleteLounasook(item.Lounasook_id);
@@ -85,11 +90,12 @@ public partial class LounasookDetailPage : ContentPage
         };
     }
 
-    private Entry CreateEntry(string text)
+    private Entry CreateEntry(string text, string placeholder)
     {
         return new Entry
         {
-            Text = text
+            Text = text,
+            Placeholder = placeholder
         };
     }
 
@@ -104,8 +110,14 @@ public partial class LounasookDetailPage : ContentPage
         entryKalorid.Text = kalorid.ToString();
     }
 
-    private void Save_Clicked(object sender, EventArgs e)
+    private async void Save_Clicked(object sender, EventArgs e)
     {
+        if (string.IsNullOrWhiteSpace(entryName.Text))
+        {
+            await DisplayAlert(AppResources.Error, AppResources.EnterFoodName, AppResources.OK);
+            return;
+        }
+
         item.Roa_nimi = entryName.Text;
 
         item.Valgud = int.TryParse(entryValgud.Text, out var v) ? v : 0;
@@ -116,6 +128,6 @@ public partial class LounasookDetailPage : ContentPage
 
         database.SaveLounasook(item);
 
-        DisplayAlert("OK", "Salvestatud", "OK");
+        await DisplayAlert(AppResources.OK, AppResources.Saved, AppResources.OK);
     }
 }

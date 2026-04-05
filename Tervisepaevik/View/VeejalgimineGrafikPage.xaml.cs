@@ -1,17 +1,20 @@
 ﻿using Syncfusion.Maui.Charts;
-using Tervisepaevik.Database;
+using System.Globalization;
 using Tervisepaevik.Models;
+using Tervisepaevik.Resources.Localization;
 
 namespace Tervisepaevik.View;
 
 public partial class VeejalgimineGrafikPage : ContentPage
 {
-    public VeejalgimineGrafikPage(List<Models.VeejalgimineClass> andmed)
+    public VeejalgimineGrafikPage(List<VeejalgimineClass> andmed)
     {
-        Title = "Vee tarbimise graafik";
+        Title = AppResources.WaterGraph;
+
+        var culture = Thread.CurrentThread.CurrentUICulture;
 
         var groupedData = andmed
-            .GroupBy(v => v.Kuupaev.ToString("MMMM yyyy"))
+            .GroupBy(v => v.Kuupaev.ToString("MMMM yyyy", culture)) // локализованный месяц
             .OrderBy(g => g.First().Kuupaev)
             .Select(g => new ChartGroup
             {
@@ -19,7 +22,7 @@ public partial class VeejalgimineGrafikPage : ContentPage
                 Data = g.OrderBy(v => v.Kuupaev)
                         .Select(v => new ChartPoint
                         {
-                            Kuupaev = v.Kuupaev.ToString("dd.MM"),
+                            Kuupaev = v.Kuupaev.ToString("dd.MM", culture),
                             Kogus = v.Kogus
                         }).ToList()
             }).ToList();
@@ -38,13 +41,15 @@ public partial class VeejalgimineGrafikPage : ContentPage
                 label.SetBinding(Label.TextProperty, nameof(ChartGroup.MonthYear));
 
                 var chart = new SfCartesianChart();
+
                 chart.XAxes.Add(new CategoryAxis
                 {
-                    Title = new ChartAxisTitle { Text = "Kuupäev" }
+                    Title = new ChartAxisTitle { Text = AppResources.Date }
                 });
+
                 chart.YAxes.Add(new NumericalAxis
                 {
-                    Title = new ChartAxisTitle { Text = "Kogus (ml)" }
+                    Title = new ChartAxisTitle { Text = $"{AppResources.Amount1} ({AppResources.Ml})" }
                 });
 
                 var columnSeries = new ColumnSeries
@@ -53,6 +58,7 @@ public partial class VeejalgimineGrafikPage : ContentPage
                     YBindingPath = nameof(ChartPoint.Kogus),
                     EnableTooltip = true
                 };
+
                 columnSeries.SetBinding(ColumnSeries.ItemsSourceProperty, nameof(ChartGroup.Data));
                 chart.Series.Add(columnSeries);
 
@@ -60,10 +66,10 @@ public partial class VeejalgimineGrafikPage : ContentPage
                 {
                     Padding = 20,
                     Children =
-                {
-                    label,
-                    chart
-                }
+                    {
+                        label,
+                        chart
+                    }
                 };
             })
         };
@@ -83,4 +89,3 @@ public class ChartPoint
     public string Kuupaev { get; set; }
     public int Kogus { get; set; }
 }
-

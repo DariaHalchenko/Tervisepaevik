@@ -4,71 +4,57 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Tervisepaevik.View"
     xmlns:pages="clr-namespace:Tervisepaevik"
+    xmlns:res="clr-namespace:Tervisepaevik.Resources.Localization"
     x:Class="Tervisepaevik.Flyout_Page"
     FlyoutLayoutBehavior="Popover">
 
-    <!-- МЕНЮ -->
     <FlyoutPage.Flyout>
-        <ContentPage Title="Menüü"
-                     BackgroundColor="{AppThemeBinding Light=White, Dark=#121212}">
-
+        <ContentPage Title="{x:Static res:AppResources.Menu}">
             <StackLayout>
+                <Button x:Name="btnStartPage"
+                    Text="{x:Static res:AppResources.StartPage}"
+                    Clicked="btnNewPage_Clicked"/>
 
-                <!-- КНОПКИ -->
-                <Button Text="Avaleht"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        Clicked="btnNewPage_Clicked"/>
+                <Button x:Name="btnNewPage"
+                    Text="{x:Static res:AppResources.NewPage}"
+                    Clicked="btnStartPage_Clicked"/>
 
-                <Button Text="Söök"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        Clicked="btnStartPage_Clicked"/>
+                <Button x:Name="btnHommikusookFotoPage"
+                    Text="{x:Static res:AppResources.Breakfast}"
+                    Clicked="btnHommikusookFotoPage_Clicked"/>
 
-                <Button Text="Hommikusöök"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        Clicked="btnHommikusookFotoPage_Clicked"/>
+                <Button x:Name="btnLounasookFotoPage"
+                    Text="{x:Static res:AppResources.Lunch}"
+                    Clicked="btnLounasookFotoPage_Clicked"/>
 
-                <Button Text="Lõunasöök"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        Clicked="btnLounasookFotoPage_Clicked"/>
+                <Button x:Name="btnOhtusookFotoPage"
+                    Text="{x:Static res:AppResources.Dinner}"
+                    Clicked="btnOhtusookFotoPage_Clicked"/>
 
-                <Button Text="Õhtusöök"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        Clicked="btnOhtusookFotoPage_Clicked"/>
+                <Button x:Name="btnVahepalaFotoPage"
+                    Text="{x:Static res:AppResources.Snack}"
+                    Clicked="btnVahepalaFotoPage_Clicked"/>
 
-                <Button Text="Vahepala"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        Clicked="btnVahepalaFotoPage_Clicked"/>
+                <Button x:Name="btnVeejalgiminePage"
+                    Text="{x:Static res:AppResources.Water}"
+                    Clicked="btnVeejalgiminePage_Clicked"/>
 
-                <Button Text="Veejälgimine"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        Clicked="btnVeejalgiminePage_Clicked"/>
+                <Button x:Name="btnTreeningudFotoPage"
+                    Text="{x:Static res:AppResources.Training}"
+                    Clicked="btnTreeningudFotoPage_Clicked"/>
 
-                <Button Text="Treeningud"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        Clicked="btnTreeningudFotoPage_Clicked"/>
-
-                <Button Text="Enesetunne"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
-                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                        Clicked="btnEnesetunnePage_Clicked"/>
+                <Button x:Name="btnEnesetunnePage"
+                    Text="{x:Static res:AppResources.Feeling}"
+                    Clicked="btnEnesetunnePage_Clicked"/>
 
             </StackLayout>
         </ContentPage>
     </FlyoutPage.Flyout>
 
-    <!-- ОСНОВНАЯ СТРАНИЦА -->
     <FlyoutPage.Detail>
         <NavigationPage>
             <x:Arguments>
-                <pages:StartPage Title="Söök"/>
+                <pages:StartPage Title="{x:Static res:AppResources.NewPage}"/>
             </x:Arguments>
         </NavigationPage>
     </FlyoutPage.Detail>

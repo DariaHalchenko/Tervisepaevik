@@ -1,5 +1,10 @@
-﻿using Tervisepaevik.Database;
+﻿using Microsoft.Maui.Controls;
+using Tervisepaevik.Database;
 using Tervisepaevik.Models;
+using Tervisepaevik.Resources.Localization;
+
+// alias чтобы не было конфликта с namespace View
+using MauiView = Microsoft.Maui.Controls.View;
 
 namespace Tervisepaevik.View;
 
@@ -19,16 +24,16 @@ public partial class TreeningudPage : ContentPage
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
         database = new TreeningudDatabase(dbPath);
 
-        Title = "🏋️ Treeningud";
+        Title = $"🏋️ {AppResources.Workouts}";
 
         dp = new DatePicker { Date = DateTime.Now };
         tp = new TimePicker { Time = TimeSpan.FromHours(8) };
 
-        entryNimi = CreateEntry("Treeningu nimi");
-        entryTuup = CreateEntry("Tüüp");
-        entryKirjeldus = CreateEntry("Kirjeldus");
-        entryLink = CreateEntry("Video link");
-        entryKalorid = CreateEntry("Kalorid");
+        entryNimi = CreateEntry(AppResources.WorkoutName);
+        entryTuup = CreateEntry(AppResources.Type);
+        entryKirjeldus = CreateEntry(AppResources.Description);
+        entryLink = CreateEntry(AppResources.VideoLink);
+        entryKalorid = CreateEntry(AppResources.Calories);
 
         img = new Image
         {
@@ -44,9 +49,9 @@ public partial class TreeningudPage : ContentPage
             Content = img
         };
 
-        var btnPick = CreateButton("Vali foto", "#03A9F4", Btn_valifoto_Clicked);
-        var btnPhoto = CreateButton("Kaamera", "#2196F3", Btn_pildista_Clicked);
-        var btnSave = CreateButton("Salvesta", "#4CAF50", Btn_salvesta_Clicked);
+        var btnPick = CreateButton(AppResources.ChoosePhoto, "#03A9F4", Btn_valifoto_Clicked);
+        var btnPhoto = CreateButton(AppResources.Camera, "#2196F3", Btn_pildista_Clicked);
+        var btnSave = CreateButton(AppResources.Save, "#4CAF50", Btn_salvesta_Clicked);
 
         var buttonRow = new HorizontalStackLayout
         {
@@ -60,15 +65,16 @@ public partial class TreeningudPage : ContentPage
             Spacing = 20
         };
 
-        mainStack.Children.Add(CreateCard("📅 Aeg", dp, tp));
-        mainStack.Children.Add(CreateCard("🏃 Treening",
+        mainStack.Children.Add(CreateCard($"📅 {AppResources.Time}", dp, tp));
+
+        mainStack.Children.Add(CreateCard($"🏃 {AppResources.Workout1}",
             entryNimi,
             entryTuup,
             entryKirjeldus,
             entryLink,
             entryKalorid));
 
-        mainStack.Children.Add(CreateCard("📸 Foto", fotoFrame, buttonRow));
+        mainStack.Children.Add(CreateCard($"📸 {AppResources.Photo}", fotoFrame, buttonRow));
 
         Content = new ScrollView { Content = mainStack };
     }
@@ -92,14 +98,16 @@ public partial class TreeningudPage : ContentPage
             Text = text,
             BackgroundColor = Color.FromArgb(color),
             CornerRadius = 15,
-            HeightRequest = 45
+            HeightRequest = 45,
+            TextColor = Colors.White
         };
 
         btn.Clicked += action;
         return btn;
     }
 
-    private Frame CreateCard(string title, params Microsoft.Maui.Controls.View[] views)
+    // ИСПРАВЛЕНО ЗДЕСЬ (MauiView вместо View)
+    private Frame CreateCard(string title, params MauiView[] views)
     {
         var stack = new VerticalStackLayout
         {
@@ -159,9 +167,13 @@ public partial class TreeningudPage : ContentPage
 
     // ================= SAVE =================
 
-    private void Btn_salvesta_Clicked(object sender, EventArgs e)
+    private async void Btn_salvesta_Clicked(object sender, EventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(entryNimi.Text)) return;
+        if (string.IsNullOrWhiteSpace(entryNimi.Text))
+        {
+            await DisplayAlert(AppResources.Error, AppResources.EnterWorkoutName, AppResources.OK);
+            return;
+        }
 
         selectedItem ??= new TreeningudClass();
 

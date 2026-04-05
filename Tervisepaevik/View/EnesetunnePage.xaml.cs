@@ -1,6 +1,7 @@
 ﻿using Microsoft.Maui.Controls;
 using Tervisepaevik.Database;
 using Tervisepaevik.Models;
+using Tervisepaevik.Resources.Localization;
 
 namespace Tervisepaevik.View;
 
@@ -24,21 +25,20 @@ public partial class EnesetunnePage : ContentPage
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
         database = new EnesetunneDatabase(dbPath);
 
-        Title = "Enesetunne";
+        Title = AppResources.Feeling;
 
         dp_kuupaev = new DatePicker
         {
             Date = DateTime.Now
         };
 
-        btn_salvesta = CreateButton("Salvesta", Colors.Green);
-        btn_kustuta = CreateButton("Kustuta", Colors.Red);
-        btn_hingeohk = CreateButton("Hingamise harjutus", Colors.Blue);
+        btn_salvesta = CreateButton(AppResources.Save, Colors.Green);
+        btn_kustuta = CreateButton(AppResources.Delete, Colors.Red);
+        btn_hingeohk = CreateButton(AppResources.BreathingExercise, Colors.Blue);
 
         btn_kustuta.IsVisible = false;
         btn_hingeohk.IsVisible = false;
 
-        // TUJU (stack row)
         sl_tuju = new StackLayout
         {
             Orientation = StackOrientation.Horizontal,
@@ -53,7 +53,6 @@ public partial class EnesetunnePage : ContentPage
             sl_tuju.Children.Add(img);
         }
 
-        // ENERGIA
         sl_energia = new StackLayout
         {
             Orientation = StackOrientation.Horizontal,
@@ -148,12 +147,11 @@ public partial class EnesetunnePage : ContentPage
                 Spacing = 15,
                 Children =
                 {
-                    CreateCard("Kuupäev", dp_kuupaev),
-                    CreateCard("Tuju", sl_tuju),
-                    CreateCard("Energia", sl_energia),
+                    CreateCard(AppResources.Date, dp_kuupaev),
+                    CreateCard(AppResources.Mood, sl_tuju),
+                    CreateCard(AppResources.Energy, sl_energia),
 
                     btn_salvesta,
-
                     btn_kustuta,
                     btn_hingeohk,
 
@@ -165,7 +163,6 @@ public partial class EnesetunnePage : ContentPage
         NaitaAndmeid();
     }
 
-    // Mood image with animation
     private Image CreateMoodImage(string source, int level, bool isMood)
     {
         var img = new Image
@@ -212,7 +209,6 @@ public partial class EnesetunnePage : ContentPage
         }
     }
 
-    // UI helpers
     private Frame CreateCard(string title, Microsoft.Maui.Controls.View content)
     {
         return new Frame
@@ -257,12 +253,11 @@ public partial class EnesetunnePage : ContentPage
         };
     }
 
-    // SAVE FIXED
     private async void Btn_salvesta_Clicked(object sender, EventArgs e)
     {
         if (selectedTuju == 0 || selectedEnergia == 0)
         {
-            await DisplayAlert("Viga", "Vali tuju ja energia enne salvestamist", "OK");
+            await DisplayAlert(AppResources.Error, AppResources.SelectMoodEnergy, AppResources.OK);
             return;
         }
 
@@ -275,7 +270,7 @@ public partial class EnesetunnePage : ContentPage
 
         database.SaveEnesetunne(selectedItem);
 
-        await DisplayAlert("Info", "Salvestatud", "OK");
+        await DisplayAlert(AppResources.Info, AppResources.Saved, AppResources.OK);
 
         SelgeForm();
         NaitaAndmeid();
@@ -293,7 +288,7 @@ public partial class EnesetunnePage : ContentPage
 
     private async void Btn_hingeohk_Clicked(object sender, EventArgs e)
     {
-        await DisplayAlert("Hingamine", "Harjutus algas...", "OK");
+        await DisplayAlert(AppResources.BreathingExercise, AppResources.BreathingStarted, AppResources.OK);
     }
 
     public void NaitaAndmeid()

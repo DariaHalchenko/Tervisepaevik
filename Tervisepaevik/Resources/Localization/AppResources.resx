@@ -1,0 +1,408 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Food" xml:space="preserve">
+    <value>Söök</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Alusta</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Kas olete valmis alustama oma teekonda tervisliku keha poole?</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Tere tulemast!</value>
+  </data>
+  <data name="Breakfast" xml:space="preserve">
+    <value>Hommikusöök</value>
+  </data>
+  <data name="Lunch" xml:space="preserve">
+    <value>Lõunasöök</value>
+  </data>
+  <data name="Dinner" xml:space="preserve">
+    <value>Õhtusöök</value>
+  </data>
+  <data name="Interlude" xml:space="preserve">
+    <value>Vahepala</value>
+  </data>
+  <data name="Greetings" xml:space="preserve">
+    <value>Tervitus</value>
+  </data>
+  <data name="Meal" xml:space="preserve">
+    <value>Söök</value>
+  </data>
+  <data name="Workouts" xml:space="preserve">
+    <value>Treeningud</value>
+  </data>
+  <data name="How I feel" xml:space="preserve">
+    <value>Enesetunne</value>
+  </data>
+  <data name="Water Monitoring&#x8;" xml:space="preserve">
+    <value>Vee jälgimine</value>
+  </data>
+  <data name="Breathing&#x8;" xml:space="preserve">
+    <value>Hingamine</value>
+  </data>
+  <data name="Health Diary" xml:space="preserve">
+    <value>Tervisepäevik</value>
+  </data>
+  <data name="Breathing" xml:space="preserve">
+    <value>Hingamine</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvesta</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Kustuta</value>
+  </data>
+  <data name="Breathing exercise" xml:space="preserve">
+    <value>Hingamise harjutus</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>Salvestatud</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Kas oled kindel?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Jah</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Ei</value>
+  </data>
+  <data name="SearchFood" xml:space="preserve">
+    <value>Otsi rooga...</value>
+  </data>
+  <data name="FoodName" xml:space="preserve">
+    <value>Roa nimi</value>
+  </data>
+  <data name="Proteins" xml:space="preserve">
+    <value>Valgud (g)</value>
+  </data>
+  <data name="Fats " xml:space="preserve">
+    <value>Rasvad</value>
+  </data>
+  <data name="Carbohydrates" xml:space="preserve">
+    <value>Süsivesikud </value>
+  </data>
+  <data name="Calories" xml:space="preserve">
+    <value>Kalorid (kcal)</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Vali</value>
+  </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Kaamera</value>
+  </data>
+  <data name="General Information" xml:space="preserve">
+    <value>Üldandmed</value>
+  </data>
+  <data name="Photo" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="WorkoutName" xml:space="preserve">
+    <value>Treeningu nimi</value>
+  </data>
+  <data name="Type of workout" xml:space="preserve">
+    <value>Treeningu tüüp</value>
+  </data>
+  <data name="Call time" xml:space="preserve">
+    <value>Kallaaeg</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Kirjeldus</value>
+  </data>
+  <data name="Calories burned" xml:space="preserve">
+    <value>Kulutud kalorid</value>
+  </data>
+  <data name="Workout" xml:space="preserve">
+    <value>Lisa uus treening</value>
+  </data>
+  <data name="Water Monitoring" xml:space="preserve">
+    <value>Vee jälgimine</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Kogus (ml)</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Kogus</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Kuupäev</value>
+  </data>
+  <data name="View the graph" xml:space="preserve">
+    <value>Vaata graafikut</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Aktiivne</value>
+  </data>
+  <data name="Water level indicator" xml:space="preserve">
+    <value>Veetaseme näidik</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>Ajalugu</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Viga</value>
+  </data>
+  <data name="Correct " xml:space="preserve">
+    <value>Sisesta korrektne vee kogus</value>
+  </data>
+  <data name="WelcomePageTitle" xml:space="preserve">
+    <value>Tervitatav</value>
+  </data>
+  <data name="Ready" xml:space="preserve">
+    <value>Valmis</value>
+  </data>
+  <data name="BreathingInstruction" xml:space="preserve">
+    <value>Hingake sisse, kui pilt muutub suuremaks,\nhingake välja, kui pilt muutub väiksemaks</value>
+  </data>
+  <data name="BreathingExercise" xml:space="preserve">
+    <value>Hingamise harjutus</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Sulge</value>
+  </data>
+  <data name="HealthDiary" xml:space="preserve">
+    <value>Tervise Päevik</value>
+  </data>
+  <data name="WaterMonitoring" xml:space="preserve">
+    <value>Veejalgimine</value>
+  </data>
+  <data name="HowIfeel" xml:space="preserve">
+    <value>enesetunne</value>
+  </data>
+  <data name="WaterTracking" xml:space="preserve">
+    <value>Vee jälgimine</value>
+  </data>
+  <data name="WaterAmountPlaceholder" xml:space="preserve">
+    <value>Joodud vee kogus (ml)</value>
+  </data>
+  <data name="WaterLevel" xml:space="preserve">
+    <value>Veetaseme näidik</value>
+  </data>
+  <data name="ShowGraph" xml:space="preserve">
+    <value>Vaata graafikut</value>
+  </data>
+  <data name="InvalidWater" xml:space="preserve">
+    <value>Sisesta korrektne vee kogus</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Ml" xml:space="preserve">
+    <value>ml</value>
+  </data>
+  <data name="WaterGraph" xml:space="preserve">
+    <value>Vee tarbimise graafik</value>
+  </data>
+  <data name="Amount1" xml:space="preserve">
+    <value>Kogus</value>
+  </data>
+  <data name="Snack" xml:space="preserve">
+    <value>Vahepala</value>
+  </data>
+  <data name="Fats" xml:space="preserve">
+    <value>Rasvad (g)</value>
+  </data>
+  <data name="Carbs" xml:space="preserve">
+    <value>Süsivesikud (g)</value>
+  </data>
+  <data name="GeneralInfo" xml:space="preserve">
+    <value>Üldandmed</value>
+  </data>
+  <data name="Choose" xml:space="preserve">
+    <value>Vali</value>
+  </data>
+  <data name="EnterFoodName" xml:space="preserve">
+    <value>Sisesta roa nimi</value>
+  </data>
+  <data name="Filters" xml:space="preserve">
+    <value>Filtrid</value>
+  </data>
+  <data name="Kcal" xml:space="preserve">
+    <value>kcal</value>
+  </data>
+  <data name="Detail" xml:space="preserve">
+    <value>Üksikasjad</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Tüüp</value>
+  </data>
+  <data name="VideoLink" xml:space="preserve">
+    <value>Video link</value>
+  </data>
+  <data name="ChoosePhoto" xml:space="preserve">
+    <value>Vali foto</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Aeg</value>
+  </data>
+  <data name="Workout1" xml:space="preserve">
+    <value>Treening</value>
+  </data>
+  <data name="EnterWorkoutName" xml:space="preserve">
+    <value>Sisesta treeningu nimi</value>
+  </data>
+  <data name="MyWorkouts" xml:space="preserve">
+    <value>My workouts</value>
+  </data>
+  <data name="Time1" xml:space="preserve">
+    <value>Kellaaeg</value>
+  </data>
+  <data name="AddWorkout" xml:space="preserve">
+    <value>Lisa uus treening</value>
+  </data>
+  <data name="Feeling" xml:space="preserve">
+    <value>Enesetunne</value>
+  </data>
+  <data name="CannotOpenLink" xml:space="preserve">
+    <value>Linki ei saa avada</value>
+  </data>
+  <data name="Mood" xml:space="preserve">
+    <value>Tuju</value>
+  </data>
+  <data name="Energy" xml:space="preserve">
+    <value>Energy</value>
+  </data>
+  <data name="BreathingStarted" xml:space="preserve">
+    <value>Harjutus algas...</value>
+  </data>
+  <data name="SelectMoodEnergy" xml:space="preserve">
+    <value>Vali tuju ja energia enne salvestamist</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="StartPage" xml:space="preserve">
+    <value>Avaleht</value>
+  </data>
+  <data name="NewPage" xml:space="preserve">
+    <value>Söök</value>
+  </data>
+  <data name="Training" xml:space="preserve">
+    <value>Treeningud</value>
+  </data>
+  <data name="Water" xml:space="preserve">
+    <value>Veejälgimine</value>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menüü</value>
+  </data>
+</root>

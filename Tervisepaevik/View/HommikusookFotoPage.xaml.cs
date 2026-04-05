@@ -1,5 +1,6 @@
 ﻿using Tervisepaevik.Database;
 using Tervisepaevik.Models;
+using Tervisepaevik.Resources.Localization;
 
 namespace Tervisepaevik.View;
 
@@ -12,7 +13,7 @@ public partial class HommikusookFotoPage : ContentPage
 
     public HommikusookFotoPage()
     {
-        Title = "Hommikusöök";
+        Title = AppResources.Breakfast;
 
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
         database = new HommikusookDatabase(dbPath);
@@ -24,10 +25,9 @@ public partial class HommikusookFotoPage : ContentPage
 
         filterDate.DateSelected += (s, e) => LoadImages();
 
-        // поиск по продукту
         searchEntry = new Entry
         {
-            Placeholder = "Otsi rooga..."
+            Placeholder = AppResources.SearchFood
         };
 
         searchEntry.TextChanged += (s, e) => LoadImages();
@@ -93,8 +93,8 @@ public partial class HommikusookFotoPage : ContentPage
             CornerRadius = 20,
             HasShadow = false,
             BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark
-            ? Color.FromArgb("#1E1E1E")
-            : Colors.White,
+                ? Color.FromArgb("#1E1E1E")
+                : Colors.White,
             Content = new VerticalStackLayout
             {
                 Spacing = 10,
@@ -102,7 +102,7 @@ public partial class HommikusookFotoPage : ContentPage
                 {
                     new Label
                     {
-                        Text = "Filtrid",
+                        Text = AppResources.Filters,
                         FontAttributes = FontAttributes.Bold,
                         FontSize = 18
                     },
@@ -119,6 +119,7 @@ public partial class HommikusookFotoPage : ContentPage
         grid.RowDefinitions.Clear();
 
         var data = database.GetHommikusook()
+            .Where(x => x.Toidu_foto != null && x.Toidu_foto.Length > 0) // защита
             .Where(x => x.Kuupaev.Date == filterDate.Date)
             .Where(x => string.IsNullOrWhiteSpace(searchEntry.Text) ||
                         x.Roa_nimi.ToLower().Contains(searchEntry.Text.ToLower()))
@@ -146,11 +147,10 @@ public partial class HommikusookFotoPage : ContentPage
 
             var label = new Label
             {
-                Text = $"{item.Kalorid} kcal",
+                Text = $"{item.Kalorid} {AppResources.Kcal}",
                 Padding = 4
             };
 
-            // кнопка удаления (крестик)
             var deleteBtn = new ImageButton
             {
                 Source = "kustuta.png",
@@ -163,7 +163,12 @@ public partial class HommikusookFotoPage : ContentPage
 
             deleteBtn.Clicked += async (s, e) =>
             {
-                bool confirm = await DisplayAlert("Kustuta", "Kas oled kindel?", "Jah", "Ei");
+                bool confirm = await DisplayAlert(
+                    AppResources.Delete,
+                    AppResources.ConfirmDelete,
+                    AppResources.Yes,
+                    AppResources.No);
+
                 if (confirm)
                 {
                     database.DeleteHommikusook(item.Hommikusook_id);
@@ -186,7 +191,7 @@ public partial class HommikusookFotoPage : ContentPage
                             VerticalOptions = LayoutOptions.End,
                             Children = { label }
                         },
-                        deleteBtn 
+                        deleteBtn
                     }
                 }
             };

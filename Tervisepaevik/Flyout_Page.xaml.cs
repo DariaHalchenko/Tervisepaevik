@@ -1,3 +1,4 @@
+﻿using Tervisepaevik.Resources.Localization;
 using Tervisepaevik.View;
 
 namespace Tervisepaevik;
@@ -7,64 +8,76 @@ public partial class Flyout_Page : FlyoutPage
     public Flyout_Page()
     {
         InitializeComponent();
+        UpdateTexts(); // сразу применяем язык
     }
 
-    private void btnNewPage_Clicked(object sender, EventArgs e)
+    // ОБНОВЛЕНИЕ ТЕКСТОВ
+    public void UpdateTexts()
     {
-        Detail = new NavigationPage(new NewPage1());
+        btnStartPage.Text = AppResources.StartPage;
+        btnNewPage.Text = AppResources.NewPage;
+
+        btnHommikusookFotoPage.Text = AppResources.Breakfast;
+        btnLounasookFotoPage.Text = AppResources.Lunch;
+        btnOhtusookFotoPage.Text = AppResources.Dinner;
+        btnVahepalaFotoPage.Text = AppResources.Snack;
+
+        btnTreeningudFotoPage.Text = AppResources.Training;
+        btnVeejalgiminePage.Text = AppResources.Water;
+        btnEnesetunnePage.Text = AppResources.Feeling;
+    }
+
+    // НАВИГАЦИЯ
+    void Navigate(Page page)
+    {
+        Detail = new NavigationPage(page);
+
         if (!((IFlyoutPageController)this).ShouldShowSplitMode)
-           
             IsPresented = false;
     }
 
     private void btnStartPage_Clicked(object sender, EventArgs e)
     {
-        Detail = new NavigationPage(new StartPage());
-        if (!((IFlyoutPageController)this).ShouldShowSplitMode)
-            IsPresented = false;
+        Navigate(new StartPage());
+    }
+
+    private void btnNewPage_Clicked(object sender, EventArgs e)
+    {
+        Navigate(new NewPage1());
     }
 
     private void btnHommikusookFotoPage_Clicked(object sender, EventArgs e)
     {
-        Detail = new NavigationPage(new HommikusookFotoPage());
-        if (!((IFlyoutPageController)this).ShouldShowSplitMode)
-            IsPresented = false;
+        Navigate(new HommikusookFotoPage());
     }
+
     private void btnLounasookFotoPage_Clicked(object sender, EventArgs e)
     {
-        Detail = new NavigationPage(new LounasookFotoPage());
-        if (!((IFlyoutPageController)this).ShouldShowSplitMode)
-            IsPresented = false;
+        Navigate(new LounasookFotoPage());
     }
+
     private void btnOhtusookFotoPage_Clicked(object sender, EventArgs e)
     {
-        Detail = new NavigationPage(new OhtusookFotoPage());
-        if (!((IFlyoutPageController)this).ShouldShowSplitMode)
-            IsPresented = false;
+        Navigate(new OhtusookFotoPage());
     }
+
     private void btnVahepalaFotoPage_Clicked(object sender, EventArgs e)
     {
-        Detail = new NavigationPage(new VahepalaFotoPage());
-        if (!((IFlyoutPageController)this).ShouldShowSplitMode)
-            IsPresented = false;
+        Navigate(new VahepalaFotoPage());
     }
+
     private void btnTreeningudFotoPage_Clicked(object sender, EventArgs e)
     {
-        Detail = new NavigationPage(new TreeningudFotoPage());
-        if (!((IFlyoutPageController)this).ShouldShowSplitMode)
-            IsPresented = false;
+        Navigate(new TreeningudFotoPage());
     }
 
     private void btnVeejalgiminePage_Clicked(object sender, EventArgs e)
     {
-        Detail = new NavigationPage(new VeejalgiminePage());
-        if (!((IFlyoutPageController)this).ShouldShowSplitMode)
-            IsPresented = false;
+        Navigate(new VeejalgiminePage());
     }
+
     private void btnEnesetunnePage_Clicked(object sender, EventArgs e)
     {
-        Detail = new NavigationPage(new EnesetunnePage());
-        if (!((IFlyoutPageController)this).ShouldShowSplitMode)
-            IsPresented = false;
+        Navigate(new EnesetunnePage());
     }
 }

@@ -10,7 +10,7 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
+            
             <Style TargetType="ContentPage">
                 <Setter Property="BackgroundColor"
                         Value="{AppThemeBinding Light=#FFF0F5, Dark=#121212}" />
@@ -37,7 +37,9 @@
             </Style>
 
             <Style TargetType="Button">
-                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="TextColor"
+                    Value="{AppThemeBinding Light=Black, Dark=White}" />
             </Style>
 
         </ResourceDictionary>

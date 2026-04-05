@@ -2,6 +2,7 @@
 using System.Globalization;
 using Tervisepaevik.Database;
 using Tervisepaevik.Models;
+using Tervisepaevik.Resources.Localization;
 
 namespace Tervisepaevik.View;
 
@@ -12,7 +13,7 @@ public partial class TreeningudFotoPage : ContentPage
 
     public TreeningudFotoPage()
     {
-        Title = "Minu treeningud";
+        Title = AppResources.MyWorkouts;
 
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
         database = new TreeningudDatabase(dbPath);
@@ -44,29 +45,21 @@ public partial class TreeningudFotoPage : ContentPage
                 };
                 nimiLabel.SetBinding(Label.TextProperty, "Treeningu_nimi");
 
-                var tyyppLabel = new Label
-                {
-                    FontSize = 14
-                };
-                tyyppLabel.SetBinding(Label.TextProperty, new Binding("Treeningu_tuup", stringFormat: "Tüüp: {0}"));
+                var tyyppLabel = new Label { FontSize = 14 };
+                tyyppLabel.SetBinding(Label.TextProperty,
+                    new Binding("Treeningu_tuup", stringFormat: $"{AppResources.Type}: {{0}}"));
 
-                var kellaaegLabel = new Label
-                {
-                    FontSize = 14
-                };
-                kellaaegLabel.SetBinding(Label.TextProperty, new Binding("Kallaaeg", stringFormat: "Kellaaeg: {0}"));
+                var kellaaegLabel = new Label { FontSize = 14 };
+                kellaaegLabel.SetBinding(Label.TextProperty,
+                    new Binding("Kallaaeg", stringFormat: $"{AppResources.Time1}: {{0:hh\\:mm}}"));
 
-                var sammudLabel = new Label
-                {
-                    FontSize = 14
-                };
-                sammudLabel.SetBinding(Label.TextProperty, new Binding("Kirjeldus", stringFormat: "Kirjeldus: {0}"));
+                var kirjeldusLabel = new Label { FontSize = 14 };
+                kirjeldusLabel.SetBinding(Label.TextProperty,
+                    new Binding("Kirjeldus", stringFormat: $"{AppResources.Description}: {{0}}"));
 
-                var kaloridLabel = new Label
-                {
-                    FontSize = 14
-                };
-                kaloridLabel.SetBinding(Label.TextProperty, new Binding("Kulutud_kalorid", stringFormat: "Kalorid: {0}"));
+                var kaloridLabel = new Label { FontSize = 14 };
+                kaloridLabel.SetBinding(Label.TextProperty,
+                    new Binding("Kulutud_kalorid", stringFormat: $"{AppResources.Calories}: {{0}} kcal"));
 
                 var image = new Image
                 {
@@ -81,7 +74,8 @@ public partial class TreeningudFotoPage : ContentPage
                 var tapGesture = new TapGestureRecognizer();
                 tapGesture.Tapped += async (s, e) =>
                 {
-                    if (((Image)s).BindingContext is TreeningudClass treening && !string.IsNullOrWhiteSpace(treening.Link))
+                    if (((Image)s).BindingContext is TreeningudClass treening &&
+                        !string.IsNullOrWhiteSpace(treening.Link))
                     {
                         try
                         {
@@ -89,7 +83,10 @@ public partial class TreeningudFotoPage : ContentPage
                         }
                         catch (Exception ex)
                         {
-                            await DisplayAlert("Viga", $"Linki ei saa avada: {ex.Message}", "OK");
+                            await DisplayAlert(
+                                AppResources.Error,
+                                $"{AppResources.CannotOpenLink}: {ex.Message}",
+                                AppResources.OK);
                         }
                     }
                 };
@@ -104,7 +101,7 @@ public partial class TreeningudFotoPage : ContentPage
                         nimiLabel,
                         tyyppLabel,
                         kellaaegLabel,
-                        sammudLabel,
+                        kirjeldusLabel,
                         kaloridLabel
                     }
                 };
@@ -125,10 +122,9 @@ public partial class TreeningudFotoPage : ContentPage
             })
         };
 
-        // ================= BUTTON (NEW DESIGN) =================
         var addButton = new Button
         {
-            Text = "➕ Lisa uus treening",
+            Text = $"➕ {AppResources.AddWorkout}",
             BackgroundColor = Colors.MediumPurple,
             TextColor = Colors.White,
             CornerRadius = 15,
@@ -141,11 +137,11 @@ public partial class TreeningudFotoPage : ContentPage
             await Navigation.PushAsync(new TreeningudPage());
         };
 
-        // ================= SWITCH =================
         redirectSwitch = new Switch
         {
             OnColor = Colors.MediumPurple
         };
+
         redirectSwitch.Toggled += RedirectSwitch_Toggled;
 
         var switchLayout = new Frame
@@ -160,7 +156,7 @@ public partial class TreeningudFotoPage : ContentPage
                 {
                     new Label
                     {
-                        Text = "Enesetunne",
+                        Text = AppResources.Feeling,
                         VerticalOptions = LayoutOptions.Center,
                         FontAttributes = FontAttributes.Bold
                     },
@@ -169,7 +165,6 @@ public partial class TreeningudFotoPage : ContentPage
             }
         };
 
-        // ================= MAIN STACK =================
         var mainStack = new VerticalStackLayout
         {
             Padding = 15,
@@ -182,7 +177,6 @@ public partial class TreeningudFotoPage : ContentPage
             }
         };
 
-        // ================= SCROLL =================
         Content = new ScrollView
         {
             Content = mainStack

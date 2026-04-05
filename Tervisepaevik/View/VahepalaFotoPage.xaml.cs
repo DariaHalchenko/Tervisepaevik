@@ -1,5 +1,6 @@
 ﻿using Tervisepaevik.Database;
 using Tervisepaevik.Models;
+using Tervisepaevik.Resources.Localization;
 
 namespace Tervisepaevik.View;
 
@@ -12,7 +13,7 @@ public partial class VahepalaFotoPage : ContentPage
 
     public VahepalaFotoPage()
     {
-        Title = "Vahepala";
+        Title = AppResources.Snack;
 
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
         database = new VahepalaDatabase(dbPath);
@@ -26,7 +27,7 @@ public partial class VahepalaFotoPage : ContentPage
 
         searchEntry = new Entry
         {
-            Placeholder = "Otsi rooga...",
+            Placeholder = AppResources.SearchFood,
         };
 
         searchEntry.TextChanged += (s, e) => LoadImages();
@@ -98,7 +99,7 @@ public partial class VahepalaFotoPage : ContentPage
                 {
                     new Label
                     {
-                        Text = "Filtrid",
+                        Text = AppResources.Filters,
                         FontAttributes = FontAttributes.Bold,
                         FontSize = 18
                     },
@@ -143,7 +144,7 @@ public partial class VahepalaFotoPage : ContentPage
 
             var label = new Label
             {
-                Text = $"{item.Kalorid} kcal",
+                Text = $"{item.Kalorid} {AppResources.Kcal}",
                 Padding = 4
             };
 
@@ -159,7 +160,12 @@ public partial class VahepalaFotoPage : ContentPage
 
             deleteBtn.Clicked += async (s, e) =>
             {
-                bool confirm = await DisplayAlert("Kustuta", "Kas oled kindel?", "Jah", "Ei");
+                bool confirm = await DisplayAlert(
+                    AppResources.Delete,
+                    AppResources.ConfirmDelete,
+                    AppResources.Yes,
+                    AppResources.No);
+
                 if (confirm)
                 {
                     database.DeleteVahepala(item.Vahepala_id);

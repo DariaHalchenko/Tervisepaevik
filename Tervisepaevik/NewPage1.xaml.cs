@@ -1,27 +1,34 @@
-﻿using System;
+﻿using Microsoft.Maui.Controls;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Maui.Controls;
+using Tervisepaevik.Resources.Localization;
 using Tervisepaevik.View;
 
 namespace Tervisepaevik
 {
     public partial class NewPage1 : ContentPage
     {
-
-        public List<(string Tekst, string Pilt)> valikud = new List<(string, string)>
+        public class MenuItemModel
         {
-            ("Tervitus", "tervitus.png"),
-            ("Söök", "menuu.png"), 
-            ("Treeningud", "gym.png"),
-            ("Enesetunne", "enesetunne.png"),
-            ("Vee jälgimine", "veejalgimine.png"),
-            ("Hingamine", "kopsud.png")
+            public string Key { get; set; }     // логика
+            public string Text { get; set; }    // UI
+            public string Image { get; set; }
+        }
+
+        public List<MenuItemModel> valikud = new()
+        {
+            new MenuItemModel { Key = "welcome", Text = AppResources.Welcome, Image = "tervitus.png" },
+            new MenuItemModel { Key = "food", Text = AppResources.Food, Image = "menuu.png" },
+            new MenuItemModel { Key = "workout", Text = AppResources.Workouts, Image = "gym.png" },
+            new MenuItemModel { Key = "feeling", Text = AppResources.HowIfeel, Image = "enesetunne.png" },
+            new MenuItemModel { Key = "water", Text = AppResources.WaterMonitoring, Image = "veejalgimine.png" },
+            new MenuItemModel { Key = "breathing", Text = AppResources.Breathing, Image = "kopsud.png" }
         };
 
         public NewPage1()
         {
-            Title = "Tervise Päevik";
+            Title = AppResources.HealthDiary;
 
             ScrollView sv = new ScrollView();
             VerticalStackLayout vsl = new VerticalStackLayout
@@ -41,7 +48,7 @@ namespace Tervisepaevik
 
                 var imgButton = new ImageButton
                 {
-                    Source = valikud[i].Pilt,
+                    Source = valikud[i].Image,
                     HeightRequest = 55,
                     WidthRequest = 55,
                     Aspect = Aspect.AspectFit,
@@ -52,7 +59,7 @@ namespace Tervisepaevik
 
                 var label = new Label
                 {
-                    Text = valikud[i].Tekst,
+                    Text = valikud[i].Text,
                     FontSize = 20,
                     FontAttributes = FontAttributes.Bold,
                     HorizontalOptions = LayoutOptions.Center
@@ -62,31 +69,31 @@ namespace Tervisepaevik
 
                 imgButton.Clicked += async (s, e) =>
                 {
-                    var tekst = valikud[index].Tekst;
+                    var key = valikud[index].Key;
 
-                    switch (tekst)
+                    switch (key)
                     {
-                        case "Tervitus":
+                        case "welcome":
                             await Navigation.PushAsync(new TervitatavPage());
                             break;
 
-                        case "Söök":
+                        case "food":
                             Application.Current.MainPage = new Flyout_Page();
                             break;
 
-                        case "Treeningud":
+                        case "workout":
                             await Navigation.PushAsync(new TreeningudFotoPage());
                             break;
 
-                        case "Enesetunne":
+                        case "feeling":
                             await Navigation.PushAsync(new EnesetunnePage());
                             break;
 
-                        case "Vee jälgimine":
+                        case "water":
                             await Navigation.PushAsync(new VeejalgiminePage());
                             break;
 
-                        case "Hingamine":
+                        case "breathing":
                             await ShowBreathingPopup();
                             break;
                     }
@@ -139,7 +146,7 @@ namespace Tervisepaevik
 
             var btn_sule = new Button
             {
-                Text = "Sulge",
+                Text = AppResources.Close,
                 Margin = new Thickness(0, 20, 0, 0)
             };
 
@@ -156,14 +163,14 @@ namespace Tervisepaevik
                 {
                     new Label
                     {
-                        Text = "Hingamise harjutus",
+                        Text = AppResources.BreathingExercise,
                         FontSize = 20,
                         TextColor = Colors.White,
                         HorizontalOptions = LayoutOptions.Center
                     },
                     new Label
                     {
-                        Text = "Hingake sisse, kui pilt muutub suuremaks,\nhingake välja, kui pilt muutub väiksemaks.",
+                        Text = AppResources.BreathingInstruction,
                         FontSize = 14,
                         TextColor = Colors.White,
                         HorizontalOptions = LayoutOptions.Center,
@@ -184,7 +191,9 @@ namespace Tervisepaevik
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     secondsRemaining--;
-                    timerLabel.Text = secondsRemaining > 0 ? secondsRemaining.ToString() : "Valmis!";
+                    timerLabel.Text = secondsRemaining > 0
+                        ? secondsRemaining.ToString()
+                        : AppResources.Ready;
                 });
 
                 return secondsRemaining > 0;

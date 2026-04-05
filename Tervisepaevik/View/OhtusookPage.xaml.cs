@@ -1,6 +1,10 @@
 ﻿using Microsoft.Maui.Controls;
 using Tervisepaevik.Database;
 using Tervisepaevik.Models;
+using Tervisepaevik.Resources.Localization;
+
+// alias чтобы избежать проблем
+using MauiView = Microsoft.Maui.Controls.View;
 
 namespace Tervisepaevik.View;
 
@@ -20,18 +24,17 @@ public partial class OhtusookPage : ContentPage
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
         database = new OhtusookDatabase(dbPath);
 
-        Title = "Õhtusöök";
+        Title = AppResources.Dinner;
 
         dp = new DatePicker { Date = DateTime.Now };
         tp = new TimePicker { Time = TimeSpan.FromHours(19) };
 
-        entryRoa = CreateEntry("Roa nimi");
-        entryValgud = CreateEntry("Valgud (g)");
-        entryRasvad = CreateEntry("Rasvad (g)");
-        entrySys = CreateEntry("Süsivesikud (g)");
-        entryKalorid = CreateEntry("Kalorid (kcal)");
+        entryRoa = CreateEntry(AppResources.FoodName);
+        entryValgud = CreateEntry(AppResources.Proteins);
+        entryRasvad = CreateEntry(AppResources.Fats);
+        entrySys = CreateEntry(AppResources.Carbs);
+        entryKalorid = CreateEntry(AppResources.Calories);
 
-        // CALCULATOR
         entryValgud.TextChanged += OnMacrosChanged;
         entryRasvad.TextChanged += OnMacrosChanged;
         entrySys.TextChanged += OnMacrosChanged;
@@ -50,9 +53,9 @@ public partial class OhtusookPage : ContentPage
             Content = img
         };
 
-        var btnPick = CreateButton("Vali", Colors.Blue, Btn_valifoto_Clicked);
-        var btnPhoto = CreateButton("Kaamera", Colors.Blue, Btn_pildista_Clicked);
-        var btnSave = CreateButton("Salvesta", Colors.Green, Btn_salvesta_Clicked);
+        var btnPick = CreateButton(AppResources.Choose, Colors.Blue, Btn_valifoto_Clicked);
+        var btnPhoto = CreateButton(AppResources.Camera, Colors.Blue, Btn_pildista_Clicked);
+        var btnSave = CreateButton(AppResources.Save, Colors.Green, Btn_salvesta_Clicked);
 
         var buttonRow = new HorizontalStackLayout
         {
@@ -66,10 +69,10 @@ public partial class OhtusookPage : ContentPage
             Spacing = 20
         };
 
-        mainStack.Children.Add(CreateCard("Üldandmed",
+        mainStack.Children.Add(CreateCard(AppResources.GeneralInfo,
             dp, tp, entryRoa, entryValgud, entryRasvad, entrySys, entryKalorid));
 
-        mainStack.Children.Add(CreateCard("Foto",
+        mainStack.Children.Add(CreateCard(AppResources.Photo,
             fotoFrame, buttonRow));
 
         Content = new ScrollView { Content = mainStack };
@@ -110,11 +113,11 @@ public partial class OhtusookPage : ContentPage
         };
 
         btn.Clicked += clicked;
-
         return btn;
     }
 
-    private Frame CreateCard(string title, params object[] views)
+    // исправлено (без object)
+    private Frame CreateCard(string title, params MauiView[] views)
     {
         var stack = new VerticalStackLayout { Spacing = 10 };
 
@@ -127,8 +130,7 @@ public partial class OhtusookPage : ContentPage
 
         foreach (var v in views)
         {
-            if (v is VisualElement element)
-                stack.Children.Add(element);
+            stack.Children.Add(v);
         }
 
         return new Frame
@@ -171,9 +173,13 @@ public partial class OhtusookPage : ContentPage
 
     // ================= SAVE =================
 
-    private void Btn_salvesta_Clicked(object sender, EventArgs e)
+    private async void Btn_salvesta_Clicked(object sender, EventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(entryRoa.Text)) return;
+        if (string.IsNullOrWhiteSpace(entryRoa.Text))
+        {
+            await DisplayAlert(AppResources.Error, AppResources.EnterFoodName, AppResources.OK);
+            return;
+        }
 
         selectedItem ??= new OhtusookClass();
 

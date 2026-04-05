@@ -1,5 +1,6 @@
 ﻿using Tervisepaevik.Database;
 using Tervisepaevik.Models;
+using Tervisepaevik.Resources.Localization;
 using Tervisepaevik.View;
 
 namespace Tervisepaevik;
@@ -24,7 +25,7 @@ public partial class StartPage : ContentPage
         var allMeals = new List<ToidukorradClass>();
         allMeals.AddRange(hommik.Select(x => new ToidukorradClass
         {
-            Tuup = "Hommikusöök",
+            Tuup = AppResources.Breakfast,
             Roa_nimi = x.Roa_nimi,
             Kuupaev = x.Kuupaev,
             Kalorid = x.Kalorid,
@@ -32,7 +33,7 @@ public partial class StartPage : ContentPage
         }));
         allMeals.AddRange(louna.Select(x => new ToidukorradClass
         {
-            Tuup = "Lõuna",
+            Tuup = AppResources.Lunch,
             Roa_nimi = x.Roa_nimi,
             Kuupaev = x.Kuupaev,
             Kalorid = x.Kalorid,
@@ -40,7 +41,7 @@ public partial class StartPage : ContentPage
         }));
         allMeals.AddRange(ohtu.Select(x => new ToidukorradClass
         {
-            Tuup = "Õhtusöök",
+            Tuup = AppResources.Dinner,
             Roa_nimi = x.Roa_nimi,
             Kuupaev = x.Kuupaev,
             Kalorid = x.Kalorid,
@@ -48,7 +49,7 @@ public partial class StartPage : ContentPage
         }));
         allMeals.AddRange(vahepala.Select(x => new ToidukorradClass
         {
-            Tuup = "Vahepala",
+            Tuup = AppResources.Interlude,
             Roa_nimi = x.Roa_nimi,
             Kuupaev = x.Kuupaev,
             Kalorid = x.Kalorid,
@@ -183,10 +184,10 @@ public partial class StartPage : ContentPage
         };
         btn_vahepala.Clicked += Btn_vahepala_Clicked;
 
-        lbl_hommikusook = new Label { Text = "Hommikusöök", HorizontalOptions = LayoutOptions.Center };
-        lbl_louna = new Label { Text = "Lõuna", HorizontalOptions = LayoutOptions.Center };
-        lbl_ohtusook = new Label { Text = "Õhtusöök", HorizontalOptions = LayoutOptions.Center };
-        lbl_vahepala = new Label { Text = "Vahepala", HorizontalOptions = LayoutOptions.Center };
+        lbl_hommikusook = new Label { Text = AppResources.Breakfast, HorizontalOptions = LayoutOptions.Center };
+        lbl_louna = new Label { Text = AppResources.Lunch, HorizontalOptions = LayoutOptions.Center };
+        lbl_ohtusook = new Label { Text = AppResources.Dinner, HorizontalOptions = LayoutOptions.Center };
+        lbl_vahepala = new Label { Text = AppResources.Interlude, HorizontalOptions = LayoutOptions.Center };
 
         var grid = new Grid
         {

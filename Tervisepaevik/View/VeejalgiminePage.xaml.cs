@@ -2,6 +2,7 @@
 using System.Globalization;
 using Tervisepaevik.Database;
 using Tervisepaevik.Models;
+using Tervisepaevik.Resources.Localization;
 
 namespace Tervisepaevik.View;
 
@@ -23,11 +24,11 @@ public partial class VeejalgiminePage : ContentPage
         string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Tervisepaevik.db");
         database = new VeejalgimineDatabase(dbPath);
 
-        Title = "Vee jälgimine";
-        // INPUTS
+        Title = AppResources.WaterTracking;
+
         kogusEntry = new Entry
         {
-            Placeholder = "Joodud vee kogus (ml)",
+            Placeholder = AppResources.WaterAmountPlaceholder,
             Keyboard = Keyboard.Numeric
         };
 
@@ -36,7 +37,6 @@ public partial class VeejalgiminePage : ContentPage
         kuupaevPicker = new DatePicker { Date = DateTime.Now };
         aktiivneSwitch = new Switch { IsToggled = true };
 
-        // ================= GLASS =================
         f_klaas = new Frame
         {
             CornerRadius = 25,
@@ -63,7 +63,6 @@ public partial class VeejalgiminePage : ContentPage
             }
         };
 
-        // ================= LIST =================
         listView = new CollectionView
         {
             ItemsLayout = new LinearItemsLayout(ItemsLayoutOrientation.Vertical)
@@ -81,7 +80,8 @@ public partial class VeejalgiminePage : ContentPage
                 };
 
                 var kogus = new Label { FontAttributes = FontAttributes.Bold, FontSize = 16 };
-                kogus.SetBinding(Label.TextProperty, new Binding("Kogus", stringFormat: "💧 {0} ml"));
+                kogus.SetBinding(Label.TextProperty,
+                    new Binding("Kogus", stringFormat: $"💧 {{0}} {AppResources.Ml}"));
 
                 var kuupaev = new Label { TextColor = Colors.Gray, FontSize = 12 };
                 kuupaev.SetBinding(Label.TextProperty, new Binding("Kuupaev", stringFormat: "{0:d}"));
@@ -96,10 +96,9 @@ public partial class VeejalgiminePage : ContentPage
             })
         };
 
-        // ================= BUTTON SAVE =================
         var btn_salvesta = new Button
         {
-            Text = "💾 Salvesta",
+            Text = $"💾 {AppResources.Save}",
             BackgroundColor = Colors.MediumPurple,
             TextColor = Colors.White,
             CornerRadius = 15,
@@ -108,10 +107,9 @@ public partial class VeejalgiminePage : ContentPage
 
         btn_salvesta.Clicked += Btn_salvesta_Clicked;
 
-        // ================= BUTTON GRAPH =================
         var btn_graafik = new Button
         {
-            Text = "📊 Vaata graafikut",
+            Text = $"📊 {AppResources.ShowGraph}",
             BackgroundColor = Colors.DodgerBlue,
             TextColor = Colors.White,
             CornerRadius = 15,
@@ -134,7 +132,6 @@ public partial class VeejalgiminePage : ContentPage
             await Navigation.PushAsync(new VeejalgimineGrafikPage(andmed));
         };
 
-        // ================= FORM =================
         var formCard = new Frame
         {
             CornerRadius = 20,
@@ -145,16 +142,16 @@ public partial class VeejalgiminePage : ContentPage
                 Spacing = 10,
                 Children =
                 {
-                    new Label { Text = "Kuupäev", FontAttributes = FontAttributes.Bold },
+                    new Label { Text = AppResources.Date, FontAttributes = FontAttributes.Bold },
                     kuupaevPicker,
 
-                    new Label { Text = "Kogus (ml)", FontAttributes = FontAttributes.Bold },
+                    new Label { Text = AppResources.Amount, FontAttributes = FontAttributes.Bold },
                     kogusEntry,
 
-                    new Label { Text = "Aktiivne", FontAttributes = FontAttributes.Bold },
+                    new Label { Text = AppResources.Active, FontAttributes = FontAttributes.Bold },
                     aktiivneSwitch,
 
-                    new Label { Text = "Veetaseme näidik", FontAttributes = FontAttributes.Bold },
+                    new Label { Text = AppResources.WaterLevel, FontAttributes = FontAttributes.Bold },
                     f_klaas,
 
                     btn_salvesta
@@ -162,7 +159,6 @@ public partial class VeejalgiminePage : ContentPage
             }
         };
 
-        // ================= MAIN =================
         var mainStack = new VerticalStackLayout
         {
             Padding = 20,
@@ -170,16 +166,13 @@ public partial class VeejalgiminePage : ContentPage
             Children =
             {
                 formCard,
-
-                btn_graafik, 
-
+                btn_graafik,
                 new Label
                 {
-                    Text = "Ajalugu",
+                    Text = AppResources.History,
                     FontSize = 18,
                     FontAttributes = FontAttributes.Bold
                 },
-
                 listView
             }
         };
@@ -204,7 +197,7 @@ public partial class VeejalgiminePage : ContentPage
     {
         if (!int.TryParse(kogusEntry.Text, out int kogus) || kogus <= 0)
         {
-            await DisplayAlert("Viga", "Sisesta korrektne vee kogus.", "OK");
+            await DisplayAlert(AppResources.Error, AppResources.InvalidWater, AppResources.OK);
             return;
         }
 
