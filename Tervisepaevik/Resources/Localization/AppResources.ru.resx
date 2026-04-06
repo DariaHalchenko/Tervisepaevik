@@ -118,291 +118,291 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Food" xml:space="preserve">
-    <value>Food</value>
+    <value>Еда</value>
   </data>
   <data name="Start" xml:space="preserve">
-    <value>Start</value>
+    <value>Начать</value>
   </data>
   <data name="Text" xml:space="preserve">
-    <value>Are you ready to start your journey toward a healthy body?</value>
+    <value>Вы готовы начать свой путь к здоровому телу?</value>
   </data>
   <data name="Welcome" xml:space="preserve">
-    <value>Welcome</value>
+    <value>Добро пожаловать!</value>
   </data>
   <data name="Breakfast" xml:space="preserve">
-    <value>Breakfast</value>
+    <value>Завтрак</value>
   </data>
   <data name="Lunch" xml:space="preserve">
-    <value>Lunch</value>
+    <value>Обед</value>
   </data>
   <data name="Dinner" xml:space="preserve">
-    <value>Dinner</value>
+    <value>Ужин</value>
   </data>
   <data name="Interlude" xml:space="preserve">
-    <value>Interlude</value>
+    <value>Перекус</value>
   </data>
   <data name="Greetings" xml:space="preserve">
-    <value>Greetings</value>
+    <value>Приветствие</value>
   </data>
   <data name="Meal" xml:space="preserve">
-    <value>Meal</value>
+    <value>Еда</value>
   </data>
   <data name="Workouts" xml:space="preserve">
-    <value>Workouts</value>
+    <value>Тренировки</value>
   </data>
   <data name="How I feel" xml:space="preserve">
-    <value>How I feel</value>
+    <value>самочувствие</value>
   </data>
   <data name="Water Monitoring&#x8;" xml:space="preserve">
-    <value>Water Monitoring</value>
+    <value>Мониторинг воды</value>
   </data>
   <data name="Breathing&#x8;" xml:space="preserve">
-    <value>Breathing</value>
+    <value>Дыхание</value>
   </data>
   <data name="Health Diary" xml:space="preserve">
-    <value>Health Diary</value>
+    <value>Дневник здоровья</value>
   </data>
   <data name="Breathing" xml:space="preserve">
-    <value>Breathing</value>
+    <value>Дыхание</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Сохранить</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Удалить</value>
   </data>
   <data name="Breathing exercise" xml:space="preserve">
-    <value>Breathing exercise</value>
+    <value>Дыхательная гимнастика</value>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>Saved</value>
+    <value>Сохранено</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>Are you sure?</value>
+    <value>Ты уверен?</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Да</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>No</value>
+    <value>Нет</value>
   </data>
   <data name="SearchFood" xml:space="preserve">
-    <value>Search food...</value>
+    <value>Найти блюдо...</value>
   </data>
   <data name="FoodName" xml:space="preserve">
-    <value>Food name</value>
+    <value>Название блюда</value>
   </data>
   <data name="Proteins" xml:space="preserve">
-    <value>Proteins (g)</value>
+    <value>Белки (г)</value>
   </data>
   <data name="Fats " xml:space="preserve">
-    <value>Fats </value>
+    <value>Жиры</value>
   </data>
   <data name="Carbohydrates" xml:space="preserve">
-    <value>Carbohydrates </value>
+    <value>Углеводы </value>
   </data>
   <data name="Calories" xml:space="preserve">
-    <value>Calories (kcal)</value>
+    <value>Калории (ккал)</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Select</value>
+    <value>Выберите</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>Камера</value>
   </data>
   <data name="General Information" xml:space="preserve">
-    <value>General Information</value>
+    <value>Общие сведения</value>
   </data>
   <data name="Photo" xml:space="preserve">
-    <value>Photo</value>
+    <value>Фото</value>
   </data>
   <data name="WorkoutName" xml:space="preserve">
-    <value>Workout name</value>
+    <value>Название тренировки</value>
   </data>
   <data name="Type of workout" xml:space="preserve">
-    <value>Type of workout</value>
+    <value>Тип тренировки</value>
   </data>
   <data name="Call time" xml:space="preserve">
-    <value>Call time</value>
+    <value>Время</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Описание</value>
   </data>
   <data name="Calories burned" xml:space="preserve">
-    <value>Calories burned</value>
+    <value>Сожженные калории</value>
   </data>
   <data name="Workout" xml:space="preserve">
-    <value>Add a new workout</value>
+    <value>Добавить новую тренировку</value>
   </data>
   <data name="Water Monitoring" xml:space="preserve">
-    <value>Water Monitoring</value>
+    <value>Мониторинг воды</value>
   </data>
   <data name="Amount" xml:space="preserve">
-    <value>Amount (ml)</value>
+    <value>Количество (мл)</value>
   </data>
   <data name="Quantity" xml:space="preserve">
-    <value>Quantity</value>
+    <value>Количество</value>
   </data>
   <data name="Date" xml:space="preserve">
-    <value>Date</value>
+    <value>Дата</value>
   </data>
   <data name="View the graph" xml:space="preserve">
-    <value>View the graph</value>
+    <value>Посмотреть график</value>
   </data>
   <data name="Active" xml:space="preserve">
-    <value>Active</value>
+    <value>Активный</value>
   </data>
   <data name="Water level indicator" xml:space="preserve">
-    <value>Water level indicator</value>
+    <value>Индикатор уровня воды</value>
   </data>
   <data name="History" xml:space="preserve">
-    <value>History</value>
+    <value>История</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Ошибка</value>
   </data>
   <data name="Correct " xml:space="preserve">
-    <value>Enter the correct amount of water</value>
+    <value>Введите правильное количество воды</value>
   </data>
   <data name="WelcomePageTitle" xml:space="preserve">
-    <value>Welcome</value>
+    <value>Приветствуется</value>
   </data>
   <data name="Ready" xml:space="preserve">
-    <value>Ready</value>
+    <value>Готово</value>
   </data>
   <data name="BreathingInstruction" xml:space="preserve">
-    <value>Breathing Instruction</value>
+    <value>Инструкции по дыханию</value>
   </data>
   <data name="BreathingExercise" xml:space="preserve">
-    <value>Breathing exercise</value>
+    <value>Дыхательная гимнастика</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>Закрыть</value>
   </data>
   <data name="HealthDiary" xml:space="preserve">
-    <value>HealthDiary</value>
+    <value>Дневник здоровья</value>
   </data>
   <data name="WaterMonitoring" xml:space="preserve">
-    <value>WaterMonitoring</value>
+    <value>Мониторинг воды</value>
   </data>
   <data name="HowIfeel" xml:space="preserve">
-    <value>How I feel</value>
+    <value>самочувствие</value>
   </data>
   <data name="WaterTracking" xml:space="preserve">
-    <value>Water tracking</value>
+    <value>Мониторинг воды</value>
   </data>
   <data name="WaterAmountPlaceholder" xml:space="preserve">
-    <value>Amount of water (ml)</value>
+    <value>Объём выпитой воды (мл)</value>
   </data>
   <data name="WaterLevel" xml:space="preserve">
-    <value>Water level</value>
+    <value>Индикатор уровня воды</value>
   </data>
   <data name="ShowGraph" xml:space="preserve">
-    <value>Show graph</value>
+    <value>Посмотреть график</value>
   </data>
   <data name="InvalidWater" xml:space="preserve">
-    <value>Enter valid water amount</value>
+    <value>Введите правильное количество воды</value>
   </data>
   <data name="OK" xml:space="preserve">
-    <value>OK</value>
+    <value>ОК</value>
   </data>
   <data name="Ml" xml:space="preserve">
-    <value>ml</value>
+    <value>мл</value>
   </data>
   <data name="WaterGraph" xml:space="preserve">
-    <value>Water consumption chart</value>
+    <value>График потребления воды</value>
   </data>
   <data name="Amount1" xml:space="preserve">
-    <value>Amount</value>
+    <value>Количество</value>
   </data>
   <data name="Snack" xml:space="preserve">
-    <value>Snack</value>
+    <value>Перекус</value>
   </data>
   <data name="Fats" xml:space="preserve">
-    <value>Fats (g)</value>
+    <value>Жиры (г)</value>
   </data>
   <data name="Carbs" xml:space="preserve">
-    <value>Carbs (g)</value>
+    <value>Углеводы (г)</value>
   </data>
   <data name="GeneralInfo" xml:space="preserve">
-    <value>General Information</value>
+    <value>Общие сведения</value>
   </data>
   <data name="Choose" xml:space="preserve">
-    <value>Choose</value>
+    <value>Выбери</value>
   </data>
   <data name="EnterFoodName" xml:space="preserve">
-    <value>Enter food name</value>
+    <value>Введите название блюда</value>
   </data>
   <data name="Filters" xml:space="preserve">
-    <value>Filters</value>
+    <value>Фильтры</value>
   </data>
   <data name="Kcal" xml:space="preserve">
-    <value>kcal</value>
+    <value>ккал</value>
   </data>
   <data name="Detail" xml:space="preserve">
-    <value>Detail</value>
+    <value>Подробности</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Тип</value>
   </data>
   <data name="VideoLink" xml:space="preserve">
-    <value>Video link</value>
+    <value>Ссылка на видео</value>
   </data>
   <data name="ChoosePhoto" xml:space="preserve">
-    <value>Choose photo</value>
+    <value>Выбери фото</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>Время</value>
   </data>
   <data name="Workout1" xml:space="preserve">
-    <value>Workout</value>
+    <value>Тренировка</value>
   </data>
   <data name="EnterWorkoutName" xml:space="preserve">
-    <value>Enter workout name</value>
+    <value>Введите название тренировки</value>
   </data>
   <data name="MyWorkouts" xml:space="preserve">
-    <value>My workouts</value>
+    <value>Мои тренировки</value>
   </data>
   <data name="Time1" xml:space="preserve">
-    <value>Time</value>
+    <value>Время</value>
   </data>
   <data name="AddWorkout" xml:space="preserve">
-    <value>Add workout</value>
+    <value>Добавить тренировку</value>
   </data>
   <data name="Feeling" xml:space="preserve">
-    <value>Feeling</value>
+    <value>Самочувствие</value>
   </data>
   <data name="CannotOpenLink" xml:space="preserve">
-    <value>Cannot open link</value>
+    <value>Ссылку не удается открыть</value>
   </data>
   <data name="Mood" xml:space="preserve">
-    <value>Mood</value>
+    <value>Настроение</value>
   </data>
   <data name="Energy" xml:space="preserve">
-    <value>Energy</value>
+    <value>Энергия</value>
   </data>
   <data name="BreathingStarted" xml:space="preserve">
-    <value>Exercise started...</value>
+    <value>Тренировка началась...</value>
   </data>
   <data name="SelectMoodEnergy" xml:space="preserve">
-    <value>Select mood and energy first</value>
+    <value>Выберите настроение и уровень энергии перед записью</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>Info</value>
+    <value>Информация</value>
   </data>
   <data name="StartPage" xml:space="preserve">
-    <value>Start</value>
+    <value>Главная страница</value>
   </data>
   <data name="NewPage" xml:space="preserve">
-    <value>Food</value>
+    <value>Еда</value>
   </data>
   <data name="Training" xml:space="preserve">
-    <value>Training</value>
+    <value>Тренировки</value>
   </data>
   <data name="Water" xml:space="preserve">
-    <value>Water</value>
+    <value>Мониторинг водопользования</value>
   </data>
   <data name="Menu" xml:space="preserve">
-    <value>Menu</value>
+    <value>Меню</value>
   </data>
 </root>

@@ -547,7 +547,7 @@ namespace Tervisepaevik.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My workouts.
+        ///   Looks up a localized string similar to Minu treeningud.
         /// </summary>
         internal static string MyWorkouts {
             get {

@@ -14,42 +14,61 @@ public partial class TervitatavPage : ContentPage
     {
         Title = AppResources.WelcomePageTitle;
 
-        // ФЛАГ ЯЗЫКА
+        // 🌍 ФЛАГ ЯЗЫКА
         langButton = new ImageButton
         {
             Source = "flag_en.svg",
-            WidthRequest = 35,
-            HeightRequest = 35,
-            BackgroundColor = Colors.Transparent
-        };
-
-        // КНОПКА ТЕМЫ
-        themeButton = new ImageButton
-        {
-            Source = "moon.svg",
             WidthRequest = 30,
             HeightRequest = 30,
             BackgroundColor = Colors.Transparent
         };
 
-        // СМЕНА ЯЗЫКА
+        // 🌙 КНОПКА ТЕМЫ
+        themeButton = new ImageButton
+        {
+            Source = "moon.svg",
+            WidthRequest = 26,
+            HeightRequest = 26,
+            BackgroundColor = Colors.Transparent
+        };
+
+        // 🌍 СМЕНА ЯЗЫКА (EN → ET → RU → EN)
         langButton.Clicked += (s, e) =>
         {
             var current = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
-            var newLang = current == "et" ? "en" : "et";
+
+            string newLang;
+
+            if (current == "en")
+                newLang = "et";
+            else if (current == "et")
+                newLang = "ru";
+            else
+                newLang = "en";
 
             SetLanguage(newLang);
 
-            // меняем флаг
-            langButton.Source = newLang == "et" ? "flag_et.svg" : "flag_en.svg";
+            // смена флага
+            switch (newLang)
+            {
+                case "en":
+                    langButton.Source = "flag_en.svg";
+                    break;
+                case "et":
+                    langButton.Source = "flag_et.svg";
+                    break;
+                case "ru":
+                    langButton.Source = "flag_ru.svg";
+                    break;
+            }
 
-            // обновляем текст
+            // обновление текста
             lbl_tervitav.Text = AppResources.Welcome;
             lbl_sisu.Text = AppResources.Text;
             btn_alusta.Text = AppResources.Start;
         };
 
-        // СМЕНА ТЕМЫ
+        // 🌙 СМЕНА ТЕМЫ
         themeButton.Clicked += (s, e) =>
         {
             if (Application.Current.UserAppTheme == AppTheme.Dark)
@@ -64,7 +83,7 @@ public partial class TervitatavPage : ContentPage
             }
         };
 
-        // ТЕКСТЫ
+        // 📝 ТЕКСТЫ
         lbl_tervitav = new Label
         {
             Text = AppResources.Welcome,
@@ -92,7 +111,7 @@ public partial class TervitatavPage : ContentPage
         };
         btn_alusta.Clicked += Btn_alusta_Clicked;
 
-        // КАРТИНКА
+        // 🖼️ КАРТИНКА
         var tervisImage = new Image
         {
             Source = "tervis.png",
@@ -111,7 +130,7 @@ public partial class TervitatavPage : ContentPage
             }
         };
 
-        // ВЕРХНЯЯ ПАНЕЛЬ (справа)
+        // 🔝 ВЕРХНЯЯ ПАНЕЛЬ
         var topBar = new Grid
         {
             ColumnDefinitions =
@@ -122,15 +141,13 @@ public partial class TervitatavPage : ContentPage
             }
         };
 
-        // язык
         Grid.SetColumn(langButton, 1);
         topBar.Children.Add(langButton);
 
-        // тема
         Grid.SetColumn(themeButton, 2);
         topBar.Children.Add(themeButton);
 
-        // ОСНОВНОЙ ЛЕЙАУТ
+        // 📐 ОСНОВНОЙ ЛЕЙАУТ
         Content = new StackLayout
         {
             Padding = 20,
