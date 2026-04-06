@@ -11,8 +11,8 @@ namespace Tervisepaevik
     {
         public class MenuItemModel
         {
-            public string Key { get; set; }     // логика
-            public string Text { get; set; }    // UI
+            public string Key { get; set; }
+            public string Text { get; set; }
             public string Image { get; set; }
         }
 
@@ -31,6 +31,7 @@ namespace Tervisepaevik
             Title = AppResources.HealthDiary;
 
             ScrollView sv = new ScrollView();
+
             VerticalStackLayout vsl = new VerticalStackLayout
             {
                 Padding = 20,
@@ -53,8 +54,7 @@ namespace Tervisepaevik
                     WidthRequest = 55,
                     Aspect = Aspect.AspectFit,
                     BackgroundColor = Colors.Transparent,
-                    HorizontalOptions = LayoutOptions.Center,
-                    CornerRadius = 10
+                    HorizontalOptions = LayoutOptions.Center
                 };
 
                 var label = new Label
@@ -111,6 +111,7 @@ namespace Tervisepaevik
             Content = sv;
         }
 
+        // 🔥 ИСПРАВЛЕННЫЙ POPUP
         private async Task ShowBreathingPopup()
         {
             var popupPage = new ContentPage
@@ -122,7 +123,7 @@ namespace Tervisepaevik
             var timerLabel = new Label
             {
                 Text = "30",
-                FontSize = 24,
+                FontSize = 28,
                 TextColor = Colors.White,
                 HorizontalOptions = LayoutOptions.Center
             };
@@ -130,11 +131,12 @@ namespace Tervisepaevik
             var kopsudImage = new Image
             {
                 Source = "kopsud.png",
-                WidthRequest = 200,
-                HeightRequest = 200,
+                WidthRequest = 220,
+                HeightRequest = 220,
                 Aspect = Aspect.AspectFit
             };
 
+            // 🌬 АНИМАЦИЯ ДЫХАНИЯ
             kopsudImage.Loaded += async (s, e) =>
             {
                 while (true)
@@ -144,9 +146,15 @@ namespace Tervisepaevik
                 }
             };
 
+            // ✅ КНОПКА SULGE (ИСПРАВЛЕНА)
             var btn_sule = new Button
             {
-                Text = AppResources.Close,
+                Text = AppResources.Close, // или "Sulge"
+                BackgroundColor = Color.FromArgb("#6C4CF1"),
+                TextColor = Colors.White,
+                CornerRadius = 15,
+                WidthRequest = 160,
+                HorizontalOptions = LayoutOptions.Center,
                 Margin = new Thickness(0, 20, 0, 0)
             };
 
@@ -159,12 +167,13 @@ namespace Tervisepaevik
             {
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
+                Spacing = 15,
                 Children =
                 {
                     new Label
                     {
                         Text = AppResources.BreathingExercise,
-                        FontSize = 20,
+                        FontSize = 22,
                         TextColor = Colors.White,
                         HorizontalOptions = LayoutOptions.Center
                     },
@@ -175,8 +184,7 @@ namespace Tervisepaevik
                         TextColor = Colors.White,
                         HorizontalOptions = LayoutOptions.Center,
                         HorizontalTextAlignment = TextAlignment.Center,
-                        LineBreakMode = LineBreakMode.WordWrap,
-                        Margin = new Thickness(10, 10, 10, 0)
+                        Margin = new Thickness(10, 0)
                     },
                     timerLabel,
                     kopsudImage,
@@ -191,6 +199,7 @@ namespace Tervisepaevik
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     secondsRemaining--;
+
                     timerLabel.Text = secondsRemaining > 0
                         ? secondsRemaining.ToString()
                         : AppResources.Ready;

@@ -39,36 +39,20 @@ public partial class EnesetunnePage : ContentPage
         btn_kustuta.IsVisible = false;
         btn_hingeohk.IsVisible = false;
 
-        sl_tuju = new StackLayout
-        {
-            Orientation = StackOrientation.Horizontal,
-            Spacing = 10,
-            HorizontalOptions = LayoutOptions.Start,
-            Margin = new Thickness(0)
-        };
+        sl_tuju = new StackLayout { Orientation = StackOrientation.Horizontal, Spacing = 10 };
 
         for (int i = 1; i <= 5; i++)
-        {
-            var img = CreateMoodImage($"tuju{i}.svg", i, true);
-            sl_tuju.Children.Add(img);
-        }
+            sl_tuju.Children.Add(CreateMoodImage($"tuju{i}.svg", i, true));
 
-        sl_energia = new StackLayout
-        {
-            Orientation = StackOrientation.Horizontal,
-            Spacing = 10
-        };
+        sl_energia = new StackLayout { Orientation = StackOrientation.Horizontal, Spacing = 10 };
 
         for (int i = 1; i <= 5; i++)
-        {
             sl_energia.Children.Add(CreateMoodImage("energia.svg", i, false));
-        }
 
         enesetunneListView = new ListView(ListViewCachingStrategy.RecycleElement)
         {
             SeparatorVisibility = SeparatorVisibility.None,
-            HasUnevenRows = true,
-            BackgroundColor = Colors.Transparent
+            HasUnevenRows = true
         };
 
         enesetunneListView.ItemTemplate = new DataTemplate(() =>
@@ -218,14 +202,9 @@ public partial class EnesetunnePage : ContentPage
             HasShadow = true,
             Content = new StackLayout
             {
-                Spacing = 10,
                 Children =
                 {
-                    new Label
-                    {
-                        Text = title,
-                        FontAttributes = FontAttributes.Bold
-                    },
+                    new Label { Text = title, FontAttributes = FontAttributes.Bold },
                     content
                 }
             }
@@ -249,6 +228,7 @@ public partial class EnesetunnePage : ContentPage
         {
             Text = text,
             BackgroundColor = color,
+            TextColor = Colors.White,
             CornerRadius = 10
         };
     }
@@ -286,9 +266,102 @@ public partial class EnesetunnePage : ContentPage
         }
     }
 
+    // 🔥 ЕДИНЫЙ POPUP (как в NewPage1)
     private async void Btn_hingeohk_Clicked(object sender, EventArgs e)
     {
-        await DisplayAlert(AppResources.BreathingExercise, AppResources.BreathingStarted, AppResources.OK);
+        var popupPage = new ContentPage
+        {
+            BackgroundColor = Color.FromRgba(0, 0, 0, 0.7),
+            Padding = 20
+        };
+
+        var timerLabel = new Label
+        {
+            Text = "30",
+            FontSize = 28,
+            TextColor = Colors.White,
+            HorizontalOptions = LayoutOptions.Center
+        };
+
+        var kopsudImage = new Image
+        {
+            Source = "kopsud.png",
+            WidthRequest = 220,
+            HeightRequest = 220,
+            Aspect = Aspect.AspectFit
+        };
+
+        kopsudImage.Loaded += async (s, e) =>
+        {
+            while (true)
+            {
+                await kopsudImage.ScaleTo(1.2, 3000, Easing.SinInOut);
+                await kopsudImage.ScaleTo(1.0, 3000, Easing.SinInOut);
+            }
+        };
+
+        var btn_sule = new Button
+        {
+            Text = AppResources.Close,
+            BackgroundColor = Color.FromArgb("#6C4CF1"),
+            TextColor = Colors.White,
+            CornerRadius = 15,
+            WidthRequest = 160,
+            HorizontalOptions = LayoutOptions.Center,
+            Margin = new Thickness(0, 20, 0, 0)
+        };
+
+        btn_sule.Clicked += async (s, e) =>
+        {
+            await Navigation.PopModalAsync();
+        };
+
+        popupPage.Content = new StackLayout
+        {
+            VerticalOptions = LayoutOptions.Center,
+            HorizontalOptions = LayoutOptions.Center,
+            Spacing = 15,
+            Children =
+            {
+                new Label
+                {
+                    Text = AppResources.BreathingExercise,
+                    FontSize = 22,
+                    TextColor = Colors.White,
+                    HorizontalOptions = LayoutOptions.Center
+                },
+                new Label
+                {
+                    Text = AppResources.BreathingInstruction,
+                    FontSize = 14,
+                    TextColor = Colors.White,
+                    HorizontalOptions = LayoutOptions.Center,
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    Margin = new Thickness(10, 0)
+                },
+                timerLabel,
+                kopsudImage,
+                btn_sule
+            }
+        };
+
+        int secondsRemaining = 30;
+
+        Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                secondsRemaining--;
+
+                timerLabel.Text = secondsRemaining > 0
+                    ? secondsRemaining.ToString()
+                    : AppResources.Ready;
+            });
+
+            return secondsRemaining > 0;
+        });
+
+        await Navigation.PushModalAsync(popupPage);
     }
 
     public void NaitaAndmeid()
@@ -334,8 +407,7 @@ public partial class EnesetunnePage : ContentPage
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            int energia = (int)value;
-            return energia >= 2;
+            return (int)value >= 2;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
