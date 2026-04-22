@@ -3,7 +3,6 @@ using Tervisepaevik.Database;
 using Tervisepaevik.Models;
 using Tervisepaevik.Resources.Localization;
 
-// alias чтобы не было проблем с View
 using MauiView = Microsoft.Maui.Controls.View;
 
 namespace Tervisepaevik.View;
@@ -14,10 +13,14 @@ public partial class LounasookPage : ContentPage
     private LounasookDatabase database;
     private LounasookClass selectedItem;
 
-    private Entry entryRoa, entryValgud, entryRasvad, entrySys, entryKalorid;
+    private Entry entryRoa;
+    private Label kaloridLabel;
+
     private DatePicker dp;
     private TimePicker tp;
     private Image img;
+
+    private int valgud = 0, rasvad = 0, sys = 0;
 
     public LounasookPage()
     {
@@ -30,14 +33,56 @@ public partial class LounasookPage : ContentPage
         tp = new TimePicker { Time = TimeSpan.FromHours(13) };
 
         entryRoa = CreateEntry(AppResources.FoodName);
-        entryValgud = CreateEntry(AppResources.Proteins);
-        entryRasvad = CreateEntry(AppResources.Fats);
-        entrySys = CreateEntry(AppResources.Carbs);
-        entryKalorid = CreateEntry(AppResources.Calories);
 
-        entryValgud.TextChanged += OnMacrosChanged;
-        entryRasvad.TextChanged += OnMacrosChanged;
-        entrySys.TextChanged += OnMacrosChanged;
+        // 🔹 макросы
+        var valgudLayout = CreateMacroRow(AppResources.Proteins, (v) =>
+        {
+            valgud = v;
+            UpdateCalories();
+        });
+
+        var rasvadLayout = CreateMacroRow(AppResources.Fats, (v) =>
+        {
+            rasvad = v;
+            UpdateCalories();
+        });
+
+        var sysLayout = CreateMacroRow(AppResources.Carbs, (v) =>
+        {
+            sys = v;
+            UpdateCalories();
+        });
+
+        // 🔹 инфо текст для обеда
+        var infoLabel = new Label
+        {
+            Text = "Норма калорий в обеде обычно составляет 30% - 40% от суточной калорийности,\nчто в среднем равно 600–900 ккал.",
+            FontSize = 12,
+            TextColor = Colors.Gray
+        };
+
+        // 🔹 калории
+        kaloridLabel = new Label
+        {
+            FontSize = 18,
+            FontAttributes = FontAttributes.Bold,
+            VerticalOptions = LayoutOptions.Center
+        };
+
+        var caloriesRow = new HorizontalStackLayout
+        {
+            Spacing = 10,
+            Children =
+            {
+                new Label
+                {
+                    Text = AppResources.Calories,
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalOptions = LayoutOptions.Center
+                },
+                kaloridLabel
+            }
+        };
 
         img = new Image
         {
@@ -70,27 +115,92 @@ public partial class LounasookPage : ContentPage
         };
 
         mainStack.Children.Add(CreateCard(AppResources.GeneralInfo,
-            dp, tp, entryRoa, entryValgud, entryRasvad, entrySys, entryKalorid));
+            dp, tp, entryRoa,
+            valgudLayout, rasvadLayout, sysLayout,
+            infoLabel,
+            caloriesRow
+        ));
 
         mainStack.Children.Add(CreateCard(AppResources.Photo,
             fotoFrame, buttonRow));
 
         Content = new ScrollView { Content = mainStack };
+
+        UpdateCalories();
     }
 
-    // ================= CALCULATOR =================
-    private void OnMacrosChanged(object sender, TextChangedEventArgs e)
+    private HorizontalStackLayout CreateMacroRow(string title, Action<int> onChanged)
     {
-        int valgud = int.TryParse(entryValgud.Text, out var v) ? v : 0;
-        int rasvad = int.TryParse(entryRasvad.Text, out var r) ? r : 0;
-        int sys = int.TryParse(entrySys.Text, out var s) ? s : 0;
+        int value = 0;
 
-        int kalorid = (valgud * 4) + (sys * 4) + (rasvad * 9);
+        var minusBtn = new Button
+        {
+            Text = "-",
+            WidthRequest = 44,
+            HeightRequest = 44,
+            CornerRadius = 22,
+            BackgroundColor = Colors.IndianRed,
+            TextColor = Colors.White
+        };
 
-        entryKalorid.Text = kalorid.ToString();
+        var plusBtn = new Button
+        {
+            Text = "+",
+            WidthRequest = 44,
+            HeightRequest = 44,
+            CornerRadius = 22,
+            BackgroundColor = Colors.SeaGreen,
+            TextColor = Colors.White
+        };
+
+        var valueLabel = new Label
+        {
+            Text = "0 g",
+            VerticalOptions = LayoutOptions.Center
+        };
+
+        minusBtn.Clicked += (s, e) =>
+        {
+            value = Math.Max(0, value - 1);
+            valueLabel.Text = $"{value} g";
+            onChanged(value);
+        };
+
+        plusBtn.Clicked += (s, e) =>
+        {
+            value++;
+            valueLabel.Text = $"{value} g";
+            onChanged(value);
+        };
+
+        return new HorizontalStackLayout
+        {
+            Spacing = 10,
+            Children =
+            {
+                new Label
+                {
+                    Text = title,
+                    WidthRequest = 120,
+                    VerticalOptions = LayoutOptions.Center
+                },
+                minusBtn,
+                valueLabel,
+                plusBtn
+            }
+        };
     }
 
-    // ================= UI =================
+    private void UpdateCalories()
+    {
+        int kalorid = (valgud * 4) + (sys * 4) + (rasvad * 9);
+        kaloridLabel.Text = $"{kalorid} kcal";
+
+        kaloridLabel.TextColor =
+            (kalorid >= 600 && kalorid <= 900)
+            ? Colors.Green
+            : Colors.Red;
+    }
 
     private Entry CreateEntry(string placeholder)
     {
@@ -116,7 +226,6 @@ public partial class LounasookPage : ContentPage
         return btn;
     }
 
-    // исправлено (без object)
     private Frame CreateCard(string title, params MauiView[] views)
     {
         var stack = new VerticalStackLayout { Spacing = 10 };
@@ -129,9 +238,7 @@ public partial class LounasookPage : ContentPage
         });
 
         foreach (var v in views)
-        {
             stack.Children.Add(v);
-        }
 
         return new Frame
         {
@@ -141,8 +248,6 @@ public partial class LounasookPage : ContentPage
             Content = stack
         };
     }
-
-    // ================= FOTO =================
 
     private async void Btn_valifoto_Clicked(object sender, EventArgs e)
     {
@@ -171,8 +276,6 @@ public partial class LounasookPage : ContentPage
         img.Source = ImageSource.FromStream(() => new MemoryStream(fotoBytes));
     }
 
-    // ================= SAVE =================
-
     private async void Btn_salvesta_Clicked(object sender, EventArgs e)
     {
         if (string.IsNullOrWhiteSpace(entryRoa.Text))
@@ -184,10 +287,10 @@ public partial class LounasookPage : ContentPage
         selectedItem ??= new LounasookClass();
 
         selectedItem.Roa_nimi = entryRoa.Text;
-        selectedItem.Valgud = int.TryParse(entryValgud.Text, out var v) ? v : 0;
-        selectedItem.Rasvad = int.TryParse(entryRasvad.Text, out var r) ? r : 0;
-        selectedItem.Susivesikud = int.TryParse(entrySys.Text, out var s) ? s : 0;
-        selectedItem.Kalorid = int.TryParse(entryKalorid.Text, out var k) ? k : 0;
+        selectedItem.Valgud = valgud;
+        selectedItem.Rasvad = rasvad;
+        selectedItem.Susivesikud = sys;
+        selectedItem.Kalorid = (valgud * 4) + (sys * 4) + (rasvad * 9);
         selectedItem.Kuupaev = dp.Date;
         selectedItem.Kallaaeg = tp.Time;
 
@@ -205,13 +308,13 @@ public partial class LounasookPage : ContentPage
         fotoBytes = null;
 
         entryRoa.Text = "";
-        entryValgud.Text = "";
-        entryRasvad.Text = "";
-        entrySys.Text = "";
-        entryKalorid.Text = "";
+
+        valgud = rasvad = sys = 0;
 
         dp.Date = DateTime.Now;
         tp.Time = TimeSpan.FromHours(13);
         img.Source = null;
+
+        UpdateCalories();
     }
 }

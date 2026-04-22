@@ -10,6 +10,10 @@ public partial class HommikusookFotoPage : ContentPage
     private Grid grid;
     private DatePicker filterDate;
     private Entry searchEntry;
+    private Switch filterSwitch;
+    private VerticalStackLayout filtersContainer;
+
+    private bool isDateFilterActive = false;
 
     public HommikusookFotoPage()
     {
@@ -20,17 +24,45 @@ public partial class HommikusookFotoPage : ContentPage
 
         filterDate = new DatePicker
         {
-            Date = DateTime.Today
+            Date = DateTime.Today,
+            HeightRequest = 40
         };
 
-        filterDate.DateSelected += (s, e) => LoadImages();
+        filterDate.DateSelected += (s, e) =>
+        {
+            isDateFilterActive = true;
+            LoadImages();
+        };
 
         searchEntry = new Entry
         {
-            Placeholder = AppResources.SearchFood
+            Placeholder = AppResources.SearchFood,
+            HeightRequest = 40
         };
 
         searchEntry.TextChanged += (s, e) => LoadImages();
+
+        filterSwitch = new Switch
+        {
+            IsToggled = false
+        };
+
+        filtersContainer = new VerticalStackLayout
+        {
+            Spacing = 6,
+            IsVisible = false,
+            Children =
+            {
+                filterDate,
+                searchEntry
+            }
+        };
+
+        filterSwitch.Toggled += (s, e) =>
+        {
+            filtersContainer.IsVisible = filterSwitch.IsToggled;
+            LoadImages();
+        };
 
         grid = new Grid
         {
@@ -89,25 +121,40 @@ public partial class HommikusookFotoPage : ContentPage
     {
         return new Frame
         {
-            Padding = 15,
-            CornerRadius = 20,
+            Padding = 10,
+            CornerRadius = 15,
             HasShadow = false,
             BackgroundColor = Application.Current.RequestedTheme == AppTheme.Dark
                 ? Color.FromArgb("#1E1E1E")
                 : Colors.White,
+            Margin = new Thickness(0, 0, 0, 5),
+
             Content = new VerticalStackLayout
             {
-                Spacing = 10,
+                Spacing = 6,
                 Children =
                 {
-                    new Label
+                    new Grid
                     {
-                        Text = AppResources.Filters,
-                        FontAttributes = FontAttributes.Bold,
-                        FontSize = 18
+                        ColumnDefinitions =
+                        {
+                            new ColumnDefinition { Width = GridLength.Star },
+                            new ColumnDefinition { Width = GridLength.Auto }
+                        },
+                        Children =
+                        {
+                            new Label
+                            {
+                                Text = AppResources.Filters,
+                                FontAttributes = FontAttributes.Bold,
+                                FontSize = 16,
+                                VerticalOptions = LayoutOptions.Center
+                            },
+                            filterSwitch
+                        }
                     },
-                    filterDate,
-                    searchEntry
+
+                    filtersContainer
                 }
             }
         };
@@ -119,11 +166,27 @@ public partial class HommikusookFotoPage : ContentPage
         grid.RowDefinitions.Clear();
 
         var data = database.GetHommikusook()
-            .Where(x => x.Toidu_foto != null && x.Toidu_foto.Length > 0) // защита
-            .Where(x => x.Kuupaev.Date == filterDate.Date)
-            .Where(x => string.IsNullOrWhiteSpace(searchEntry.Text) ||
-                        x.Roa_nimi.ToLower().Contains(searchEntry.Text.ToLower()))
+            .Where(x => x.Toidu_foto != null && x.Toidu_foto.Length > 0)
             .ToList();
+
+        if (filterSwitch.IsToggled)
+        {
+            // 🔍 поиск
+            if (!string.IsNullOrWhiteSpace(searchEntry.Text))
+            {
+                data = data
+                    .Where(x => x.Roa_nimi.ToLower().Contains(searchEntry.Text.ToLower()))
+                    .ToList();
+            }
+
+            // 📅 дата только если выбрана
+            if (isDateFilterActive)
+            {
+                data = data
+                    .Where(x => x.Kuupaev.Date == filterDate.Date)
+                    .ToList();
+            }
+        }
 
         int row = 0;
         int col = 0;
@@ -148,15 +211,16 @@ public partial class HommikusookFotoPage : ContentPage
             var label = new Label
             {
                 Text = $"{item.Kalorid} {AppResources.Kcal}",
-                Padding = 4
+                Padding = 4,
+                FontSize = 12
             };
 
             var deleteBtn = new ImageButton
             {
                 Source = "kustuta.png",
                 BackgroundColor = Colors.Transparent,
-                HeightRequest = 24,
-                WidthRequest = 24,
+                HeightRequest = 22,
+                WidthRequest = 22,
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.Start
             };
@@ -178,9 +242,9 @@ public partial class HommikusookFotoPage : ContentPage
 
             var frame = new Frame
             {
-                CornerRadius = 15,
+                CornerRadius = 12,
                 Padding = 0,
-                HasShadow = true,
+                HasShadow = false,
                 Content = new Grid
                 {
                     Children =

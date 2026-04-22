@@ -1,5 +1,4 @@
 ﻿using Microsoft.Maui.Layouts;
-using System.Globalization;
 using Tervisepaevik.Database;
 using Tervisepaevik.Models;
 using Tervisepaevik.Resources.Localization;
@@ -10,14 +9,19 @@ public partial class VeejalgiminePage : ContentPage
 {
     VeejalgimineDatabase database;
 
-    Entry kogusEntry;
     DatePicker kuupaevPicker;
     Switch aktiivneSwitch;
 
-    BoxView bv_klaas;
-    Frame f_klaas;
-
     CollectionView listView;
+
+    const int KlaasideArv = 15;
+    const int KlaasiMaht = 200;
+
+    List<Image> klaasid = new();
+    int valitudKlaasid = 0;
+
+    Label progressLabel;
+    Label goalLabel;
 
     public VeejalgiminePage()
     {
@@ -26,43 +30,99 @@ public partial class VeejalgiminePage : ContentPage
 
         Title = AppResources.WaterTracking;
 
-        kogusEntry = new Entry
-        {
-            Placeholder = AppResources.WaterAmountPlaceholder,
-            Keyboard = Keyboard.Numeric
-        };
-
-        kogusEntry.TextChanged += KogusEntry_TextChanged;
-
         kuupaevPicker = new DatePicker { Date = DateTime.Now };
+        kuupaevPicker.DateSelected += (s, e) => LoadData();
+
         aktiivneSwitch = new Switch { IsToggled = true };
 
-        f_klaas = new Frame
+        // 🔹 Инфо текст
+        var infoLabel = new Label
         {
-            CornerRadius = 25,
-            HeightRequest = 250,
-            WidthRequest = 140,
-            HasShadow = false,
-            Padding = 0,
-            Content = new Grid
-            {
-                Children =
-                {
-                    new BoxView
-                    {
-                        Color = Colors.LightGray,
-                        Opacity = 0.2
-                    },
-                    (bv_klaas = new BoxView
-                    {
-                        Color = Colors.DodgerBlue,
-                        VerticalOptions = LayoutOptions.End,
-                        HeightRequest = 0
-                    })
-                }
-            }
+            Text = "1 стакан = 200 ml\nРекомендуется 2–3 литра в день",
+            FontSize = 14,
+            TextColor = Colors.Gray
         };
 
+        // 🔹 Прогресс
+        progressLabel = new Label
+        {
+            FontSize = 16,
+            FontAttributes = FontAttributes.Bold
+        };
+
+        goalLabel = new Label
+        {
+            FontSize = 16
+        };
+
+        // 🔹 Стаканы
+        var klaasidLayout = new FlexLayout
+        {
+            Wrap = FlexWrap.Wrap,
+            Direction = FlexDirection.Row,
+            Margin = new Thickness(0, 10)
+        };
+
+        for (int i = 0; i < KlaasideArv; i++)
+        {
+            int index = i;
+
+            var img = new Image
+            {
+                Source = "vesi.svg",
+                HeightRequest = 40,
+                WidthRequest = 40,
+                Opacity = 0.3
+            };
+
+            var tap = new TapGestureRecognizer();
+            tap.Tapped += (s, e) => KlaasTapped(index);
+
+            img.GestureRecognizers.Add(tap);
+
+            klaasid.Add(img);
+            klaasidLayout.Children.Add(img);
+        }
+
+        // 🔹 КНОПКА СОХРАНИТЬ
+        var btn_salvesta = new Button
+        {
+            Text = $"💾 {AppResources.Save}",
+            BackgroundColor = Colors.MediumPurple,
+            TextColor = Colors.White,
+            CornerRadius = 15,
+            HeightRequest = 50
+        };
+
+        btn_salvesta.Clicked += Btn_salvesta_Clicked;
+
+        // 🔹 Кнопка графика
+        var btn_graafik = new Button
+        {
+            Text = $"📊 {AppResources.ShowGraph}",
+            BackgroundColor = Colors.DodgerBlue,
+            TextColor = Colors.White,
+            CornerRadius = 15,
+            HeightRequest = 50
+        };
+
+        btn_graafik.Clicked += async (s, e) =>
+        {
+            var andmed = database.GetVeejalgimine()
+                .GroupBy(v => v.Kuupaev.Date)
+                .Select(g => new VeejalgimineClass
+                {
+                    Kuupaev = g.Key,
+                    Kogus = g.Sum(x => x.Kogus),
+                    Aktiivne = g.Any(x => x.Aktiivne)
+                })
+                .OrderBy(v => v.Kuupaev)
+                .ToList();
+
+            await Navigation.PushAsync(new VeejalgimineGrafikPage(andmed));
+        };
+
+        // 🔹 История
         listView = new CollectionView
         {
             ItemsLayout = new LinearItemsLayout(ItemsLayoutOrientation.Vertical)
@@ -96,42 +156,7 @@ public partial class VeejalgiminePage : ContentPage
             })
         };
 
-        var btn_salvesta = new Button
-        {
-            Text = $"💾 {AppResources.Save}",
-            BackgroundColor = Colors.MediumPurple,
-            TextColor = Colors.White,
-            CornerRadius = 15,
-            HeightRequest = 50
-        };
-
-        btn_salvesta.Clicked += Btn_salvesta_Clicked;
-
-        var btn_graafik = new Button
-        {
-            Text = $"📊 {AppResources.ShowGraph}",
-            BackgroundColor = Colors.DodgerBlue,
-            TextColor = Colors.White,
-            CornerRadius = 15,
-            HeightRequest = 50
-        };
-
-        btn_graafik.Clicked += async (s, e) =>
-        {
-            var andmed = database.GetVeejalgimine()
-                .GroupBy(v => v.Kuupaev.Date)
-                .Select(g => new VeejalgimineClass
-                {
-                    Kuupaev = g.Key,
-                    Kogus = g.Sum(x => x.Kogus),
-                    Aktiivne = g.Any(x => x.Aktiivne)
-                })
-                .OrderBy(v => v.Kuupaev)
-                .ToList();
-
-            await Navigation.PushAsync(new VeejalgimineGrafikPage(andmed));
-        };
-
+        // 🔹 Карточка
         var formCard = new Frame
         {
             CornerRadius = 20,
@@ -145,62 +170,92 @@ public partial class VeejalgiminePage : ContentPage
                     new Label { Text = AppResources.Date, FontAttributes = FontAttributes.Bold },
                     kuupaevPicker,
 
-                    new Label { Text = AppResources.Amount, FontAttributes = FontAttributes.Bold },
-                    kogusEntry,
+                    infoLabel,
+                    progressLabel,
+                    goalLabel,
 
-                    new Label { Text = AppResources.Active, FontAttributes = FontAttributes.Bold },
-                    aktiivneSwitch,
-
-                    new Label { Text = AppResources.WaterLevel, FontAttributes = FontAttributes.Bold },
-                    f_klaas,
-
+                    klaasidLayout,
                     btn_salvesta
                 }
             }
         };
 
-        var mainStack = new VerticalStackLayout
-        {
-            Padding = 20,
-            Spacing = 15,
-            Children =
-            {
-                formCard,
-                btn_graafik,
-                new Label
-                {
-                    Text = AppResources.History,
-                    FontSize = 18,
-                    FontAttributes = FontAttributes.Bold
-                },
-                listView
-            }
-        };
-
         Content = new ScrollView
         {
-            Content = mainStack
+            Content = new VerticalStackLayout
+            {
+                Padding = 20,
+                Spacing = 15,
+                Children =
+                {
+                    formCard,
+                    btn_graafik,
+                    new Label
+                    {
+                        Text = AppResources.History,
+                        FontSize = 18,
+                        FontAttributes = FontAttributes.Bold
+                    },
+                    listView
+                }
+            }
         };
 
         LoadData();
     }
 
-    private void KogusEntry_TextChanged(object sender, TextChangedEventArgs e)
+    private void KlaasTapped(int index)
     {
-        if (int.TryParse(kogusEntry.Text, out int kogus))
-            UpdateKlaasImg(kogus);
+        valitudKlaasid = index + 1;
+
+        UpdateKlaasid();
+        UpdateProgress();
+    }
+
+    private void UpdateKlaasid()
+    {
+        for (int i = 0; i < klaasid.Count; i++)
+        {
+            klaasid[i].Opacity = i < valitudKlaasid ? 1.0 : 0.3;
+        }
+    }
+
+    private void UpdateProgress()
+    {
+        int kogus = valitudKlaasid * KlaasiMaht;
+        int max = KlaasideArv * KlaasiMaht;
+
+        progressLabel.Text = $"{kogus} / {max} ml";
+
+        if (kogus >= max)
+        {
+            goalLabel.Text = "✅ Цель достигнута!";
+            goalLabel.TextColor = Colors.Green;
+        }
         else
-            UpdateKlaasImg(0);
+        {
+            goalLabel.Text = "";
+        }
     }
 
     private async void Btn_salvesta_Clicked(object sender, EventArgs e)
     {
-        if (!int.TryParse(kogusEntry.Text, out int kogus) || kogus <= 0)
+        int kogus = valitudKlaasid * KlaasiMaht;
+
+        if (kogus <= 0)
         {
-            await DisplayAlert(AppResources.Error, AppResources.InvalidWater, AppResources.OK);
+            await DisplayAlert(AppResources.Error, "Выберите количество воды", "OK");
             return;
         }
 
+        SaveOrUpdate(kogus);
+        LoadData();
+
+        await DisplayAlert("OK", "Сохранено", "OK");
+    }
+
+    private void SaveOrUpdate(int kogus)
+    {
         var paev = kuupaevPicker.Date.Date;
 
         var kirje = database.GetVeejalgimine()
@@ -208,7 +263,7 @@ public partial class VeejalgiminePage : ContentPage
 
         if (kirje != null)
         {
-            kirje.Kogus += kogus;
+            kirje.Kogus = kogus;
             kirje.Aktiivne = true;
             database.SaveVeejalgimine(kirje);
         }
@@ -221,14 +276,28 @@ public partial class VeejalgiminePage : ContentPage
                 Aktiivne = true
             });
         }
-
-        ClearForm();
-        LoadData();
     }
 
     private void LoadData()
     {
-        var andmed = database.GetVeejalgimine()
+        var paev = kuupaevPicker.Date.Date;
+
+        var kirje = database.GetVeejalgimine()
+            .FirstOrDefault(v => v.Kuupaev.Date == paev);
+
+        if (kirje != null)
+        {
+            valitudKlaasid = kirje.Kogus / KlaasiMaht;
+        }
+        else
+        {
+            valitudKlaasid = 0;
+        }
+
+        UpdateKlaasid();
+        UpdateProgress();
+
+        listView.ItemsSource = database.GetVeejalgimine()
             .GroupBy(v => v.Kuupaev.Date)
             .Select(g => new VeejalgimineClass
             {
@@ -238,28 +307,5 @@ public partial class VeejalgiminePage : ContentPage
             })
             .OrderByDescending(v => v.Kuupaev)
             .ToList();
-
-        listView.ItemsSource = andmed;
-
-        var paev = kuupaevPicker.Date.Date;
-
-        int kokku = andmed
-            .Where(v => v.Kuupaev.Date == paev)
-            .Sum(v => v.Kogus);
-
-        UpdateKlaasImg(kokku);
-    }
-
-    private void UpdateKlaasImg(int kogus)
-    {
-        double max = 2000;
-        double protsent = Math.Min(kogus / max, 1.0);
-        bv_klaas.HeightRequest = protsent * 250;
-    }
-
-    private void ClearForm()
-    {
-        kogusEntry.Text = "";
-        aktiivneSwitch.IsToggled = true;
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using System.Threading;
 using Tervisepaevik.Resources.Localization;
+using Tervisepaevik.View;
+using Tervisepaevik.Services;
 
 namespace Tervisepaevik;
 
@@ -165,7 +167,7 @@ public partial class TervitatavPage : ContentPage
 
     private async void Btn_alusta_Clicked(object? sender, EventArgs e)
     {
-        await Navigation.PushAsync(new NewPage1());
+        await Navigation.PushAsync(new InfoPage());
     }
 
     void SetLanguage(string lang)

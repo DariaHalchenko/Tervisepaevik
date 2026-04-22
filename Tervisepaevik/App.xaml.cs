@@ -1,4 +1,7 @@
-﻿namespace Tervisepaevik
+﻿using Tervisepaevik.Services;
+using Microsoft.Maui.Storage;
+
+namespace Tervisepaevik
 {
     public partial class App : Application
     {
@@ -7,6 +10,13 @@
             InitializeComponent();
 
             MainPage = new NavigationPage(new TervitatavPage());
+
+            // 💧 запуск уведомлений только один раз
+            if (!Preferences.Get("notifications_started", false))
+            {
+                NotificationService.StartWaterReminders();
+                Preferences.Set("notifications_started", true);
+            }
         }
     }
 }

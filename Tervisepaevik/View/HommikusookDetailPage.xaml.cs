@@ -1,4 +1,4 @@
-using Tervisepaevik.Database;
+﻿using Tervisepaevik.Database;
 using Tervisepaevik.Models;
 using Tervisepaevik.Resources.Localization;
 
@@ -9,8 +9,10 @@ public partial class HommikusookDetailPage : ContentPage
     private HommikusookClass item;
     private HommikusookDatabase database;
 
-    private Image image;
-    private Entry entryName, entryValgud, entryRasvad, entrySys, entryKalorid;
+    private Entry entryName;
+    private Label kaloridLabel;
+
+    private int valgud, rasvad, sys;
 
     public HommikusookDetailPage(HommikusookClass selected)
     {
@@ -21,22 +23,73 @@ public partial class HommikusookDetailPage : ContentPage
 
         Title = AppResources.Detail;
 
-        image = new Image
+        valgud = item.Valgud;
+        rasvad = item.Rasvad;
+        sys = item.Susivesikud;
+
+        var image = new Image
         {
             Source = ImageSource.FromStream(() => new MemoryStream(item.Toidu_foto)),
             HeightRequest = 250,
             Aspect = Aspect.AspectFill
         };
 
-        entryName = CreateEntry(item.Roa_nimi, AppResources.FoodName);
-        entryValgud = CreateEntry(item.Valgud.ToString(), AppResources.Proteins);
-        entryRasvad = CreateEntry(item.Rasvad.ToString(), AppResources.Fats);
-        entrySys = CreateEntry(item.Susivesikud.ToString(), AppResources.Carbs);
-        entryKalorid = CreateEntry(item.Kalorid.ToString(), AppResources.Calories);
+        entryName = new Entry
+        {
+            Text = item.Roa_nimi,
+            Placeholder = AppResources.FoodName
+        };
 
-        entryValgud.TextChanged += OnMacrosChanged;
-        entryRasvad.TextChanged += OnMacrosChanged;
-        entrySys.TextChanged += OnMacrosChanged;
+        var valgudLayout = CreateMacroRow(AppResources.Proteins, valgud, (v) =>
+        {
+            valgud = v;
+            UpdateCalories();
+        });
+
+        var rasvadLayout = CreateMacroRow(AppResources.Fats, rasvad, (v) =>
+        {
+            rasvad = v;
+            UpdateCalories();
+        });
+
+        var sysLayout = CreateMacroRow(AppResources.Carbs, sys, (v) =>
+        {
+            sys = v;
+            UpdateCalories();
+        });
+
+        // 🔹 инфо текст
+        var infoLabel = new Label
+        {
+            Text = "Норма калорий в завтраке обычно составляет 25% - 30% от суточной калорийности, что в среднем равно 400–600 ккал.",
+            FontSize = 12,
+            TextColor = Colors.Gray
+        };
+
+        kaloridLabel = new Label
+        {
+            FontSize = 18,
+            FontAttributes = FontAttributes.Bold,
+            VerticalOptions = LayoutOptions.Center
+        };
+
+        // 🔹 строка "Calories 414 kcal"
+        var caloriesRow = new HorizontalStackLayout
+        {
+            Spacing = 10,
+            Children =
+            {
+                new Label
+                {
+                    Text = AppResources.Calories,
+                    FontAttributes = FontAttributes.Bold,
+                    VerticalOptions = LayoutOptions.Center
+                },
+                kaloridLabel
+            }
+        };
+
+        UpdateCalories();
 
         var saveBtn = new Button
         {
@@ -79,10 +132,14 @@ public partial class HommikusookDetailPage : ContentPage
                 {
                     image,
                     entryName,
-                    entryValgud,
-                    entryRasvad,
-                    entrySys,
-                    entryKalorid,
+
+                    valgudLayout,
+                    rasvadLayout,
+                    sysLayout,
+
+                    infoLabel,
+                    caloriesRow, // 👈 теперь в одной строке
+
                     saveBtn,
                     deleteBtn
                 }
@@ -90,25 +147,78 @@ public partial class HommikusookDetailPage : ContentPage
         };
     }
 
-    private Entry CreateEntry(string text, string placeholder)
+    private HorizontalStackLayout CreateMacroRow(string title, int initialValue, Action<int> onChanged)
     {
-        return new Entry
+        int value = initialValue;
+
+        var minusBtn = new Button
         {
-            Text = text,
-            Placeholder = placeholder
+            Text = "-",
+            WidthRequest = 44,
+            HeightRequest = 44,
+            CornerRadius = 22,
+            BackgroundColor = Colors.IndianRed,
+            TextColor = Colors.White
+        };
+
+        var plusBtn = new Button
+        {
+            Text = "+",
+            WidthRequest = 44,
+            HeightRequest = 44,
+            CornerRadius = 22,
+            BackgroundColor = Colors.SeaGreen,
+            TextColor = Colors.White
+        };
+
+        var valueLabel = new Label
+        {
+            Text = $"{value} g",
+            VerticalOptions = LayoutOptions.Center
+        };
+
+        minusBtn.Clicked += (s, e) =>
+        {
+            value = Math.Max(0, value - 1);
+            valueLabel.Text = $"{value} g";
+            onChanged(value);
+        };
+
+        plusBtn.Clicked += (s, e) =>
+        {
+            value++;
+            valueLabel.Text = $"{value} g";
+            onChanged(value);
+        };
+
+        return new HorizontalStackLayout
+        {
+            Spacing = 10,
+            Children =
+            {
+                new Label
+                {
+                    Text = title,
+                    WidthRequest = 120,
+                    VerticalOptions = LayoutOptions.Center
+                },
+                minusBtn,
+                valueLabel,
+                plusBtn
+            }
         };
     }
 
-    // ================= CALCULATOR =================
-    private void OnMacrosChanged(object sender, TextChangedEventArgs e)
+    private void UpdateCalories()
     {
-        int valgud = int.TryParse(entryValgud.Text, out var v) ? v : 0;
-        int rasvad = int.TryParse(entryRasvad.Text, out var r) ? r : 0;
-        int sys = int.TryParse(entrySys.Text, out var s) ? s : 0;
-
         int kalorid = (valgud * 4) + (sys * 4) + (rasvad * 9);
 
-        entryKalorid.Text = kalorid.ToString();
+        kaloridLabel.Text = $"{kalorid} kcal";
+
+        kaloridLabel.TextColor =
+            (kalorid >= 400 && kalorid <= 600)
+            ? Colors.Green
+            : Colors.Red;
     }
 
     private async void Save_Clicked(object sender, EventArgs e)
@@ -120,12 +230,10 @@ public partial class HommikusookDetailPage : ContentPage
         }
 
         item.Roa_nimi = entryName.Text;
-
-        item.Valgud = int.TryParse(entryValgud.Text, out var v) ? v : 0;
-        item.Rasvad = int.TryParse(entryRasvad.Text, out var r) ? r : 0;
-        item.Susivesikud = int.TryParse(entrySys.Text, out var s) ? s : 0;
-
-        item.Kalorid = (item.Valgud * 4) + (item.Susivesikud * 4) + (item.Rasvad * 9);
+        item.Valgud = valgud;
+        item.Rasvad = rasvad;
+        item.Susivesikud = sys;
+        item.Kalorid = (valgud * 4) + (sys * 4) + (rasvad * 9);
 
         database.SaveHommikusook(item);
 
