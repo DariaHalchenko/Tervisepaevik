@@ -271,7 +271,7 @@
     <value>Valmis</value>
   </data>
   <data name="BreathingInstruction" xml:space="preserve">
-    <value>Hingake sisse, kui pilt muutub suuremaks,\nhingake välja, kui pilt muutub väiksemaks</value>
+    <value>Hingake sisse, kui pilt muutub suuremaks, \nhingake välja, kui pilt muutub väiksemaks</value>
   </data>
   <data name="BreathingExercise" xml:space="preserve">
     <value>Hingamise harjutus</value>
@@ -286,7 +286,7 @@
     <value>Veejalgimine</value>
   </data>
   <data name="HowIfeel" xml:space="preserve">
-    <value>enesetunne</value>
+    <value>Enesetunne</value>
   </data>
   <data name="WaterTracking" xml:space="preserve">
     <value>Vee jälgimine</value>
@@ -404,5 +404,29 @@
   </data>
   <data name="Menu" xml:space="preserve">
     <value>Menüü</value>
+  </data>
+  <data name="BreakfastInfo" xml:space="preserve">
+    <value>Hommikusöögi kalorikogus moodustab tavaliselt 25–30% päevasest kalorikogusest, mis on keskmiselt 400–600 kcal.</value>
+  </data>
+  <data name="LunchInfo" xml:space="preserve">
+    <value>Lõunasöögi kalorikogus moodustab tavaliselt 30–40% päevasest kalorikogusest, mis on keskmiselt 600–900 kcal.</value>
+  </data>
+  <data name="DinnerInfo" xml:space="preserve">
+    <value>Õhtusöögi kalorikogus moodustab tavaliselt 20–25% päevasest kalorikogusest, mis on keskmiselt 400–700 kcal.</value>
+  </data>
+  <data name="SnackInfo" xml:space="preserve">
+    <value>Vahepalad moodustavad tavaliselt 10–15% päevasest kalorikogusest, mis on keskmiselt 200–400 kcal.</value>
+  </data>
+  <data name="WaterInfo" xml:space="preserve">
+    <value>1 klaas = 200 ml. Soovitatav: 2–3 liitrit päevas.</value>
+  </data>
+  <data name="GoalReached" xml:space="preserve">
+    <value>Eesmärk on saavutatud!</value>
+  </data>
+  <data name="SelectWaterAmount" xml:space="preserve">
+    <value>Valige vee kogus</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Lähtesta</value>
   </data>
 </root>

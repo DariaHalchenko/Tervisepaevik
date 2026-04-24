@@ -34,7 +34,6 @@ public partial class LounasookPage : ContentPage
 
         entryRoa = CreateEntry(AppResources.FoodName);
 
-        // 🔹 макросы
         var valgudLayout = CreateMacroRow(AppResources.Proteins, (v) =>
         {
             valgud = v;
@@ -53,15 +52,13 @@ public partial class LounasookPage : ContentPage
             UpdateCalories();
         });
 
-        // 🔹 инфо текст для обеда
         var infoLabel = new Label
         {
-            Text = "Норма калорий в обеде обычно составляет 30% - 40% от суточной калорийности,\nчто в среднем равно 600–900 ккал.",
+            Text = AppResources.LunchInfo,
             FontSize = 12,
             TextColor = Colors.Gray
         };
 
-        // 🔹 калории
         kaloridLabel = new Label
         {
             FontSize = 18,

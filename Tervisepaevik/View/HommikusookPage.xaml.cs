@@ -34,7 +34,6 @@ public partial class HommikusookPage : ContentPage
 
         entryRoa = CreateEntry(AppResources.FoodName);
 
-        // 🔹 макросы
         var valgudLayout = CreateMacroRow(AppResources.Proteins, (v) =>
         {
             valgud = v;
@@ -53,15 +52,13 @@ public partial class HommikusookPage : ContentPage
             UpdateCalories();
         });
 
-        // 🔹 инфо текст
         var infoLabel = new Label
         {
-            Text = "Норма калорий в завтраке обычно составляет 25% - 30% от суточной калорийности,\nчто в среднем равно 400–600 ккал.",
+            Text = AppResources.BreakfastInfo,
             FontSize = 12,
             TextColor = Colors.Gray
         };
 
-        // 🔹 калории как текст (без рамки)
         kaloridLabel = new Label
         {
             FontSize = 18,

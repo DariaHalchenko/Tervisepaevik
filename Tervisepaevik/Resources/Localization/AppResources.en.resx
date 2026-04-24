@@ -271,7 +271,7 @@
     <value>Ready</value>
   </data>
   <data name="BreathingInstruction" xml:space="preserve">
-    <value>Breathing Instruction</value>
+    <value>Inhale as the image expands, \nexhale as it contracts</value>
   </data>
   <data name="BreathingExercise" xml:space="preserve">
     <value>Breathing exercise</value>
@@ -404,5 +404,29 @@
   </data>
   <data name="Menu" xml:space="preserve">
     <value>Menu</value>
+  </data>
+  <data name="BreakfastInfo" xml:space="preserve">
+    <value>Breakfast typically accounts for 25% to 30% of daily calorie intake, which averages 400–600 calories.</value>
+  </data>
+  <data name="LunchInfo" xml:space="preserve">
+    <value>A typical lunch should account for 30% to 40% of your daily calorie intake, which averages out to 600–900 calories.</value>
+  </data>
+  <data name="DinnerInfo" xml:space="preserve">
+    <value>Dinner typically accounts for 20% to 25% of daily calorie intake, which averages 400–700 calories.</value>
+  </data>
+  <data name="SnackInfo" xml:space="preserve">
+    <value>Snacks typically account for 10%–15% of daily calorie intake, which averages out to 200–400 calories.</value>
+  </data>
+  <data name="WaterInfo" xml:space="preserve">
+    <value>1 cup = 200 ml. Recommended: 2–3 liters per day.</value>
+  </data>
+  <data name="GoalReached" xml:space="preserve">
+    <value>Mission accomplished!</value>
+  </data>
+  <data name="SelectWaterAmount" xml:space="preserve">
+    <value>Select the amount of water</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Reset</value>
   </data>
 </root>

@@ -58,10 +58,9 @@ public partial class VahepalaDetailPage : ContentPage
             UpdateCalories();
         });
 
-        // 🔹 инфо текст для перекуса
         var infoLabel = new Label
         {
-            Text = "Перекус обычно составляет 10% - 15% от суточной калорийности,\nчто в среднем равно 200–400 ккал.",
+            Text = AppResources.SnackInfo,
             FontSize = 12,
             TextColor = Colors.Gray
         };

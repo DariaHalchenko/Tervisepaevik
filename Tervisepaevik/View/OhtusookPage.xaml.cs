@@ -34,7 +34,6 @@ public partial class OhtusookPage : ContentPage
 
         entryRoa = CreateEntry(AppResources.FoodName);
 
-        // 🔹 макросы
         var valgudLayout = CreateMacroRow(AppResources.Proteins, (v) =>
         {
             valgud = v;
@@ -53,15 +52,13 @@ public partial class OhtusookPage : ContentPage
             UpdateCalories();
         });
 
-        // 🔹 инфо текст для ужина
         var infoLabel = new Label
         {
-            Text = "Норма калорий в ужине обычно составляет 20% - 25% от суточной калорийности,\nчто в среднем равно 400–700 ккал.",
+            Text = AppResources.DinnerInfo,
             FontSize = 12,
             TextColor = Colors.Gray
         };
 
-        // 🔹 калории
         kaloridLabel = new Label
         {
             FontSize = 18,

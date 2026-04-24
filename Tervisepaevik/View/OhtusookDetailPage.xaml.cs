@@ -58,10 +58,9 @@ public partial class OhtusookDetailPage : ContentPage
             UpdateCalories();
         });
 
-        // 🔹 инфо текст для ужина
         var infoLabel = new Label
         {
-            Text = "Норма калорий в ужине обычно составляет 20% - 25% от суточной калорийности,\nчто в среднем равно 400–700 ккал.",
+            Text = AppResources.DinnerInfo,
             FontSize = 12,
             TextColor = Colors.Gray
         };

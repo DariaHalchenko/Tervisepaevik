@@ -63,7 +63,7 @@ public partial class StartPage : ContentPage
                 var foods = allMeals.Where(x => x.Kuupaev.Date == date).ToList();
                 return new DayFoodGroup { DateTime = date, Foods = foods };
             })
-            .Where(group => group.Foods.Any()) // Исключаем пустые дни
+            .Where(group => group.Foods.Any()) // Исключение пустых дней
             .ToList();
     }
 

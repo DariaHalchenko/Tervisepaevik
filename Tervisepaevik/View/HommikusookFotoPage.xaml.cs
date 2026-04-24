@@ -93,8 +93,8 @@ public partial class HommikusookFotoPage : ContentPage
         {
             Source = "lisa.svg",
             CornerRadius = 30,
-            HeightRequest = 60,
-            WidthRequest = 60,
+            HeightRequest = 100,
+            WidthRequest = 100,
             Command = new Command(async () =>
             {
                 await Navigation.PushAsync(new HommikusookPage());
@@ -171,7 +171,7 @@ public partial class HommikusookFotoPage : ContentPage
 
         if (filterSwitch.IsToggled)
         {
-            // 🔍 поиск
+            // поиск
             if (!string.IsNullOrWhiteSpace(searchEntry.Text))
             {
                 data = data
@@ -179,7 +179,6 @@ public partial class HommikusookFotoPage : ContentPage
                     .ToList();
             }
 
-            // 📅 дата только если выбрана
             if (isDateFilterActive)
             {
                 data = data

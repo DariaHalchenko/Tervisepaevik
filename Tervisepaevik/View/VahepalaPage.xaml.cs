@@ -34,7 +34,6 @@ public partial class VahepalaPage : ContentPage
 
         entryRoa = CreateEntry(AppResources.FoodName);
 
-        // 🔹 макросы
         var valgudLayout = CreateMacroRow(AppResources.Proteins, (v) =>
         {
             valgud = v;
@@ -53,15 +52,13 @@ public partial class VahepalaPage : ContentPage
             UpdateCalories();
         });
 
-        // 🔹 инфо текст
         var infoLabel = new Label
         {
-            Text = "Перекус обычно составляет 10% - 15% от суточной калорийности,\nчто в среднем равно 200–400 ккал.",
+            Text = AppResources.SnackInfo,
             FontSize = 12,
             TextColor = Colors.Gray
         };
 
-        // 🔹 калории
         kaloridLabel = new Label
         {
             FontSize = 18,

@@ -8,7 +8,7 @@ public partial class Flyout_Page : FlyoutPage
     public Flyout_Page()
     {
         InitializeComponent();
-        UpdateTexts(); // сразу применяем язык
+        UpdateTexts();
     }
 
     // ОБНОВЛЕНИЕ ТЕКСТОВ
@@ -25,6 +25,7 @@ public partial class Flyout_Page : FlyoutPage
         btnTreeningudFotoPage.Text = AppResources.Training;
         btnVeejalgiminePage.Text = AppResources.Water;
         btnEnesetunnePage.Text = AppResources.Feeling;
+        btnInfoPage.Text = AppResources.Info;
     }
 
     // НАВИГАЦИЯ
@@ -79,5 +80,10 @@ public partial class Flyout_Page : FlyoutPage
     private void btnEnesetunnePage_Clicked(object sender, EventArgs e)
     {
         Navigate(new EnesetunnePage());
+    }
+
+    private void btnInfoPage_Clicked(object sender, EventArgs e)
+    {
+        Navigate(new InfoPage());
     }
 }

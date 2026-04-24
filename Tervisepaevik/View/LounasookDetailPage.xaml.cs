@@ -58,10 +58,9 @@ public partial class LounasookDetailPage : ContentPage
             UpdateCalories();
         });
 
-        // 🔹 инфо текст (для обеда можно чуть шире диапазон)
         var infoLabel = new Label
         {
-            Text = "Норма калорий в обеде обычно составляет 30% - 40% от суточной калорийности,\nчто в среднем равно 600–900 ккал.",
+            Text = AppResources.LunchInfo,
             FontSize = 12,
             TextColor = Colors.Gray
         };

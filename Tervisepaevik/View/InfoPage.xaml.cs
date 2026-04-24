@@ -2,6 +2,7 @@
 using Microsoft.Maui.Layouts;
 using System.IO;
 using Tervisepaevik.Database;
+using Tervisepaevik.Resources.Localization;
 using MauiView = Microsoft.Maui.Controls.View;
 
 namespace Tervisepaevik.View;
@@ -63,7 +64,6 @@ public partial class InfoPage : ContentPage
             }
         };
 
-        // 🔥 AbsoluteLayout для кнопки
         var absolute = new AbsoluteLayout();
 
         var scroll = new ScrollView { Content = mainLayout };
@@ -73,7 +73,6 @@ public partial class InfoPage : ContentPage
 
         absolute.Children.Add(scroll);
 
-        // 🔘 КНОПКА edasi
         var edasiButton = new ImageButton
         {
             Source = "edasi.svg",
@@ -123,7 +122,7 @@ public partial class InfoPage : ContentPage
 
         var resetButton = new Button
         {
-            Text = "Reset",
+            Text = AppResources.Reset,
             FontSize = 12,
             Padding = new Thickness(8, 2),
             HeightRequest = 30

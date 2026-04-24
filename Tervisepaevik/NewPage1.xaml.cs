@@ -111,7 +111,6 @@ namespace Tervisepaevik
             Content = sv;
         }
 
-        // 🔥 ИСПРАВЛЕННЫЙ POPUP
         private async Task ShowBreathingPopup()
         {
             var popupPage = new ContentPage
@@ -136,7 +135,7 @@ namespace Tervisepaevik
                 Aspect = Aspect.AspectFit
             };
 
-            // 🌬 АНИМАЦИЯ ДЫХАНИЯ
+            // АНИМАЦИЯ ДЫХАНИЯ
             kopsudImage.Loaded += async (s, e) =>
             {
                 while (true)
@@ -146,10 +145,9 @@ namespace Tervisepaevik
                 }
             };
 
-            // ✅ КНОПКА SULGE (ИСПРАВЛЕНА)
             var btn_sule = new Button
             {
-                Text = AppResources.Close, // или "Sulge"
+                Text = AppResources.Close,
                 BackgroundColor = Color.FromArgb("#6C4CF1"),
                 TextColor = Colors.White,
                 CornerRadius = 15,

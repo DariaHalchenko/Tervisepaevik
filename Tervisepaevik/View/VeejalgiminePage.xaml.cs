@@ -14,7 +14,7 @@ public partial class VeejalgiminePage : ContentPage
 
     CollectionView listView;
 
-    const int KlaasideArv = 15;
+    const int KlaasideArv = 24;
     const int KlaasiMaht = 200;
 
     List<Image> klaasid = new();
@@ -35,15 +35,13 @@ public partial class VeejalgiminePage : ContentPage
 
         aktiivneSwitch = new Switch { IsToggled = true };
 
-        // 🔹 Инфо текст
         var infoLabel = new Label
         {
-            Text = "1 стакан = 200 ml\nРекомендуется 2–3 литра в день",
+            Text = AppResources.WaterInfo,
             FontSize = 14,
             TextColor = Colors.Gray
         };
 
-        // 🔹 Прогресс
         progressLabel = new Label
         {
             FontSize = 16,
@@ -55,7 +53,7 @@ public partial class VeejalgiminePage : ContentPage
             FontSize = 16
         };
 
-        // 🔹 Стаканы
+        // Стаканы
         var klaasidLayout = new FlexLayout
         {
             Wrap = FlexWrap.Wrap,
@@ -84,7 +82,6 @@ public partial class VeejalgiminePage : ContentPage
             klaasidLayout.Children.Add(img);
         }
 
-        // 🔹 КНОПКА СОХРАНИТЬ
         var btn_salvesta = new Button
         {
             Text = $"💾 {AppResources.Save}",
@@ -96,7 +93,6 @@ public partial class VeejalgiminePage : ContentPage
 
         btn_salvesta.Clicked += Btn_salvesta_Clicked;
 
-        // 🔹 Кнопка графика
         var btn_graafik = new Button
         {
             Text = $"📊 {AppResources.ShowGraph}",
@@ -122,7 +118,7 @@ public partial class VeejalgiminePage : ContentPage
             await Navigation.PushAsync(new VeejalgimineGrafikPage(andmed));
         };
 
-        // 🔹 История
+        // История
         listView = new CollectionView
         {
             ItemsLayout = new LinearItemsLayout(ItemsLayoutOrientation.Vertical)
@@ -156,7 +152,6 @@ public partial class VeejalgiminePage : ContentPage
             })
         };
 
-        // 🔹 Карточка
         var formCard = new Frame
         {
             CornerRadius = 20,
@@ -229,7 +224,7 @@ public partial class VeejalgiminePage : ContentPage
 
         if (kogus >= max)
         {
-            goalLabel.Text = "✅ Цель достигнута!";
+            goalLabel.Text = AppResources.GoalReached;
             goalLabel.TextColor = Colors.Green;
         }
         else
@@ -244,14 +239,14 @@ public partial class VeejalgiminePage : ContentPage
 
         if (kogus <= 0)
         {
-            await DisplayAlert(AppResources.Error, "Выберите количество воды", "OK");
+            await DisplayAlert(AppResources.Error, AppResources.SelectWaterAmount, "OK");
             return;
         }
 
         SaveOrUpdate(kogus);
         LoadData();
 
-        await DisplayAlert("OK", "Сохранено", "OK");
+        await DisplayAlert("OK", AppResources.Saved, "OK");
     }
 
     private void SaveOrUpdate(int kogus)

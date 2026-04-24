@@ -93,8 +93,8 @@ public partial class LounasookFotoPage : ContentPage
         {
             Source = "lisa.svg",
             CornerRadius = 30,
-            HeightRequest = 60,
-            WidthRequest = 60,
+            HeightRequest = 100,
+            WidthRequest = 100,
             Command = new Command(async () =>
             {
                 await Navigation.PushAsync(new LounasookPage());
@@ -168,7 +168,7 @@ public partial class LounasookFotoPage : ContentPage
 
         if (filterSwitch.IsToggled)
         {
-            // 🔍 поиск
+            // поиск
             if (!string.IsNullOrWhiteSpace(searchEntry.Text))
             {
                 data = data
@@ -176,7 +176,6 @@ public partial class LounasookFotoPage : ContentPage
                     .ToList();
             }
 
-            // 📅 дата только если выбрана
             if (isDateFilterActive)
             {
                 data = data

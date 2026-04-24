@@ -266,7 +266,6 @@ public partial class EnesetunnePage : ContentPage
         }
     }
 
-    // 🔥 ЕДИНЫЙ POPUP (как в NewPage1)
     private async void Btn_hingeohk_Clicked(object sender, EventArgs e)
     {
         var popupPage = new ContentPage

@@ -47,6 +47,10 @@
                     Text="{x:Static res:AppResources.Feeling}"
                     Clicked="btnEnesetunnePage_Clicked"/>
 
+                <Button x:Name="btnInfoPage"
+                    Text="{x:Static res:AppResources.Info}"
+                    Clicked="btnInfoPage_Clicked"/>
+
             </StackLayout>
         </ContentPage>
     </FlyoutPage.Flyout>

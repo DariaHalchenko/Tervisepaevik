@@ -93,8 +93,8 @@ public partial class VahepalaFotoPage : ContentPage
         {
             Source = "lisa.svg",
             CornerRadius = 30,
-            HeightRequest = 60,
-            WidthRequest = 60,
+            HeightRequest = 100,
+            WidthRequest = 100,
             Command = new Command(async () =>
             {
                 await Navigation.PushAsync(new VahepalaPage());

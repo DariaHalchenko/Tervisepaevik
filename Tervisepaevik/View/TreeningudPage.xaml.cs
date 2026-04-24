@@ -2,8 +2,6 @@
 using Tervisepaevik.Database;
 using Tervisepaevik.Models;
 using Tervisepaevik.Resources.Localization;
-
-// alias чтобы не было конфликта с namespace View
 using MauiView = Microsoft.Maui.Controls.View;
 
 namespace Tervisepaevik.View;
@@ -79,8 +77,6 @@ public partial class TreeningudPage : ContentPage
         Content = new ScrollView { Content = mainStack };
     }
 
-    // ================= UI =================
-
     private Entry CreateEntry(string placeholder)
     {
         return new Entry
@@ -106,7 +102,6 @@ public partial class TreeningudPage : ContentPage
         return btn;
     }
 
-    // ИСПРАВЛЕНО ЗДЕСЬ (MauiView вместо View)
     private Frame CreateCard(string title, params MauiView[] views)
     {
         var stack = new VerticalStackLayout
@@ -135,8 +130,6 @@ public partial class TreeningudPage : ContentPage
         };
     }
 
-    // ================= FOTO =================
-
     private async void Btn_valifoto_Clicked(object sender, EventArgs e)
     {
         var foto = await MediaPicker.Default.PickPhotoAsync();
@@ -164,8 +157,6 @@ public partial class TreeningudPage : ContentPage
 
         img.Source = ImageSource.FromStream(() => new MemoryStream(fotoBytes));
     }
-
-    // ================= SAVE =================
 
     private async void Btn_salvesta_Clicked(object sender, EventArgs e)
     {

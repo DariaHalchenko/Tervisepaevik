@@ -58,10 +58,9 @@ public partial class HommikusookDetailPage : ContentPage
             UpdateCalories();
         });
 
-        // 🔹 инфо текст
         var infoLabel = new Label
         {
-            Text = "Норма калорий в завтраке обычно составляет 25% - 30% от суточной калорийности, что в среднем равно 400–600 ккал.",
+            Text = AppResources.BreakfastInfo,
             FontSize = 12,
             TextColor = Colors.Gray
         };
@@ -73,7 +72,6 @@ public partial class HommikusookDetailPage : ContentPage
             VerticalOptions = LayoutOptions.Center
         };
 
-        // 🔹 строка "Calories 414 kcal"
         var caloriesRow = new HorizontalStackLayout
         {
             Spacing = 10,
@@ -138,7 +136,7 @@ public partial class HommikusookDetailPage : ContentPage
                     sysLayout,
 
                     infoLabel,
-                    caloriesRow, // 👈 теперь в одной строке
+                    caloriesRow, 
 
                     saveBtn,
                     deleteBtn
