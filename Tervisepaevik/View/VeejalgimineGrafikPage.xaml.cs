@@ -14,7 +14,7 @@ public partial class VeejalgimineGrafikPage : ContentPage
         var culture = Thread.CurrentThread.CurrentUICulture;
 
         var groupedData = andmed
-            .GroupBy(v => v.Kuupaev.ToString("MMMM yyyy", culture)) // локализованный месяц
+            .GroupBy(v => v.Kuupaev.ToString("MMMM yyyy", culture)) 
             .OrderBy(g => g.First().Kuupaev)
             .Select(g => new ChartGroup
             {

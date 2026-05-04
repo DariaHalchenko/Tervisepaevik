@@ -179,11 +179,11 @@ public partial class InfoPage : ContentPage
 
                 Children =
                 {
-                    CreateShowItem("💧","Water", showWater,0),
-                    CreateShowItem("🍽","Food", showFood,1),
+                    CreateShowItem("💧",AppResources.InfoWater, showWater,0),
+                    CreateShowItem("🍽",AppResources.InfoFood, showFood,1),
                     CreateShowItem("🔥","Kcal", showKcal,2),
-                    CreateShowItem("😊","Mood", showMood,3),
-                    CreateShowItem("🏋️","Workout", showWorkout,4)
+                    CreateShowItem("😊",AppResources.InfoMood, showMood,3),
+                    CreateShowItem("🏋️",AppResources.InfoWorkout, showWorkout,4)
                 }
             }
         };
@@ -317,7 +317,7 @@ public partial class InfoPage : ContentPage
         {
             var lbl = new Label
             {
-                Text = workout ? "🏋️ Yes" : "🏋️ No",
+                Text = workout ? $"🏋️ {AppResources.Yes}" : $"🏋️ {AppResources.No}",
                 HorizontalOptions = LayoutOptions.Center
             };
             statsGrid.Children.Add(lbl);
@@ -336,16 +336,16 @@ public partial class InfoPage : ContentPage
             };
 
             if (hommik != null)
-                foodRow.Children.Add(CreateFoodCard(hommik.Toidu_foto, "Breakfast", hommik.Kalorid));
+                foodRow.Children.Add(CreateFoodCard(hommik.Toidu_foto, AppResources.Breakfast, hommik.Kalorid));
 
             if (lounas != null)
-                foodRow.Children.Add(CreateFoodCard(lounas.Toidu_foto, "Lunch", lounas.Kalorid));
+                foodRow.Children.Add(CreateFoodCard(lounas.Toidu_foto, AppResources.Lunch, lounas.Kalorid));
 
             if (ohtu != null)
-                foodRow.Children.Add(CreateFoodCard(ohtu.Toidu_foto, "Dinner", ohtu.Kalorid));
+                foodRow.Children.Add(CreateFoodCard(ohtu.Toidu_foto, AppResources.Dinner, ohtu.Kalorid));
 
             if (snack != null)
-                foodRow.Children.Add(CreateFoodCard(snack.Toidu_foto, "Snack", snack.Kalorid));
+                foodRow.Children.Add(CreateFoodCard(snack.Toidu_foto, AppResources.Snack, snack.Kalorid));
 
             if (foodRow.Children.Count > 0)
                 layout.Children.Add(foodRow);

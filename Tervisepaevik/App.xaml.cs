@@ -11,7 +11,6 @@ namespace Tervisepaevik
 
             MainPage = new NavigationPage(new TervitatavPage());
 
-            // 💧 запуск уведомлений только один раз
             if (!Preferences.Get("notifications_started", false))
             {
                 NotificationService.StartWaterReminders();

@@ -271,7 +271,7 @@
     <value>Ready</value>
   </data>
   <data name="BreathingInstruction" xml:space="preserve">
-    <value>Inhale as the image expands, \nexhale as it contracts</value>
+    <value>Inhale as the image expands, exhale as it contracts</value>
   </data>
   <data name="BreathingExercise" xml:space="preserve">
     <value>Breathing exercise</value>
@@ -428,5 +428,23 @@
   </data>
   <data name="Reset" xml:space="preserve">
     <value>Reset</value>
+  </data>
+  <data name="WaterTitle" xml:space="preserve">
+    <value>Water</value>
+  </data>
+  <data name="WaterDescription" xml:space="preserve">
+    <value>Drink some water!</value>
+  </data>
+  <data name="InfoWater" xml:space="preserve">
+    <value>Water</value>
+  </data>
+  <data name="InfoFood" xml:space="preserve">
+    <value>Food</value>
+  </data>
+  <data name="InfoMood" xml:space="preserve">
+    <value>Mood</value>
+  </data>
+  <data name="InfoWorkout" xml:space="preserve">
+    <value>Workout</value>
   </data>
 </root>

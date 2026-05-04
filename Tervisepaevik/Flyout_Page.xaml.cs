@@ -11,7 +11,6 @@ public partial class Flyout_Page : FlyoutPage
         UpdateTexts();
     }
 
-    // ОБНОВЛЕНИЕ ТЕКСТОВ
     public void UpdateTexts()
     {
         btnStartPage.Text = AppResources.StartPage;
@@ -28,7 +27,6 @@ public partial class Flyout_Page : FlyoutPage
         btnInfoPage.Text = AppResources.Info;
     }
 
-    // НАВИГАЦИЯ
     void Navigate(Page page)
     {
         Detail = new NavigationPage(page);

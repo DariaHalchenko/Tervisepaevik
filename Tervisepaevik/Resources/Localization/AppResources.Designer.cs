@@ -142,7 +142,7 @@ namespace Tervisepaevik.Resources.Localization {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Hingake sisse, kui pilt muutub suuremaks, \nhingake välja, kui pilt muutub väiksemaks.
+        ///   Ищет локализованную строку, похожую на Hingake sisse, kui pilt muutub suuremaks, hingake välja, kui pilt muutub väiksemaks.
         /// </summary>
         internal static string BreathingInstruction {
             get {
@@ -498,6 +498,42 @@ namespace Tervisepaevik.Resources.Localization {
         internal static string Info {
             get {
                 return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Toit.
+        /// </summary>
+        internal static string InfoFood {
+            get {
+                return ResourceManager.GetString("InfoFood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Tuju.
+        /// </summary>
+        internal static string InfoMood {
+            get {
+                return ResourceManager.GetString("InfoMood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Vesi.
+        /// </summary>
+        internal static string InfoWater {
+            get {
+                return ResourceManager.GetString("InfoWater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Treening.
+        /// </summary>
+        internal static string InfoWorkout {
+            get {
+                return ResourceManager.GetString("InfoWorkout", resourceCulture);
             }
         }
         
@@ -871,6 +907,15 @@ namespace Tervisepaevik.Resources.Localization {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Joo vett!.
+        /// </summary>
+        internal static string WaterDescription {
+            get {
+                return ResourceManager.GetString("WaterDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Vee tarbimise graafik.
         /// </summary>
         internal static string WaterGraph {
@@ -903,6 +948,15 @@ namespace Tervisepaevik.Resources.Localization {
         internal static string WaterMonitoring {
             get {
                 return ResourceManager.GetString("WaterMonitoring", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Vesi.
+        /// </summary>
+        internal static string WaterTitle {
+            get {
+                return ResourceManager.GetString("WaterTitle", resourceCulture);
             }
         }
         

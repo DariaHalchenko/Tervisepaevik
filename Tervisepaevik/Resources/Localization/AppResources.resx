@@ -271,7 +271,7 @@
     <value>Valmis</value>
   </data>
   <data name="BreathingInstruction" xml:space="preserve">
-    <value>Hingake sisse, kui pilt muutub suuremaks, \nhingake välja, kui pilt muutub väiksemaks</value>
+    <value>Hingake sisse, kui pilt muutub suuremaks, hingake välja, kui pilt muutub väiksemaks</value>
   </data>
   <data name="BreathingExercise" xml:space="preserve">
     <value>Hingamise harjutus</value>
@@ -428,5 +428,23 @@
   </data>
   <data name="Reset" xml:space="preserve">
     <value>Lähtesta</value>
+  </data>
+  <data name="WaterTitle" xml:space="preserve">
+    <value>Vesi</value>
+  </data>
+  <data name="WaterDescription" xml:space="preserve">
+    <value>Joo vett!</value>
+  </data>
+  <data name="InfoWater" xml:space="preserve">
+    <value>Vesi</value>
+  </data>
+  <data name="InfoFood" xml:space="preserve">
+    <value>Toit</value>
+  </data>
+  <data name="InfoMood" xml:space="preserve">
+    <value>Tuju</value>
+  </data>
+  <data name="InfoWorkout" xml:space="preserve">
+    <value>Treening</value>
   </data>
 </root>

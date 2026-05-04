@@ -32,7 +32,6 @@ public partial class TervitatavPage : ContentPage
             BackgroundColor = Colors.Transparent
         };
 
-        // Смена языка
         langButton.Clicked += (s, e) =>
         {
             var current = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName;
@@ -46,7 +45,6 @@ public partial class TervitatavPage : ContentPage
 
             SetLanguage(newLang);
 
-            // Смена флага
             switch (newLang)
             {
                 case "en":
@@ -57,13 +55,11 @@ public partial class TervitatavPage : ContentPage
                     break;
             }
 
-            // Обновление текста
             lbl_tervitav.Text = AppResources.Welcome;
             lbl_sisu.Text = AppResources.Text;
             btn_alusta.Text = AppResources.Start;
         };
 
-        // Смена темы
         themeButton.Clicked += (s, e) =>
         {
             if (Application.Current.UserAppTheme == AppTheme.Dark)

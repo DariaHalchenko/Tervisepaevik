@@ -171,7 +171,6 @@ public partial class HommikusookFotoPage : ContentPage
 
         if (filterSwitch.IsToggled)
         {
-            // поиск
             if (!string.IsNullOrWhiteSpace(searchEntry.Text))
             {
                 data = data

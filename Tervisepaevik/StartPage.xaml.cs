@@ -14,8 +14,8 @@ public partial class StartPage : ContentPage
 
     private List<DayFoodGroup> GetNadalaToidud(string dbPath)
     {
-        DateTime startDate = DateTime.Today; // Сегодня
-        DateTime endDate = DateTime.Today.AddDays(6); // Через 6 дней
+        DateTime startDate = DateTime.Today; 
+        DateTime endDate = DateTime.Today.AddDays(6); 
 
         var hommik = new HommikusookDatabase(dbPath).GetHommikusook().Where(x => x.Kuupaev >= startDate && x.Kuupaev <= endDate);
         var louna = new LounasookDatabase(dbPath).GetLounasook().Where(x => x.Kuupaev >= startDate && x.Kuupaev <= endDate);
