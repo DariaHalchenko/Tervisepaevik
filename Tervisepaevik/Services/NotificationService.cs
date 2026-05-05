@@ -48,4 +48,31 @@ public static class NotificationService
             LocalNotificationCenter.Current.Show(request);
         }
     }
+    public static void StartWorkoutReminder()
+    {
+        var now = DateTime.Now;
+
+        var notifyTime = new DateTime(
+            now.Year,
+            now.Month,
+            now.Day,
+            18, 0, 0);
+        if (notifyTime <= now)
+        {
+            notifyTime = notifyTime.AddDays(1);
+        }
+
+        var request = new NotificationRequest
+        {
+            NotificationId = 200,
+            Title = AppResources.WorkoutTitle,
+            Description = AppResources.WorkoutDescription,
+            Schedule = new NotificationRequestSchedule
+            {
+                NotifyTime = notifyTime
+            }
+        };
+
+        LocalNotificationCenter.Current.Show(request);
+    }
 }

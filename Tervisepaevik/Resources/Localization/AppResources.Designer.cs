@@ -907,7 +907,7 @@ namespace Tervisepaevik.Resources.Localization {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Joo vett!.
+        ///   Ищет локализованную строку, похожую на Ärge unustage vett juua!.
         /// </summary>
         internal static string WaterDescription {
             get {
@@ -1006,6 +1006,15 @@ namespace Tervisepaevik.Resources.Localization {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Pange treening juba täna kava!.
+        /// </summary>
+        internal static string WorkoutDescription {
+            get {
+                return ResourceManager.GetString("WorkoutDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Treeningu nimi.
         /// </summary>
         internal static string WorkoutName {
@@ -1020,6 +1029,15 @@ namespace Tervisepaevik.Resources.Localization {
         internal static string Workouts {
             get {
                 return ResourceManager.GetString("Workouts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Treening.
+        /// </summary>
+        internal static string WorkoutTitle {
+            get {
+                return ResourceManager.GetString("WorkoutTitle", resourceCulture);
             }
         }
         

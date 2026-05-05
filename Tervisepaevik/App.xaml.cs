@@ -1,5 +1,6 @@
-﻿using Tervisepaevik.Services;
-using Microsoft.Maui.Storage;
+﻿using Microsoft.Maui.Storage;
+using Plugin.LocalNotification;
+using Tervisepaevik.Services;
 
 namespace Tervisepaevik
 {
@@ -11,11 +12,13 @@ namespace Tervisepaevik
 
             MainPage = new NavigationPage(new TervitatavPage());
 
-            if (!Preferences.Get("notifications_started", false))
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
                 NotificationService.StartWaterReminders();
-                Preferences.Set("notifications_started", true);
-            }
+                NotificationService.ShowWaterReminder(15);
+
+                NotificationService.StartWorkoutReminder();
+            });
         }
     }
 }

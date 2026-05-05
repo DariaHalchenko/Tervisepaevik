@@ -433,7 +433,7 @@
     <value>Water</value>
   </data>
   <data name="WaterDescription" xml:space="preserve">
-    <value>Drink some water!</value>
+    <value>Don't forget to drink water!</value>
   </data>
   <data name="InfoWater" xml:space="preserve">
     <value>Water</value>
@@ -446,5 +446,11 @@
   </data>
   <data name="InfoWorkout" xml:space="preserve">
     <value>Workout</value>
+  </data>
+  <data name="WorkoutTitle" xml:space="preserve">
+    <value>Workout</value>
+  </data>
+  <data name="WorkoutDescription" xml:space="preserve">
+    <value>Schedule a workout today!</value>
   </data>
 </root>

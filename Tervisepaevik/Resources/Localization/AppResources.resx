@@ -433,7 +433,7 @@
     <value>Vesi</value>
   </data>
   <data name="WaterDescription" xml:space="preserve">
-    <value>Joo vett!</value>
+    <value>Ärge unustage vett juua!</value>
   </data>
   <data name="InfoWater" xml:space="preserve">
     <value>Vesi</value>
@@ -446,5 +446,11 @@
   </data>
   <data name="InfoWorkout" xml:space="preserve">
     <value>Treening</value>
+  </data>
+  <data name="WorkoutTitle" xml:space="preserve">
+    <value>Treening</value>
+  </data>
+  <data name="WorkoutDescription" xml:space="preserve">
+    <value>Pange treening juba täna kava!</value>
   </data>
 </root>
