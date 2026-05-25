@@ -21,6 +21,9 @@ public partial class HommikusookPage : ContentPage
     private Image img;
 
     private int valgud = 0, rasvad = 0, sys = 0;
+    private Label valgudLabel;
+    private Label rasvadLabel;
+    private Label sysLabel;
 
     public HommikusookPage()
     {
@@ -128,7 +131,28 @@ public partial class HommikusookPage : ContentPage
 
     private HorizontalStackLayout CreateMacroRow(string title, Action<int> onChanged)
     {
-        int value = 0;
+        int GetValue()
+        {
+            if (title == AppResources.Proteins)
+                return valgud;
+
+            if (title == AppResources.Fats)
+                return rasvad;
+
+            return sys;
+        }
+
+        Label valueLabel;
+
+        if (title == AppResources.Proteins)
+            valueLabel = valgudLabel = new Label();
+        else if (title == AppResources.Fats)
+            valueLabel = rasvadLabel = new Label();
+        else
+            valueLabel = sysLabel = new Label();
+
+        valueLabel.Text = "0 g";
+        valueLabel.VerticalOptions = LayoutOptions.Center;
 
         var minusBtn = new Button
         {
@@ -150,22 +174,18 @@ public partial class HommikusookPage : ContentPage
             TextColor = Colors.White
         };
 
-        var valueLabel = new Label
-        {
-            Text = "0 g",
-            VerticalOptions = LayoutOptions.Center
-        };
-
         minusBtn.Clicked += (s, e) =>
         {
-            value = Math.Max(0, value - 1);
+            int value = Math.Max(0, GetValue() - 1);
+
             valueLabel.Text = $"{value} g";
             onChanged(value);
         };
 
         plusBtn.Clicked += (s, e) =>
         {
-            value++;
+            int value = GetValue() + 1;
+
             valueLabel.Text = $"{value} g";
             onChanged(value);
         };
@@ -307,6 +327,9 @@ public partial class HommikusookPage : ContentPage
         entryRoa.Text = "";
 
         valgud = rasvad = sys = 0;
+        valgudLabel.Text = "0 g";
+        rasvadLabel.Text = "0 g";
+        sysLabel.Text = "0 g";
 
         dp.Date = DateTime.Now;
         tp.Time = TimeSpan.FromHours(8);
